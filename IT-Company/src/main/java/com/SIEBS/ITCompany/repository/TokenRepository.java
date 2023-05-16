@@ -3,10 +3,15 @@ package com.SIEBS.ITCompany.repository;
 import com.SIEBS.ITCompany.model.Token;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
+<<<<<<< Updated upstream
 
+=======
+@Repository
+>>>>>>> Stashed changes
 public interface TokenRepository extends JpaRepository<Token, Integer> {
 
     @Query(value = """
