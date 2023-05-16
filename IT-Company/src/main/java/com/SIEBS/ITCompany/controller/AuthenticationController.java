@@ -2,6 +2,7 @@ package com.SIEBS.ITCompany.controller;
 
 import com.SIEBS.ITCompany.dto.AuthenticationRequest;
 import com.SIEBS.ITCompany.dto.AuthenticationResponse;
+import com.SIEBS.ITCompany.dto.RegisterRequest;
 import com.SIEBS.ITCompany.service.AuthenticationService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -28,6 +29,13 @@ public class AuthenticationController {
     return ResponseEntity.ok(service.authenticate(request));
   }
 
+  @PostMapping("/register")
+  public ResponseEntity<AuthenticationResponse> register(
+          @RequestBody RegisterRequest request
+  ) {
+    return ResponseEntity.ok(service.register(request));
+  }
+
   @PostMapping("/refresh-token")
   public void refreshToken(
       HttpServletRequest request,
@@ -35,6 +43,4 @@ public class AuthenticationController {
   ) throws IOException {
     service.refreshToken(request, response);
   }
-
-
 }

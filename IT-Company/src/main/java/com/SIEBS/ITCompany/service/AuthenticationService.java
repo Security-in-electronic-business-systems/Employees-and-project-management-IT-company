@@ -2,6 +2,7 @@ package com.SIEBS.ITCompany.service;
 
 import com.SIEBS.ITCompany.dto.AuthenticationRequest;
 import com.SIEBS.ITCompany.dto.AuthenticationResponse;
+import com.SIEBS.ITCompany.dto.RegisterRequest;
 import com.SIEBS.ITCompany.model.Token;
 import com.SIEBS.ITCompany.repository.TokenRepository;
 import com.SIEBS.ITCompany.enumerations.TokenType;
@@ -45,6 +46,27 @@ public class AuthenticationService {
         .accessToken(jwtToken)
             .refreshToken(refreshToken)
         .build();
+  }
+
+  public AuthenticationResponse register(RegisterRequest request) {
+    var user = User.builder()
+            .firstname(request.getFirstname())
+            .lastname(request.getLastname())
+            .email(request.getEmail())
+            .password(passwordEncoder.encode(request.getPassword()))
+            .phoneNumber(request.getPhoneNumber())
+            .title(request.getTitle())
+            .address(request.getAddress())
+            .role(request.getRole())
+            .build();
+    var savedUser = repository.save(user);
+    var jwtToken = jwtService.generateToken(user);
+    var refreshToken = jwtService.generateRefreshToken(user);
+    saveUserToken(savedUser, jwtToken);
+    return AuthenticationResponse.builder()
+            .accessToken(jwtToken)
+            .refreshToken(refreshToken)
+            .build();
   }
 
   private void saveUserToken(User user, String jwtToken) {
