@@ -2,6 +2,7 @@ package com.SIEBS.ITCompany.controller;
 
 import com.SIEBS.ITCompany.dto.AuthenticationRequest;
 import com.SIEBS.ITCompany.dto.AuthenticationResponse;
+import com.SIEBS.ITCompany.dto.PasswordlessAuthenticationRequest;
 import com.SIEBS.ITCompany.dto.RegisterRequest;
 import com.SIEBS.ITCompany.service.AuthenticationService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -26,6 +27,14 @@ public class AuthenticationController {
   ) {
     return ResponseEntity.ok(service.authenticate(request));
   }
+
+  /*@CrossOrigin(origins = "*")
+  @PostMapping("/passwordless-authenticate")
+  public ResponseEntity<AuthenticationResponse> passwordlessAuthenticate(
+          @RequestBody PasswordlessAuthenticationRequest request
+  ) {
+    return ResponseEntity.ok(service.authenticate(request));
+  }*/
 
   @CrossOrigin(origins = "")
   @PostMapping("/register")
