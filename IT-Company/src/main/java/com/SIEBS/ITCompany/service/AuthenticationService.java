@@ -2,7 +2,9 @@ package com.SIEBS.ITCompany.service;
 
 import com.SIEBS.ITCompany.dto.AuthenticationRequest;
 import com.SIEBS.ITCompany.dto.AuthenticationResponse;
+import com.SIEBS.ITCompany.dto.PasswordlessAuthenticationRequest;
 import com.SIEBS.ITCompany.dto.RegisterRequest;
+import com.SIEBS.ITCompany.model.MagicLink;
 import com.SIEBS.ITCompany.model.Token;
 import com.SIEBS.ITCompany.repository.TokenRepository;
 import com.SIEBS.ITCompany.enumerations.TokenType;
@@ -28,6 +30,7 @@ public class AuthenticationService {
   private final PasswordEncoder passwordEncoder;
   private final JwtService jwtService;
   private final AuthenticationManager authenticationManager;
+  private final MagicLinkService magicLinkService;
 
   public AuthenticationResponse authenticate(AuthenticationRequest request) {
     authenticationManager.authenticate(
@@ -46,6 +49,46 @@ public class AuthenticationService {
         .accessToken(jwtToken)
             .refreshToken(refreshToken)
         .build();
+  }
+
+  public AuthenticationResponse generateAccessAndRefresToken(String token){
+    boolean isTokenValid = isTokenForPasswordlessLoginValid(token);
+    if(isTokenValid){
+      String email = jwtService.extractUsername(token);
+      var user = repository.findByEmail(email).orElse(null);
+      if(user == null){
+        return null;
+      }
+      var jwtToken = jwtService.generateToken(user);
+      var refreshToken = jwtService.generateRefreshToken(user);
+      return AuthenticationResponse.builder()
+              .accessToken(jwtToken)
+              .refreshToken(refreshToken)
+              .build();
+    }
+    return null;
+  }
+
+  public String generateAndSendToken(PasswordlessAuthenticationRequest request){
+    var user = repository.findByEmail(request.getEmail()).orElse(null);
+    if(user == null){
+      return "User not found!";
+    }
+    var jwtToken = jwtService.generateTokenForPasswordlessLogin(user);
+    String url = "http://localhost:8081/api/v1/auth/authenticate?token=" + jwtToken;
+    magicLinkService.Save(MagicLink.builder().used(false).token(jwtToken).build());
+    System.out.println(url);
+    //ovjde ide slanje linka na mejl
+    return url;
+  }
+
+  private boolean isTokenForPasswordlessLoginValid(String token){
+    if(magicLinkService.isTokenUsed(token)){
+      return false;
+    }else if(jwtService.isTokenExpired(token)){
+      return false;
+    }
+    return true;
   }
 
   public AuthenticationResponse register(RegisterRequest request) {

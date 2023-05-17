@@ -1,5 +1,6 @@
 package com.SIEBS.ITCompany.service;
 
+import com.SIEBS.ITCompany.model.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -13,6 +14,7 @@ import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
 
 @Service
@@ -22,6 +24,8 @@ public class JwtService {
   private String secretKey;
   @Value("${application.security.jwt.expiration}")
   private long jwtExpiration;
+  @Value("${application.security.jwt.passwordless-login.expiration}")
+  private long jwtForPasswordlessLoginExpiration;
   @Value("${application.security.jwt.refresh-token.expiration}")
   private long refreshExpiration;
 
@@ -43,6 +47,12 @@ public class JwtService {
       UserDetails userDetails
   ) {
     return buildToken(extraClaims, userDetails, jwtExpiration);
+  }
+
+  public String generateTokenForPasswordlessLogin(
+          UserDetails userDetails
+  ) {
+    return buildToken(new HashMap<>(), userDetails, jwtForPasswordlessLoginExpiration);
   }
 
   public String generateRefreshToken(
@@ -71,7 +81,7 @@ public class JwtService {
     return (username.equals(userDetails.getUsername())) && !isTokenExpired(token);
   }
 
-  private boolean isTokenExpired(String token) {
+  public boolean isTokenExpired(String token) {
     return extractExpiration(token).before(new Date());
   }
 

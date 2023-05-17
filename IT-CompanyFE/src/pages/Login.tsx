@@ -54,6 +54,7 @@ export function Login() {
         "email": email,
         "password": password
       }),
+      credentials: "include"
     }).then(res => res.json())
       .then(data => {
 
@@ -82,6 +83,10 @@ export function Login() {
   useEffect(() => {
     setEmailError("");
   }, [email]);
+
+  const handlePasswordlessLogin = () => {
+    navigate("/passwordless-login"); 
+  };  
 
   return (
     <div className="d-flex align-items-center justify-content-center" style={{ height: "80vh" }}>
@@ -113,7 +118,7 @@ export function Login() {
     <div className="d-grid mt-4">
       <button type="submit" className="btn btn-primary btn-sm">Confirm</button>
       <div className="text-center mt-2">
-        <a href="">Login without password</a>
+        <a href="" onClick={handlePasswordlessLogin}>Login without password</a>
       </div>
     </div>
   </form>

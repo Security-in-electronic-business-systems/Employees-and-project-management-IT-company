@@ -49,18 +49,8 @@ export function PasswordlessLogin() {
     }).then(res => res.json())
       .then(data => {
 
-        loginResponse = data
+        //loginResponse = data
         console.log(data)
-        /*if(loginResponse.message === "User not found!"){
-          setEmailError("User not found")
-        }else if(loginResponse.message === "Password is incorrect!"){
-          setPasswordError("Password is incorrect")
-        }else if(loginResponse.message === "Some error ocurred, please try again!"){
-          setPasswordError("Some error ocurred, please try again")
-        }else if(loginResponse.message === "Login successful!"){
-          localStorage.setItem('loggedUser', JSON.stringify(loginResponse));
-          navigate("/")
-        }*/
 
         
     })
@@ -73,28 +63,27 @@ export function PasswordlessLogin() {
 
   return (
     <div className="d-flex align-items-center justify-content-center" style={{ height: "80vh" }}>
-  <form className="col-md-3" onSubmit={handleSubmit}>
-    <blockquote className="blockquote text-center">
-      <p className="mb-0">Login</p>
-    </blockquote>
-    <div className="mb-3">
-      <label className="form-label">Email</label>
-      <input
-        className="form-control"
-        id="departure"
-        value={email}
-        onChange={(event) => setEmail(event.target.value)}
-      />
-      {emailError && <div className="text-danger">{emailError}</div>}
+      <form className="col-md-3" onSubmit={handleSubmit}>
+        <blockquote className="blockquote text-center">
+          <p className="mb-0">Login</p>
+        </blockquote>
+        <div className="mb-3">
+          <label className="form-label">Email</label>
+          <input
+            className="form-control"
+            id="departure"
+            value={email}
+            onChange={(event) => setEmail(event.target.value)}
+          />
+          {emailError && <div className="text-danger">{emailError}</div>}
+        </div>
+        <div className="d-grid mt-4">
+          <button type="submit" className="btn btn-primary btn-sm">Confirm</button>
+          <div className="text-center mt-2">
+            <a href="">Login without password</a>
+          </div>
+        </div>
+      </form>
     </div>
-    <div className="d-grid mt-4">
-      <button type="submit" className="btn btn-primary btn-sm">Confirm</button>
-      <div className="text-center mt-2">
-        <a href="">Login without password</a>
-      </div>
-    </div>
-  </form>
-</div>
-
   );
 }
