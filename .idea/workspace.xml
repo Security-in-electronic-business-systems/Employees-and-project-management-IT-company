@@ -5,9 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4c611d39-afa5-411e-8e8b-fb0c98d133ae" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/IT-Company/src/main/java/com/SIEBS/ITCompany/dto/RegisterRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/IT-Company/src/main/java/com/SIEBS/ITCompany/controller/AuthenticationController.java" beforeDir="false" afterPath="$PROJECT_DIR$/IT-Company/src/main/java/com/SIEBS/ITCompany/controller/AuthenticationController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/IT-Company/src/main/java/com/SIEBS/ITCompany/service/AuthenticationService.java" beforeDir="false" afterPath="$PROJECT_DIR$/IT-Company/src/main/java/com/SIEBS/ITCompany/service/AuthenticationService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/IT-CompanyFE/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/IT-CompanyFE/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/IT-CompanyFE/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/IT-CompanyFE/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/IT-CompanyFE/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/IT-CompanyFE/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/IT-CompanyFE/src/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/IT-CompanyFE/src/App.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/IT-CompanyFE/src/index.css" beforeDir="false" afterPath="$PROJECT_DIR$/IT-CompanyFE/src/index.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/IT-CompanyFE/src/main.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/IT-CompanyFE/src/main.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
