@@ -2,6 +2,7 @@ package com.SIEBS.ITCompany.service;
 
 import com.SIEBS.ITCompany.dto.AuthenticationRequest;
 import com.SIEBS.ITCompany.dto.AuthenticationResponse;
+import com.SIEBS.ITCompany.dto.MessageResponse;
 import com.SIEBS.ITCompany.dto.RegisterRequest;
 import com.SIEBS.ITCompany.model.Token;
 import com.SIEBS.ITCompany.repository.TokenRepository;
@@ -19,6 +20,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -48,24 +50,29 @@ public class AuthenticationService {
         .build();
   }
 
-  public AuthenticationResponse register(RegisterRequest request) {
-    var user = User.builder()
-            .firstname(request.getFirstname())
-            .lastname(request.getLastname())
-            .email(request.getEmail())
-            .password(passwordEncoder.encode(request.getPassword()))
-            .phoneNumber(request.getPhoneNumber())
-            .title(request.getTitle())
-            .address(request.getAddress())
-            .role(request.getRole())
-            .build();
-    var savedUser = repository.save(user);
-    var jwtToken = jwtService.generateToken(user);
-    var refreshToken = jwtService.generateRefreshToken(user);
-    saveUserToken(savedUser, jwtToken);
-    return AuthenticationResponse.builder()
-            .accessToken(jwtToken)
-            .refreshToken(refreshToken)
+  public MessageResponse register(RegisterRequest request) {
+    Optional<User> tmp = repository.findByEmail(request.getEmail());
+    if (tmp.isPresent()){
+      var user = User.builder()
+              .firstname(request.getFirstname())
+              .lastname(request.getLastname())
+              .email(request.getEmail())
+              .password(passwordEncoder.encode(request.getPassword()))
+              .phoneNumber(request.getPhoneNumber())
+              .title(request.getTitle())
+              .address(request.getAddress())
+              .role(request.getRole())
+              .build();
+      var savedUser = repository.save(user);
+      var jwtToken = jwtService.generateToken(user);
+      var refreshToken = jwtService.generateRefreshToken(user);
+      saveUserToken(savedUser, jwtToken);
+      return MessageResponse.builder()
+              .message("Success!")
+              .build();
+    }
+    return MessageResponse.builder()
+            .message("User with that email already exist!")
             .build();
   }
 

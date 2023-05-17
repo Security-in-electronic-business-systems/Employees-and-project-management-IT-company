@@ -2,6 +2,7 @@ package com.SIEBS.ITCompany.controller;
 
 import com.SIEBS.ITCompany.dto.AuthenticationRequest;
 import com.SIEBS.ITCompany.dto.AuthenticationResponse;
+import com.SIEBS.ITCompany.dto.MessageResponse;
 import com.SIEBS.ITCompany.dto.RegisterRequest;
 import com.SIEBS.ITCompany.service.AuthenticationService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -30,7 +31,7 @@ public class AuthenticationController {
   }
 
   @PostMapping("/register")
-  public ResponseEntity<AuthenticationResponse> register(
+  public ResponseEntity<MessageResponse> register(
           @RequestBody RegisterRequest request
   ) {
     return ResponseEntity.ok(service.register(request));
