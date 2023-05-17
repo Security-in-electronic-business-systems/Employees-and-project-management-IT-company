@@ -5,6 +5,7 @@ import { useEffect } from "react";
 import Home from "./pages/Home";
 import { Login } from "./pages/Login";
 import { PasswordlessLogin } from "./pages/PasswordlessLogin";
+import ViewAllEmployees from './pages/ViewAllEmployees';
 
 function App(){
   useEffect(() => {
@@ -16,6 +17,7 @@ function App(){
       <Navbar/>
       <div>
         <Routes>
+          <Route path="/ViewAll" element={<ViewAllEmployees/>} />
           <Route path="/register" element={<Register/>} />
           <Route path="/" element={<Home/>} />
           <Route path="/login" element={<Login/>} />
@@ -26,3 +28,4 @@ function App(){
   )
 }
 export default App;
+

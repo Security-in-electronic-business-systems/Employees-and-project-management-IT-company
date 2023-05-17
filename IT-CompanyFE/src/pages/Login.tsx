@@ -43,7 +43,7 @@ export function Login() {
     }
 
     // Send form data to server
-    await fetch("http://localhost:8081/api/v1/auth/authenticate", {
+    await fetch("https://localhost:8081/api/v1/auth/authenticate", {
       method: "POST",
       headers: {
         "Content-type": "application/json",

@@ -7,6 +7,7 @@ import com.SIEBS.ITCompany.dto.PasswordlessAuthenticationRequest;
 import com.SIEBS.ITCompany.dto.RegisterRequest;
 import com.SIEBS.ITCompany.model.MagicLink;
 import com.SIEBS.ITCompany.model.Token;
+import com.SIEBS.ITCompany.repository.AddressRepository;
 import com.SIEBS.ITCompany.repository.TokenRepository;
 import com.SIEBS.ITCompany.enumerations.TokenType;
 import com.SIEBS.ITCompany.model.User;
@@ -30,6 +31,8 @@ import java.util.Optional;
 public class AuthenticationService {
   private final UserRepository repository;
   private final TokenRepository tokenRepository;
+
+  private final AddressRepository addressRepository;
   private final PasswordEncoder passwordEncoder;
   private final JwtService jwtService;
   private final AuthenticationManager authenticationManager;
@@ -57,17 +60,19 @@ public class AuthenticationService {
 
   public MessageResponse register(RegisterRequest request) {
     Optional<User> tmp = repository.findByEmail(request.getEmail());
-    if (tmp.isPresent()){
+    if (!tmp.isPresent()){
       var user = User.builder()
               .firstname(request.getFirstname())
               .lastname(request.getLastname())
               .email(request.getEmail())
               .password(passwordEncoder.encode(request.getPassword()))
               .phoneNumber(request.getPhoneNumber())
+              .isApproved(false)
               .title(request.getTitle())
               .address(request.getAddress())
               .role(request.getRole())
               .build();
+      var address =addressRepository.save(request.getAddress());
       var savedUser = repository.save(user);
       var jwtToken = jwtService.generateToken(user);
       var refreshToken = jwtService.generateRefreshToken(user);

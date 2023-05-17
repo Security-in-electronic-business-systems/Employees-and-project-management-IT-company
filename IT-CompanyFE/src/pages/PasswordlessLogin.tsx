@@ -1,13 +1,14 @@
 import { SyntheticEvent, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { User } from "../model/User";
+//import { useNavigate } from "react-router-dom";
+//import { User } from "../model/user";
+
 
 export function PasswordlessLogin() {
   const [email, setEmail] = useState("");
   const [emailError, setEmailError] = useState("");
 
-  const navigate = useNavigate();
-  var loginResponse: User
+  //const navigate = useNavigate();
+ // var loginResponse: User
 
   const handleSubmit = async (event: SyntheticEvent) => {
     event.preventDefault();

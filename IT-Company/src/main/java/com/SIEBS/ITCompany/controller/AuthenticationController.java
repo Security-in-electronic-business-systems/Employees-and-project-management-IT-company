@@ -25,7 +25,7 @@ public class AuthenticationController {
 
   private final AuthenticationService service;
 
-  @CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
+ // @CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
   @PostMapping("/authenticate")
   public ResponseEntity<MessageResponse> authenticate(
       @RequestBody AuthenticationRequest request,
@@ -51,7 +51,7 @@ public class AuthenticationController {
 
   }
 
-  @CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
+ // @CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
   @GetMapping("/authenticate")
   public ResponseEntity<AuthenticationResponse> passwordlessAuthenticate(
           @RequestParam("token") String token,
@@ -74,7 +74,7 @@ public class AuthenticationController {
             .body(authResponse);
   }
 
-  @CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
+ // @CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
   @PostMapping("/passwordless-authenticate")
   public ResponseEntity<MessageResponse> generateAndSendToken(
           @RequestBody PasswordlessAuthenticationRequest request
@@ -82,7 +82,7 @@ public class AuthenticationController {
     return ResponseEntity.ok(MessageResponse.builder().message(service.generateAndSendToken(request)).build());
   }
 
-  @CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
+  //@CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
   @PostMapping("/register")
   public ResponseEntity<MessageResponse> register(
           @RequestBody RegisterRequest request
@@ -90,7 +90,7 @@ public class AuthenticationController {
     return ResponseEntity.ok(service.register(request));
   }
 
-  @CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
+ // @CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
   @PostMapping("/refresh-token")
   public void refreshToken(
       HttpServletRequest request,
@@ -99,7 +99,13 @@ public class AuthenticationController {
     service.refreshToken(request, response);
   }
 
-  @CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
+
+  @GetMapping("/message")
+  public ResponseEntity<String> getMessage() {
+    String message = "Ovo je poruka sa servera.";
+    return ResponseEntity.ok(message);
+  }
+ // @CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
   @GetMapping("/endpoint")
   public ResponseEntity<MessageResponse> passwordlessAuthenticate(HttpServletRequest request){
     Cookie[] cookies = request.getCookies();
@@ -118,8 +124,6 @@ public class AuthenticationController {
         }
       }
     }
-
-    // Vaša logika i generisanje odgovora
 
     return ResponseEntity.ok(new MessageResponse("Access token: " + accessToken + " , Refresh token: " + refreshToken));
   }
