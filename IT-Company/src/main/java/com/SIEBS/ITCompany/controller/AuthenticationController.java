@@ -27,21 +27,28 @@ public class AuthenticationController {
 
   @CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
   @PostMapping("/authenticate")
-  public ResponseEntity<AuthenticationResponse> authenticate(
+  public ResponseEntity<MessageResponse> authenticate(
       @RequestBody AuthenticationRequest request,
       HttpServletResponse response
 
   ) {
     AuthenticationResponse authResponse = service.authenticate(request);
 
-    Cookie accessTokenCookie = new Cookie("access_token", authResponse.getAccessToken());
-    accessTokenCookie.setHttpOnly(true);
-    response.addCookie(accessTokenCookie);
+    if(authResponse != null){
+      Cookie accessTokenCookie = new Cookie("access_token", authResponse.getAccessToken());
+      accessTokenCookie.setHttpOnly(true);
+      //accessTokenCookie.setDomain("localhost:8081");
+      response.addCookie(accessTokenCookie);
 
-    Cookie refreshTokenCookie = new Cookie("refresh_token", authResponse.getRefreshToken());
-    refreshTokenCookie.setHttpOnly(true);
-    response.addCookie(refreshTokenCookie);
-    return ResponseEntity.ok(authResponse);
+      Cookie refreshTokenCookie = new Cookie("refresh_token", authResponse.getRefreshToken());
+      refreshTokenCookie.setHttpOnly(true);
+      //accessTokenCookie.setDomain("localhost:8081");
+      //refreshTokenCookie.setPath("/api/v1/auth/refresh-token");
+      response.addCookie(refreshTokenCookie);
+      return ResponseEntity.ok(MessageResponse.builder().message("Successfully!").build());
+    }
+    return ResponseEntity.ok(MessageResponse.builder().message("Email or password are not correct!").build());
+
   }
 
   @CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
