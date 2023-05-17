@@ -14,6 +14,7 @@ public class CorsConfig implements WebMvcConfigurer {
         registry.addMapping("/api/v1/auth/*")		// dozvoljava cross-origin zahteve ka navedenim putanjama
                 .allowedOrigins("https://localhost:3000")	// postavice Access-Control-Allow-Origin header u preflight zahtev
                 .allowedMethods("*")
+                .allowCredentials(true)
                 .maxAge(3600);		// definise u sekundama koliko dugo se preflight response cuva u browseru
     }
 
