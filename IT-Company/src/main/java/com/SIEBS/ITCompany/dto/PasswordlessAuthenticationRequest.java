@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class MessageResponse {
-    private String message;
+public class PasswordlessAuthenticationRequest {
+
+    private String email;
 }
