@@ -37,13 +37,14 @@ public class AuthenticationController {
     if(authResponse != null){
       Cookie accessTokenCookie = new Cookie("access_token", authResponse.getAccessToken());
       accessTokenCookie.setHttpOnly(true);
-      //accessTokenCookie.setDomain("localhost:8081");
+      accessTokenCookie.setDomain("localhost");
+      accessTokenCookie.setPath("/");
       response.addCookie(accessTokenCookie);
 
       Cookie refreshTokenCookie = new Cookie("refresh_token", authResponse.getRefreshToken());
       refreshTokenCookie.setHttpOnly(true);
-      //accessTokenCookie.setDomain("localhost:8081");
-      //refreshTokenCookie.setPath("/api/v1/auth/refresh-token");
+      accessTokenCookie.setDomain("localhost");
+      refreshTokenCookie.setPath("/api/v1/auth/refresh-token");
       response.addCookie(refreshTokenCookie);
       return ResponseEntity.ok(MessageResponse.builder().message("Successfully!").build());
     }

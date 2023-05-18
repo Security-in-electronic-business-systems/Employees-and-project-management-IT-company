@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1/demo")
 @RequiredArgsConstructor
 public class DemoController {
-    @CrossOrigin(origins = "*")
+
     @GetMapping("/endpoint")
     public ResponseEntity<MessageResponse> passwordlessAuthenticate(HttpServletRequest request){
         Cookie[] cookies = request.getCookies();
