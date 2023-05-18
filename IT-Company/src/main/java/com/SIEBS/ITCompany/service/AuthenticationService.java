@@ -1,13 +1,11 @@
 package com.SIEBS.ITCompany.service;
 
-import com.SIEBS.ITCompany.dto.AuthenticationRequest;
-import com.SIEBS.ITCompany.dto.AuthenticationResponse;
-import com.SIEBS.ITCompany.dto.MessageResponse;
-import com.SIEBS.ITCompany.dto.PasswordlessAuthenticationRequest;
-import com.SIEBS.ITCompany.dto.RegisterRequest;
+import com.SIEBS.ITCompany.dto.*;
 import com.SIEBS.ITCompany.model.MagicLink;
+import com.SIEBS.ITCompany.model.Role;
 import com.SIEBS.ITCompany.model.Token;
 import com.SIEBS.ITCompany.repository.AddressRepository;
+import com.SIEBS.ITCompany.repository.RoleRepository;
 import com.SIEBS.ITCompany.repository.TokenRepository;
 import com.SIEBS.ITCompany.enumerations.TokenType;
 import com.SIEBS.ITCompany.model.User;
@@ -31,6 +29,7 @@ import java.util.Optional;
 public class AuthenticationService {
   private final UserRepository repository;
   private final TokenRepository tokenRepository;
+  private final RoleRepository roleRepository;
 
   private final AddressRepository addressRepository;
   private final PasswordEncoder passwordEncoder;
@@ -47,7 +46,13 @@ public class AuthenticationService {
               )
       );
     }catch(BadCredentialsException e){
-      return null;
+      return AuthenticationResponse
+              .builder()
+              .loginResponse(LoginResponse
+                      .builder()
+                      .message("Email or password are not correct!")
+                      .build())
+              .build();
     }
     var user = repository.findByEmail(request.getEmail())
         .orElseThrow();
@@ -55,11 +60,27 @@ public class AuthenticationService {
     var refreshToken = jwtService.generateRefreshToken(user);
     revokeAllUserTokens(user);
     saveUserToken(user, jwtToken);
-    return AuthenticationResponse.builder().accessToken(jwtToken).refreshToken(refreshToken).build();
+    return AuthenticationResponse
+            .builder()
+            .accessToken(jwtToken)
+            .refreshToken(refreshToken)
+            .loginResponse(LoginResponse.builder()
+                    .userId(user.getId())
+                    .firstname(user.getFirstname())
+                    .lastname(user.getLastname())
+                    .email(user.getEmail())
+                    .title(user.getTitle())
+                    .phoneNumber(user.getPhoneNumber())
+                    .address(user.getAddress())
+                    .role(user.getRole())
+                    .message("Successfully!")
+                    .build())
+            .build();
   }
 
   public MessageResponse register(RegisterRequest request) {
     Optional<User> tmp = repository.findByEmail(request.getEmail());
+    Role role = roleRepository.findByName(request.getRole());
     if (!tmp.isPresent()){
       var user = User.builder()
               .firstname(request.getFirstname())
@@ -70,7 +91,7 @@ public class AuthenticationService {
               .isApproved(false)
               .title(request.getTitle())
               .address(request.getAddress())
-              .role(request.getRole())
+              .role(role)
               .build();
       var address =addressRepository.save(request.getAddress());
       var savedUser = repository.save(user);

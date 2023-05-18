@@ -27,7 +27,7 @@ public class AuthenticationController {
 
  // @CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
   @PostMapping("/authenticate")
-  public ResponseEntity<MessageResponse> authenticate(
+  public ResponseEntity<LoginResponse> authenticate(
       @RequestBody AuthenticationRequest request,
       HttpServletResponse response
 
@@ -46,9 +46,9 @@ public class AuthenticationController {
       accessTokenCookie.setDomain("localhost");
       refreshTokenCookie.setPath("/api/v1/auth/refresh-token");
       response.addCookie(refreshTokenCookie);
-      return ResponseEntity.ok(MessageResponse.builder().message("Successfully!").build());
+      return ResponseEntity.ok(authResponse.getLoginResponse());
     }
-    return ResponseEntity.ok(MessageResponse.builder().message("Email or password are not correct!").build());
+    return ResponseEntity.ok(authResponse.getLoginResponse());
 
   }
 
