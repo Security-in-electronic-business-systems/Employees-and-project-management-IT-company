@@ -1,5 +1,6 @@
 import { SyntheticEvent, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { LoginResponse } from "../model/login-response";
 
 export function Login() {
   const [email, setEmail] = useState("");
@@ -8,6 +9,7 @@ export function Login() {
   const [passwordError, setPasswordError] = useState("");
 
   const navigate = useNavigate();
+  let loginResponse: LoginResponse
 
   const handleSubmit = async (event: SyntheticEvent) => {
     event.preventDefault();
@@ -56,9 +58,17 @@ export function Login() {
     }).then(res => res.json())
       .then(data => {
 
-        console.log(data)
+        loginResponse = data
+        if(loginResponse.message === "Successfully!"){
+          localStorage.setItem('loggedUser', JSON.stringify(loginResponse));
+          navigate("/")
+          return
+        }else if(loginResponse.message === "Email or password are not correct!"){
+          setPasswordError("Email or password are not correct!")
+          return
+        }
 
-        
+        setPasswordError("Some error occured, please try again!")
     })
 
   };
