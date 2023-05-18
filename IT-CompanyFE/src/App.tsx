@@ -6,6 +6,7 @@ import Home from "./pages/Home";
 import { Login } from "./pages/Login";
 import { PasswordlessLogin } from "./pages/PasswordlessLogin";
 import ViewAllEmployees from './pages/ViewAllEmployees';
+import WaitRoom from './pages/WaitRoom';
 
 function App(){
   useEffect(() => {
@@ -22,6 +23,7 @@ function App(){
           <Route path="/" element={<Home/>} />
           <Route path="/login" element={<Login/>} />
           <Route path="/passwordless-login" element={<PasswordlessLogin/>} />
+          <Route path="/wait-room" element={<WaitRoom/>} />
         </Routes>
       </div>
     </>

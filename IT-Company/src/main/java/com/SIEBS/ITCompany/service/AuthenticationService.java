@@ -11,6 +11,7 @@ import com.SIEBS.ITCompany.enumerations.TokenType;
 import com.SIEBS.ITCompany.model.User;
 import com.SIEBS.ITCompany.repository.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -116,6 +117,8 @@ public class AuthenticationService {
       }
       var jwtToken = jwtService.generateToken(user);
       var refreshToken = jwtService.generateRefreshToken(user);
+      revokeAllUserTokens(user);
+      saveUserToken(user, jwtToken);
       return AuthenticationResponse.builder()
               .accessToken(jwtToken)
               .refreshToken(refreshToken)
@@ -130,7 +133,7 @@ public class AuthenticationService {
       return "User not found!";
     }
     var jwtToken = jwtService.generateTokenForPasswordlessLogin(user);
-    String url = "http://localhost:8081/api/v1/auth/authenticate?token=" + jwtToken;
+    String url = "https://localhost:8081/api/v1/auth/authenticate?token=" + jwtToken;
     magicLinkService.Save(MagicLink.builder().used(false).token(jwtToken).build());
     System.out.println(url);
     //ovjde ide slanje linka na mejl
@@ -194,5 +197,26 @@ public class AuthenticationService {
         new ObjectMapper().writeValue(response.getOutputStream(), authResponse);
       }
     }
+  }
+
+  public TokensDTO getTokensFromRequest(HttpServletRequest request){
+    Cookie[] cookies = request.getCookies();
+    String accessToken = "";
+    String refreshToken = "";
+    if (cookies != null) {
+      for (Cookie cookie : cookies) {
+        if (cookie.getName().equals("access_token")) {
+          accessToken = cookie.getValue();
+        }
+        if (cookie.getName().equals("refresh_token")) {
+          refreshToken = cookie.getValue();
+        }
+      }
+    }
+    return TokensDTO.builder().accessToken(accessToken).refreshToken(refreshToken).build();
+  }
+
+  public User getUserByEmail(String email){
+    return repository.findByEmail(email).orElse(null);
   }
 }

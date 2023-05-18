@@ -39,14 +39,15 @@ export function PasswordlessLogin() {
     }
 
     // Send form data to server
-    await fetch("http://localhost:8081/api/v1/auth/passwordless-authenticate", {
+    await fetch("https://localhost:8081/api/v1/auth/generateAndSendToken", {
       method: "POST",
       headers: {
         "Content-type": "application/json",
       },
+      credentials: "include",
       body: JSON.stringify({
         "email": email,
-      }),
+      })
     }).then(res => res.json())
       .then(data => {
 

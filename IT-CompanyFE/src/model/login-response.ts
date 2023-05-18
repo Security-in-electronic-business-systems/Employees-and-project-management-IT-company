@@ -1,31 +1,23 @@
 export class LoginResponse {
-    userId: number = 0;
-    firstname: string = '';
-    lastname: string = '';
-    email: string = '';
-    phoneNumber: string = '';
-    title: string = '';
-    address: Address = new Address();
-    role: Role = new Role();
-    message: string = '';
-  }
-  
-  export class Address {
-    country: string = '';
-    city: string = '';
-    street: string = '';
-    number: string = '';
-  
-    constructor(country: string = '', city: string = '', street: string = '', number: string = '') {
-      this.country = country;
-      this.city = city;
-      this.street = street;
-      this.number = number;
-    }
-  }
-  
-  export class Role {
-    id: number = 0;
-    name: string = '';
-  }
-  
+  userId = 0;
+  firstname=  '';
+  lastname = '';
+  email = '';
+  phoneNumber = '';
+  title = '';
+  address = new Address();
+  role = new Role();
+  message = '';
+}
+
+export class Address {
+  country = '';
+  city = '';
+  street = '';
+  number = '';
+}
+
+export class Role {
+  id = 0;
+  name = '';
+}
