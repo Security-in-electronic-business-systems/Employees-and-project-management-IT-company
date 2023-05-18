@@ -4,7 +4,9 @@ import com.SIEBS.ITCompany.dto.AuthenticationResponse;
 import com.SIEBS.ITCompany.dto.MessageResponse;
 import com.SIEBS.ITCompany.dto.RegisterRequest;
 import com.SIEBS.ITCompany.dto.*;
+import com.SIEBS.ITCompany.model.User;
 import com.SIEBS.ITCompany.service.AuthenticationService;
+import com.SIEBS.ITCompany.service.UserService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -24,8 +27,10 @@ import java.net.URI;
 public class AuthenticationController {
 
   private final AuthenticationService service;
+    private final UserService userService;
 
- // @CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
+
+    // @CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
   @PostMapping("/authenticate")
   public ResponseEntity<AuthenticationResponse> authenticate(
       @RequestBody AuthenticationRequest request,
@@ -120,4 +125,11 @@ public class AuthenticationController {
 
     return ResponseEntity.ok(new MessageResponse("Access token: " + accessToken + " , Refresh token: " + refreshToken));
   }
+
+    @GetMapping("/getAll")
+    public ResponseEntity<List<User>> getAllUsers() {
+        List<User> users = userService.getAllUsers();
+        return ResponseEntity.ok(users);
+    }
+
 }

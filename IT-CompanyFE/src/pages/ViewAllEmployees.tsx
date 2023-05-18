@@ -22,7 +22,9 @@ function ViewAllEmployees() {
   const [users, setUsers] = useState<User[]>([]);
 
   useEffect(() => {
-    fetch('https://localhost:8081/api/v1/auth/message')
+    fetch('https://localhost:8081/api/v1/auth/getAll',{
+      method: "GET",
+      credentials: "include",})
       .then((response) => response.json())
       .then((data) => {
         setUsers(data);
