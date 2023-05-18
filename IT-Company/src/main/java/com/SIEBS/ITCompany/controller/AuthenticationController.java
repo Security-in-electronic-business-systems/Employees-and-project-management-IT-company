@@ -100,32 +100,4 @@ public class AuthenticationController {
     service.refreshToken(request, response);
   }
 
-
-  @GetMapping("/message")
-  public ResponseEntity<String> getMessage() {
-    String message = "Ovo je poruka sa servera.";
-    return ResponseEntity.ok(message);
-  }
- // @CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
-  @GetMapping("/endpoint")
-  public ResponseEntity<MessageResponse> passwordlessAuthenticate(HttpServletRequest request){
-    Cookie[] cookies = request.getCookies();
-    String accessToken = "";
-    String refreshToken = "";
-    if (cookies != null) {
-      for (Cookie cookie : cookies) {
-        if (cookie.getName().equals("access_token")) {
-          accessToken = cookie.getValue();
-          // Ovdje možete obraditi pronađeni access token
-          System.out.println("Access Token: " + accessToken);
-        } else if (cookie.getName().equals("refresh_token")) {
-          refreshToken = cookie.getValue();
-          // Ovdje možete obraditi pronađeni refresh token
-          System.out.println("Refresh Token: " + refreshToken);
-        }
-      }
-    }
-
-    return ResponseEntity.ok(new MessageResponse("Access token: " + accessToken + " , Refresh token: " + refreshToken));
-  }
 }

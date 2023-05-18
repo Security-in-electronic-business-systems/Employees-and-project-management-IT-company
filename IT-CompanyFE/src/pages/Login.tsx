@@ -87,21 +87,21 @@ export function Login() {
 
   const handleOnClick = async (event: SyntheticEvent) => {
     event.preventDefault()
-    // Send form data to server
+
     await fetch("https://localhost:8081/api/v1/demo/endpoint", {
-      method: "GET",
-      headers: {
-        "Content-type": "application/json",
-      },
-      //mode: "no-cors",
-      credentials: "include"
-    }).then(res => res.json())
-      .then(data => {
-
-        console.log(data)
-
-        
+    method: "GET",
+    headers: {
+      "Content-type": "application/json",
+    },
+    credentials: "include"
     })
+    .then( res => res.json())
+    .then(data => {
+      console.log(data);
+    })
+    .catch(error => {
+      console.error(error);
+    });
 
   };
 
@@ -136,7 +136,7 @@ export function Login() {
       <button type="submit" className="btn btn-primary btn-sm">Confirm</button>
       <div className="text-center mt-2">
         <a href="" onClick={handlePasswordlessLogin}>Login without password</a>
-        <button onClick={handleOnClick}>Klikni</button>
+        <button onClick={handleOnClick}>Klik</button>
       </div>
     </div>
   </form>
