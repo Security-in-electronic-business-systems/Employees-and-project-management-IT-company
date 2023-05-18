@@ -1,6 +1,6 @@
 package com.SIEBS.ITCompany.model;
 
-import com.SIEBS.ITCompany.enumerations.Role;
+import com.SIEBS.ITCompany.model.Role;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -34,7 +34,7 @@ public class User implements UserDetails {
   @OneToOne
   private Address address;
 
-  @Enumerated(EnumType.STRING)
+  @ManyToOne
   private Role role;
 
   @OneToMany(mappedBy = "user")
@@ -42,7 +42,7 @@ public class User implements UserDetails {
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
-    return List.of(new SimpleGrantedAuthority(role.name()));
+    return List.of(new SimpleGrantedAuthority(role.getName()));
   }
 
   @Override

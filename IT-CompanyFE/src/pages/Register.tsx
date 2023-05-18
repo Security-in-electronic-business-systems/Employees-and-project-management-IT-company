@@ -179,9 +179,9 @@ export function Register() {
             onChange={(event) => setRole(event.target.value)}
             required
           >
-            <option value="0">SOFTWARE_ENGINEER</option>
-            <option value="1">PROJECT_MANAGER</option>
-            <option value="2">HR_MANAGER</option>
+            <option value="SOFTWARE_ENGINEER">SOFTWARE_ENGINEER</option>
+            <option value="PROJECT_MANAGER">PROJECT_MANAGER</option>
+            <option value="HR_MANAGER">HR_MANAGER</option>
           </select>
         </div>
       </div>

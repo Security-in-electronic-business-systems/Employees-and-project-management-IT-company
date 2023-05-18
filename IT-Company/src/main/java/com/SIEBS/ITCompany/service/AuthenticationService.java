@@ -1,23 +1,23 @@
 package com.SIEBS.ITCompany.service;
 
-import com.SIEBS.ITCompany.dto.AuthenticationRequest;
-import com.SIEBS.ITCompany.dto.AuthenticationResponse;
-import com.SIEBS.ITCompany.dto.MessageResponse;
-import com.SIEBS.ITCompany.dto.PasswordlessAuthenticationRequest;
-import com.SIEBS.ITCompany.dto.RegisterRequest;
+import com.SIEBS.ITCompany.dto.*;
 import com.SIEBS.ITCompany.model.MagicLink;
+import com.SIEBS.ITCompany.model.Role;
 import com.SIEBS.ITCompany.model.Token;
 import com.SIEBS.ITCompany.repository.AddressRepository;
+import com.SIEBS.ITCompany.repository.RoleRepository;
 import com.SIEBS.ITCompany.repository.TokenRepository;
 import com.SIEBS.ITCompany.enumerations.TokenType;
 import com.SIEBS.ITCompany.model.User;
 import com.SIEBS.ITCompany.repository.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -30,6 +30,7 @@ import java.util.Optional;
 public class AuthenticationService {
   private final UserRepository repository;
   private final TokenRepository tokenRepository;
+  private final RoleRepository roleRepository;
 
   private final AddressRepository addressRepository;
   private final PasswordEncoder passwordEncoder;
@@ -38,26 +39,49 @@ public class AuthenticationService {
   private final MagicLinkService magicLinkService;
 
   public AuthenticationResponse authenticate(AuthenticationRequest request) {
-    authenticationManager.authenticate(
-        new UsernamePasswordAuthenticationToken(
-            request.getEmail(),
-            request.getPassword()
-        )
-    );
+    try{
+      authenticationManager.authenticate(
+              new UsernamePasswordAuthenticationToken(
+                      request.getEmail(),
+                      request.getPassword()
+              )
+      );
+    }catch(BadCredentialsException e){
+      return AuthenticationResponse
+              .builder()
+              .loginResponse(LoginResponse
+                      .builder()
+                      .message("Email or password are not correct!")
+                      .build())
+              .build();
+    }
     var user = repository.findByEmail(request.getEmail())
         .orElseThrow();
     var jwtToken = jwtService.generateToken(user);
     var refreshToken = jwtService.generateRefreshToken(user);
     revokeAllUserTokens(user);
     saveUserToken(user, jwtToken);
-    return AuthenticationResponse.builder()
-        .accessToken(jwtToken)
+    return AuthenticationResponse
+            .builder()
+            .accessToken(jwtToken)
             .refreshToken(refreshToken)
-        .build();
+            .loginResponse(LoginResponse.builder()
+                    .userId(user.getId())
+                    .firstname(user.getFirstname())
+                    .lastname(user.getLastname())
+                    .email(user.getEmail())
+                    .title(user.getTitle())
+                    .phoneNumber(user.getPhoneNumber())
+                    .address(user.getAddress())
+                    .role(user.getRole())
+                    .message("Successfully!")
+                    .build())
+            .build();
   }
 
   public MessageResponse register(RegisterRequest request) {
     Optional<User> tmp = repository.findByEmail(request.getEmail());
+    Role role = roleRepository.findByName(request.getRole());
     if (!tmp.isPresent()){
       var user = User.builder()
               .firstname(request.getFirstname())
@@ -68,7 +92,7 @@ public class AuthenticationService {
               .isApproved(false)
               .title(request.getTitle())
               .address(request.getAddress())
-              .role(request.getRole())
+              .role(role)
               .build();
       var address =addressRepository.save(request.getAddress());
       var savedUser = repository.save(user);
@@ -93,6 +117,8 @@ public class AuthenticationService {
       }
       var jwtToken = jwtService.generateToken(user);
       var refreshToken = jwtService.generateRefreshToken(user);
+      revokeAllUserTokens(user);
+      saveUserToken(user, jwtToken);
       return AuthenticationResponse.builder()
               .accessToken(jwtToken)
               .refreshToken(refreshToken)
@@ -107,7 +133,7 @@ public class AuthenticationService {
       return "User not found!";
     }
     var jwtToken = jwtService.generateTokenForPasswordlessLogin(user);
-    String url = "http://localhost:8081/api/v1/auth/authenticate?token=" + jwtToken;
+    String url = "https://localhost:8081/api/v1/auth/authenticate?token=" + jwtToken;
     magicLinkService.Save(MagicLink.builder().used(false).token(jwtToken).build());
     System.out.println(url);
     //ovjde ide slanje linka na mejl
@@ -171,5 +197,26 @@ public class AuthenticationService {
         new ObjectMapper().writeValue(response.getOutputStream(), authResponse);
       }
     }
+  }
+
+  public TokensDTO getTokensFromRequest(HttpServletRequest request){
+    Cookie[] cookies = request.getCookies();
+    String accessToken = "";
+    String refreshToken = "";
+    if (cookies != null) {
+      for (Cookie cookie : cookies) {
+        if (cookie.getName().equals("access_token")) {
+          accessToken = cookie.getValue();
+        }
+        if (cookie.getName().equals("refresh_token")) {
+          refreshToken = cookie.getValue();
+        }
+      }
+    }
+    return TokensDTO.builder().accessToken(accessToken).refreshToken(refreshToken).build();
+  }
+
+  public User getUserByEmail(String email){
+    return repository.findByEmail(email).orElse(null);
   }
 }
