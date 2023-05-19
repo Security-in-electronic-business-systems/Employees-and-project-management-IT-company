@@ -1,6 +1,6 @@
-import { SyntheticEvent, useEffect, useState } from "react";
+import { SyntheticEvent, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { FaChalkboardTeacher,  FaEnvelope, FaLock, FaPhone, FaSearchLocation, FaTeamspeak, FaUser, FaUserTag } from "react-icons/fa";
+import { FaChalkboardTeacher, FaEnvelope, FaLock, FaPhone, FaSearchLocation, FaUser, FaUserTag } from "react-icons/fa";
 
 export function Register() {
   const [name, setName] = useState("");
@@ -8,9 +8,9 @@ export function Register() {
   const [email, setEmail] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [title, setTitle] = useState("");
-  const [emailError, setEmailError] = useState("");
+  const [, setEmailError] = useState("");
   const [password, setPassword] = useState("");
-  const [inputValue, setInputValue] = useState('');
+  //const [inputValue, setInputValue] = useState('');
   const [repeatPassword, setRepeatPassword] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [country, setCountry] = useState("");
@@ -41,7 +41,7 @@ export function Register() {
 
     setPasswordError("")
 
-    await fetch("http://localhost:8081/api/v1/auth/register", {
+    await fetch("https://localhost:8081/api/v1/auth/register", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -179,9 +179,9 @@ export function Register() {
             onChange={(event) => setRole(event.target.value)}
             required
           >
-            <option value="0">SOFTWARE_ENGINEER</option>
-            <option value="1">PROJECT_MANAGER</option>
-            <option value="2">HR_MANAGER</option>
+            <option value="SOFTWARE_ENGINEER">SOFTWARE_ENGINEER</option>
+            <option value="PROJECT_MANAGER">PROJECT_MANAGER</option>
+            <option value="HR_MANAGER">HR_MANAGER</option>
           </select>
         </div>
       </div>

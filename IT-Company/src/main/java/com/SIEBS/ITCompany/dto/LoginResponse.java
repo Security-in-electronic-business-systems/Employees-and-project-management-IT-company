@@ -1,23 +1,27 @@
 package com.SIEBS.ITCompany.dto;
 
-import com.SIEBS.ITCompany.enumerations.Role;
+import com.SIEBS.ITCompany.model.Role;
 import com.SIEBS.ITCompany.model.Address;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.OneToOne;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Builder;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
+@Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
-@Setter
-public class RegisterRequest {
+public class LoginResponse {
+    private Integer userId;
     private String firstname;
     private String lastname;
     private String email;
-    private String password;
     private String phoneNumber;
     private String title;
     private Address address;
-    private String role;
+    private Role role;
+    private String message;
 }

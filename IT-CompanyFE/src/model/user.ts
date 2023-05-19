@@ -6,16 +6,16 @@ export class User {
     phoneNumber='';
     title = '';
     address : Address = new Address('','','','');
-    type: UserType=4;
+    role = '';
   
-    constructor(firstname: string, lastname: string, email: string, password: string, phoneNumber: string, title: string, type: UserType) {
+    constructor(firstname: string, lastname: string, email: string, password: string, phoneNumber: string, title: string, role: string) {
       this.firstname = firstname;
       this.lastname = lastname;
       this.email = email;
       this.password = password;
       this.phoneNumber = phoneNumber;
       this.title = title;
-      this.type = type;
+      this.role = role;
     }
   }
 

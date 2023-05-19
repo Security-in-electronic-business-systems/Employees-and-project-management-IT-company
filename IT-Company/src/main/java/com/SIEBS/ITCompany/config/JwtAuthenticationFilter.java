@@ -4,6 +4,7 @@ import com.SIEBS.ITCompany.service.JwtService;
 import com.SIEBS.ITCompany.repository.TokenRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -36,14 +37,20 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
       filterChain.doFilter(request, response);
       return;
     }
-    final String authHeader = request.getHeader("Authorization");
-    final String jwt;
+    Cookie[] cookies = request.getCookies();
+    String jwt = "";
+    if (cookies != null) {
+      for (Cookie cookie : cookies) {
+        if (cookie.getName().equals("access_token")) {
+          jwt = cookie.getValue();
+        }
+      }
+    }
     final String userEmail;
-    if (authHeader == null ||!authHeader.startsWith("Bearer ")) {
+    if (jwt == "") {
       filterChain.doFilter(request, response);
       return;
     }
-    jwt = authHeader.substring(7);
     userEmail = jwtService.extractUsername(jwt);
     if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
       UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
@@ -63,5 +70,18 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
       }
     }
     filterChain.doFilter(request, response);
+  }
+
+  private String getTokenFromRequest(HttpServletRequest request){
+    Cookie[] cookies = request.getCookies();
+    String accessToken = "";
+    if (cookies != null) {
+      for (Cookie cookie : cookies) {
+        if (cookie.getName().equals("access_token")) {
+          accessToken = cookie.getValue();
+        }
+      }
+    }
+    return accessToken;
   }
 }
