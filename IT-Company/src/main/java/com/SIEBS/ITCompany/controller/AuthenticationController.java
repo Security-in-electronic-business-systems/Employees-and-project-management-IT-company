@@ -46,7 +46,7 @@ public class AuthenticationController {
       Cookie refreshTokenCookie = new Cookie("refresh_token", authResponse.getRefreshToken());
       refreshTokenCookie.setHttpOnly(true);
       accessTokenCookie.setDomain("localhost");
-      refreshTokenCookie.setPath("/api/v1/auth/refresh-token");
+      refreshTokenCookie.setPath("/");
       response.addCookie(refreshTokenCookie);
       return ResponseEntity.ok(authResponse.getLoginResponse());
     }
@@ -72,7 +72,7 @@ public class AuthenticationController {
       Cookie refreshTokenCookie = new Cookie("refresh_token", authResponse.getRefreshToken());
       refreshTokenCookie.setHttpOnly(true);
       accessTokenCookie.setDomain("localhost");
-      refreshTokenCookie.setPath("/api/v1/auth/refresh-token");
+      refreshTokenCookie.setPath("/");
       response.addCookie(refreshTokenCookie);
 
     return ResponseEntity.status(HttpStatus.FOUND)

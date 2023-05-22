@@ -59,8 +59,6 @@ public class AuthenticationService {
         .orElseThrow();
     var jwtToken = jwtService.generateToken(user);
     var refreshToken = jwtService.generateRefreshToken(user);
-    revokeAllUserTokens(user);
-    saveUserToken(user, jwtToken);
     return AuthenticationResponse
             .builder()
             .accessToken(jwtToken)
@@ -96,9 +94,6 @@ public class AuthenticationService {
               .build();
       var address =addressRepository.save(request.getAddress());
       var savedUser = repository.save(user);
-      var jwtToken = jwtService.generateToken(user);
-      var refreshToken = jwtService.generateRefreshToken(user);
-      saveUserToken(savedUser, jwtToken);
       return MessageResponse.builder()
               .message("Success!")
               .build();
@@ -149,7 +144,7 @@ public class AuthenticationService {
     return true;
   }
 
-  private void saveUserToken(User user, String jwtToken) {
+  public void saveUserToken(User user, String jwtToken) {
     var token = Token.builder()
         .user(user)
         .token(jwtToken)
@@ -160,7 +155,7 @@ public class AuthenticationService {
     tokenRepository.save(token);
   }
 
-  private void revokeAllUserTokens(User user) {
+  public void revokeAllUserTokens(User user) {
     var validUserTokens = tokenRepository.findAllValidTokenByUser(user.getId());
     if (validUserTokens.isEmpty())
       return;
