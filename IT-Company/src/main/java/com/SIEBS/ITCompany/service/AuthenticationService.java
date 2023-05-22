@@ -39,15 +39,18 @@ public class AuthenticationService {
   private final MagicLinkService magicLinkService;
 
   public AuthenticationResponse authenticate(AuthenticationRequest request) {
+    try{
+      if(!repository.findByEmail(request.getEmail()).orElse(null).isApproved()){
+        return AuthenticationResponse
+                .builder()
+                .loginResponse(LoginResponse
+                        .builder()
+                        .message("Your account are not approved by administrator!")
+                        .build())
+                .build();
+      }
+    }catch (Exception e){
 
-    if(repository.findByEmail(request.getEmail()).orElse(null).isApproved()){
-      return AuthenticationResponse
-              .builder()
-              .loginResponse(LoginResponse
-                      .builder()
-                      .message("Your account are not approved by administrator!")
-                      .build())
-              .build();
     }
 
     try{
