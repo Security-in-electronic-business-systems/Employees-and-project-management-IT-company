@@ -5,9 +5,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4c611d39-afa5-411e-8e8b-fb0c98d133ae" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/IT-Company/src/main/java/com/SIEBS/ITCompany/service/impl/EmailServiceImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/IT-Company/src/main/java/com/SIEBS/ITCompany/ItCompanyApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/IT-Company/src/main/java/com/SIEBS/ITCompany/ItCompanyApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/IT-Company/src/main/java/com/SIEBS/ITCompany/config/ApplicationConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/IT-Company/src/main/java/com/SIEBS/ITCompany/config/ApplicationConfig.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/IT-Company/src/main/java/com/SIEBS/ITCompany/config/SecurityConfiguration.java" beforeDir="false" afterPath="$PROJECT_DIR$/IT-Company/src/main/java/com/SIEBS/ITCompany/config/SecurityConfiguration.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/IT-Company/src/main/java/com/SIEBS/ITCompany/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/IT-Company/src/main/java/com/SIEBS/ITCompany/controller/UserController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/IT-Company/src/main/java/com/SIEBS/ITCompany/service/EmailService.java" beforeDir="false" afterPath="$PROJECT_DIR$/IT-Company/src/main/java/com/SIEBS/ITCompany/service/EmailService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/IT-Company/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/IT-Company/src/main/resources/application.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -92,21 +97,5 @@
         </entry>
       </map>
     </option>
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/IT-Company/src/main/java/com/SIEBS/ITCompany/service/EmailService.java</url>
-          <line>18</line>
-          <option name="timeStamp" value="3" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/IT-Company/src/main/java/com/SIEBS/ITCompany/controller/UserController.java</url>
-          <line>19</line>
-          <option name="timeStamp" value="5" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
 </project>

@@ -7,10 +7,11 @@ import { Login } from "./pages/Login";
 import { PasswordlessLogin } from "./pages/PasswordlessLogin";
 import ViewAllEmployees from './pages/ViewAllEmployees';
 import WaitRoom from './pages/WaitRoom';
-import Protected from './authorization/Protected';
 import CreateProject from './pages/CreateProject';
 import Projects from './pages/Projects';
 import Profil from './pages/Profil';
+import SessionExpired from './pages/SessionExpired';
+import TokenExpired from './pages/TokenExpired';0
 
 function App(){
   useEffect(() => {
@@ -27,10 +28,12 @@ function App(){
           <Route path="/profil" element={<Profil/>} />
           <Route path="/createProject" element={<CreateProject/>} />
           <Route path="/register" element={<Register/>} />
-          <Route path="/" element={<Protected role={"PROJECT_MANAGE"}><Home/></Protected>} />
+          <Route path="/" element={<Home/>} />
           <Route path="/login" element={<Login/>} />
           <Route path="/passwordless-login" element={<PasswordlessLogin/>} />
           <Route path="/wait-room" element={<WaitRoom/>} />
+          <Route path="/session-expired" element={<SessionExpired/>} />
+          <Route path="/token-expired" element={<TokenExpired/>} />
         </Routes>
       </div>
     </>

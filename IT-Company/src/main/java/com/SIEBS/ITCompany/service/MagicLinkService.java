@@ -18,4 +18,8 @@ public class MagicLinkService {
     public void Save(MagicLink ml){
         repository.save(ml);
     }
+
+    public void setUsedByToken(String token){
+        repository.setUsedByToken(token);
+    }
 }
