@@ -39,10 +39,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     }
     Cookie[] cookies = request.getCookies();
     String jwt = "";
+    String refreshToken = "";
     if (cookies != null) {
       for (Cookie cookie : cookies) {
         if (cookie.getName().equals("access_token")) {
           jwt = cookie.getValue();
+        }
+        if (cookie.getName().equals("refresh_token")) {
+          refreshToken = cookie.getValue();
         }
       }
     }
@@ -52,8 +56,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
       return;
     }
     userEmail = jwtService.extractUsername(jwt);
+    UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
     if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-      UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
       var isTokenValid = tokenRepository.findByToken(jwt)
           .map(t -> !t.isExpired() && !t.isRevoked())
           .orElse(false);
@@ -69,6 +73,19 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         SecurityContextHolder.getContext().setAuthentication(authToken);
       }
     }
+
+    /*if(jwtService.tokenBelongsToTheUserButHasExpired(jwt, userDetails)){
+      if(jwtService.isTokenValid(refreshToken, userDetails)){
+        String accessToken = jwtService.generateToken(userDetails);
+        Cookie accessTokenCookie = new Cookie("access_token", accessToken);
+        accessTokenCookie.setHttpOnly(true);
+        accessTokenCookie.setDomain("localhost");
+        accessTokenCookie.setPath("/");
+        response.addCookie(accessTokenCookie);
+      }else{
+        return;
+      }
+    }*/
     filterChain.doFilter(request, response);
   }
 
