@@ -7,6 +7,7 @@ import com.SIEBS.ITCompany.dto.*;
 import com.SIEBS.ITCompany.model.User;
 import com.SIEBS.ITCompany.service.AuthenticationService;
 import com.SIEBS.ITCompany.service.JwtService;
+import com.SIEBS.ITCompany.service.MagicLinkService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -28,6 +29,7 @@ public class AuthenticationController {
 
   private final AuthenticationService service;
   private final JwtService jwtService;
+  private final MagicLinkService magicLinkService;
 
   @PostMapping("/authenticate")
   public ResponseEntity<LoginResponse> authenticate(
@@ -62,7 +64,10 @@ public class AuthenticationController {
           HttpServletResponse response
   ) {
     AuthenticationResponse authResponse = service.generateAccessAndRefresToken(token);
-    URI redirectUri = URI.create("http://localhost:3000/wait-room");
+    URI waitRoomUri = URI.create("http://localhost:3000/wait-room");
+    URI tokenExpiredUri = URI.create("http://localhost:3000/token-expired");
+    if(authResponse != null){
+      magicLinkService.setUsedByToken(token);
 
       Cookie accessTokenCookie = new Cookie("access_token", authResponse.getAccessToken());
       accessTokenCookie.setHttpOnly(true);
@@ -76,9 +81,16 @@ public class AuthenticationController {
       refreshTokenCookie.setPath("/");
       response.addCookie(refreshTokenCookie);
 
+      return ResponseEntity.status(HttpStatus.FOUND)
+              .location(waitRoomUri)
+              .body(authResponse);
+    }
+
+    //authResponse.getLoginResponse().setMessage("Link was expired!");
     return ResponseEntity.status(HttpStatus.FOUND)
-            .location(redirectUri)
+            .location(tokenExpiredUri)
             .body(authResponse);
+
   }
 
   @PostMapping("/generateAndSendToken")
