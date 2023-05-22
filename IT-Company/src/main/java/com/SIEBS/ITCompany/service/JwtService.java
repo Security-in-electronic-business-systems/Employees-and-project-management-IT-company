@@ -2,12 +2,15 @@ package com.SIEBS.ITCompany.service;
 
 import com.SIEBS.ITCompany.model.User;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
 import java.security.Key;
@@ -87,7 +90,13 @@ public class JwtService {
   }
 
   public boolean isTokenExpired(String token) {
-    return extractExpiration(token).before(new Date());
+    try {
+      final Date expiration = extractExpiration(token);
+      return expiration.before(new Date());
+    } catch (ExpiredJwtException e) {
+      // Token je istekao, rukovanje ovom situacijom
+      return true;
+    }
   }
 
   private Date extractExpiration(String token) {

@@ -7,6 +7,7 @@ import { Login } from "./pages/Login";
 import { PasswordlessLogin } from "./pages/PasswordlessLogin";
 import ViewAllEmployees from './pages/ViewAllEmployees';
 import WaitRoom from './pages/WaitRoom';
+import SessionExpired from './pages/SessionExpired';
 
 function App(){
   useEffect(() => {
@@ -24,6 +25,7 @@ function App(){
           <Route path="/login" element={<Login/>} />
           <Route path="/passwordless-login" element={<PasswordlessLogin/>} />
           <Route path="/wait-room" element={<WaitRoom/>} />
+          <Route path="/session-expired" element={<SessionExpired/>} />
         </Routes>
       </div>
     </>

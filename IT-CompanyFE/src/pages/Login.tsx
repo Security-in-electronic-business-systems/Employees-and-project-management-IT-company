@@ -66,6 +66,9 @@ export function Login() {
         }else if(loginResponse.message === "Email or password are not correct!"){
           setPasswordError("Email or password are not correct!")
           return
+        }else if(loginResponse.message === "Your account are not approved by administrator!"){
+          setPasswordError("Your account are not approved by administrator!")
+          return
         }
 
         setPasswordError("Some error occured, please try again!")
@@ -88,21 +91,22 @@ export function Login() {
   const handleOnClick = async (event: SyntheticEvent) => {
     event.preventDefault()
 
-    await fetch("https://localhost:8081/api/v1/demo/endpoint", {
+    const response = await fetch("https://localhost:8081/api/v1/demo/endpoint", {
     method: "GET",
     headers: {
       "Content-type": "application/json",
     },
     credentials: "include"
-    })
-    .then( res => res.json())
-    .then(data => {
-      console.log(data);
-    })
-    .catch(error => {
-      console.error(error);
     });
-
+    
+    if (response.status === 403) {
+      console.log("majmunee");
+      localStorage.setItem('loggedUser', "")
+      navigate("/session-expired")
+    } else {
+      const data = await response.json();
+      console.log(data);
+    }
   };
 
   return (

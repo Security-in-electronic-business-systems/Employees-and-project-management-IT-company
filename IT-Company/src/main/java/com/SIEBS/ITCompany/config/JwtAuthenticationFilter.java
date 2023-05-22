@@ -1,5 +1,6 @@
 package com.SIEBS.ITCompany.config;
 
+import com.SIEBS.ITCompany.service.AuthenticationService;
 import com.SIEBS.ITCompany.service.JwtService;
 import com.SIEBS.ITCompany.repository.TokenRepository;
 import jakarta.servlet.FilterChain;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 @Component
 @RequiredArgsConstructor
@@ -51,17 +53,32 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
       }
     }
     final String userEmail;
-    if (jwt == "") {
+    if (jwt == "" || refreshToken == "") {
       filterChain.doFilter(request, response);
       return;
     }
+
+    if(jwtService.isTokenExpired(jwt)){
+      if(jwtService.isTokenExpired(refreshToken)){
+        filterChain.doFilter(request, response);
+        return;
+      }
+      String accessToken = refreshAccessToken(refreshToken);
+      Cookie accessTokenCookie = new Cookie("access_token", accessToken);
+      accessTokenCookie.setHttpOnly(true);
+      accessTokenCookie.setDomain("localhost");
+      accessTokenCookie.setPath("/");
+      response.addCookie(accessTokenCookie);
+      jwt = accessToken;
+    }
+
     userEmail = jwtService.extractUsername(jwt);
-    UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
     if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-      var isTokenValid = tokenRepository.findByToken(jwt)
+      UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
+      /*var isTokenValid = tokenRepository.findByToken(jwt)
           .map(t -> !t.isExpired() && !t.isRevoked())
-          .orElse(false);
-      if (jwtService.isTokenValid(jwt, userDetails) && isTokenValid) {
+          .orElse(false);*/
+      if (jwtService.isTokenValid(jwt, userDetails)) {
         UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
             userDetails,
             null,
@@ -73,20 +90,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         SecurityContextHolder.getContext().setAuthentication(authToken);
       }
     }
-
-    /*if(jwtService.tokenBelongsToTheUserButHasExpired(jwt, userDetails)){
-      if(jwtService.isTokenValid(refreshToken, userDetails)){
-        String accessToken = jwtService.generateToken(userDetails);
-        Cookie accessTokenCookie = new Cookie("access_token", accessToken);
-        accessTokenCookie.setHttpOnly(true);
-        accessTokenCookie.setDomain("localhost");
-        accessTokenCookie.setPath("/");
-        response.addCookie(accessTokenCookie);
-      }else{
-        return;
-      }
-    }*/
     filterChain.doFilter(request, response);
+  }
+
+  public String refreshAccessToken(String refreshToken) {
+    final String username = jwtService.extractUsername(refreshToken);
+    UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
+    return jwtService.generateToken(new HashMap<>(), userDetails);
   }
 
   private String getTokenFromRequest(HttpServletRequest request){
