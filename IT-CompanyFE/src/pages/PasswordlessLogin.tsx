@@ -81,9 +81,6 @@ export function PasswordlessLogin() {
         </div>
         <div className="d-grid mt-4">
           <button type="submit" className="btn btn-primary btn-sm">Confirm</button>
-          <div className="text-center mt-2">
-            <a href="">Login without password</a>
-          </div>
         </div>
       </form>
     </div>

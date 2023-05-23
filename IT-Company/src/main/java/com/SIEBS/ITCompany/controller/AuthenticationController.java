@@ -6,7 +6,9 @@ import com.SIEBS.ITCompany.dto.RegisterRequest;
 import com.SIEBS.ITCompany.dto.*;
 import com.SIEBS.ITCompany.model.User;
 import com.SIEBS.ITCompany.service.AuthenticationService;
+import com.SIEBS.ITCompany.service.UserService;
 import com.SIEBS.ITCompany.service.JwtService;
+import com.SIEBS.ITCompany.service.MagicLinkService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -15,10 +17,12 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -26,17 +30,21 @@ import java.net.URI;
 public class AuthenticationController {
 
   private final AuthenticationService service;
+  private final UserService userService;
   private final JwtService jwtService;
+  private final MagicLinkService magicLinkService;
+
 
   @PostMapping("/authenticate")
+
   public ResponseEntity<LoginResponse> authenticate(
-      @RequestBody AuthenticationRequest request,
-      HttpServletResponse response
+          @RequestBody AuthenticationRequest request,
+          HttpServletResponse response
 
   ) {
     AuthenticationResponse authResponse = service.authenticate(request);
 
-    if(authResponse != null){
+    if (authResponse != null) {
       Cookie accessTokenCookie = new Cookie("access_token", authResponse.getAccessToken());
       accessTokenCookie.setHttpOnly(true);
       accessTokenCookie.setDomain("localhost");
@@ -46,7 +54,7 @@ public class AuthenticationController {
       Cookie refreshTokenCookie = new Cookie("refresh_token", authResponse.getRefreshToken());
       refreshTokenCookie.setHttpOnly(true);
       accessTokenCookie.setDomain("localhost");
-      refreshTokenCookie.setPath("/api/v1/auth/refresh-token");
+      refreshTokenCookie.setPath("/");
       response.addCookie(refreshTokenCookie);
       return ResponseEntity.ok(authResponse.getLoginResponse());
     }
@@ -61,23 +69,33 @@ public class AuthenticationController {
           HttpServletResponse response
   ) {
     AuthenticationResponse authResponse = service.generateAccessAndRefresToken(token);
-    URI redirectUri = URI.create("http://localhost:3000/wait-room");
+    URI waitRoomUri = URI.create("http://localhost:3000/wait-room");
+    URI tokenExpiredUri = URI.create("http://localhost:3000/token-expired");
+    if(authResponse != null){
+      magicLinkService.setUsedByToken(token);
 
-      Cookie accessTokenCookie = new Cookie("access_token", authResponse.getAccessToken());
-      accessTokenCookie.setHttpOnly(true);
-      accessTokenCookie.setDomain("localhost");
-      accessTokenCookie.setPath("/");
-      response.addCookie(accessTokenCookie);
+    Cookie accessTokenCookie = new Cookie("access_token", authResponse.getAccessToken());
+    accessTokenCookie.setHttpOnly(true);
+    accessTokenCookie.setDomain("localhost");
+    accessTokenCookie.setPath("/");
+    response.addCookie(accessTokenCookie);
 
       Cookie refreshTokenCookie = new Cookie("refresh_token", authResponse.getRefreshToken());
       refreshTokenCookie.setHttpOnly(true);
       accessTokenCookie.setDomain("localhost");
-      refreshTokenCookie.setPath("/api/v1/auth/refresh-token");
+      refreshTokenCookie.setPath("/");
       response.addCookie(refreshTokenCookie);
 
+      return ResponseEntity.status(HttpStatus.FOUND)
+              .location(waitRoomUri)
+              .body(authResponse);
+    }
+
+    //authResponse.getLoginResponse().setMessage("Link was expired!");
     return ResponseEntity.status(HttpStatus.FOUND)
-            .location(redirectUri)
+            .location(tokenExpiredUri)
             .body(authResponse);
+
   }
 
   @PostMapping("/generateAndSendToken")
@@ -96,8 +114,8 @@ public class AuthenticationController {
 
   @PostMapping("/refresh-token")
   public void refreshToken(
-      HttpServletRequest request,
-      HttpServletResponse response
+          HttpServletRequest request,
+          HttpServletResponse response
   ) throws IOException {
     service.refreshToken(request, response);
   }
@@ -122,5 +140,6 @@ public class AuthenticationController {
             .message("Successfully!")
             .build());
   }
+
 
 }

@@ -5,18 +5,49 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4c611d39-afa5-411e-8e8b-fb0c98d133ae" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/IT-Company/src/main/java/com/SIEBS/ITCompany/dto/RegistrationRequestResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/IT-Company/src/main/java/com/SIEBS/ITCompany/dto/EmployeeProjectDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/IT-Company/src/main/java/com/SIEBS/ITCompany/dto/ProjectDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/IT-Company/src/main/java/com/SIEBS/ITCompany/dto/UsersResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/IT-Company/src/main/java/com/SIEBS/ITCompany/model/EmployeeProject.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/IT-Company/src/main/java/com/SIEBS/ITCompany/model/Project.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/IT-Company/src/main/java/com/SIEBS/ITCompany/repository/EmployeeProjectRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/IT-Company/src/main/java/com/SIEBS/ITCompany/repository/ProjectRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/IT-Company/src/main/java/com/SIEBS/ITCompany/service/UserService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/IT-CompanyFE/src/pages/CreateProject.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/IT-CompanyFE/src/pages/Profil.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/IT-CompanyFE/src/pages/Projects.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/IT-CompanyFE/src/pages/RegisterAdmin.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/IT-CompanyFE/src/pages/SessionExpired.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/IT-CompanyFE/src/pages/TokenExpired.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/IT-Company/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/IT-Company/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/IT-Company/src/main/java/com/SIEBS/ITCompany/ItCompanyApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/IT-Company/src/main/java/com/SIEBS/ITCompany/ItCompanyApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/IT-Company/src/main/java/com/SIEBS/ITCompany/config/CorsConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/IT-Company/src/main/java/com/SIEBS/ITCompany/config/CorsConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/IT-Company/src/main/java/com/SIEBS/ITCompany/config/JwtAuthenticationFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/IT-Company/src/main/java/com/SIEBS/ITCompany/config/JwtAuthenticationFilter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/IT-Company/src/main/java/com/SIEBS/ITCompany/controller/AuthenticationController.java" beforeDir="false" afterPath="$PROJECT_DIR$/IT-Company/src/main/java/com/SIEBS/ITCompany/controller/AuthenticationController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/IT-Company/src/main/java/com/SIEBS/ITCompany/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/IT-Company/src/main/java/com/SIEBS/ITCompany/controller/UserController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/IT-Company/src/main/java/com/SIEBS/ITCompany/model/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/IT-Company/src/main/java/com/SIEBS/ITCompany/model/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/IT-Company/src/main/java/com/SIEBS/ITCompany/repository/MagicLinkRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/IT-Company/src/main/java/com/SIEBS/ITCompany/repository/MagicLinkRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/IT-Company/src/main/java/com/SIEBS/ITCompany/repository/UserRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/IT-Company/src/main/java/com/SIEBS/ITCompany/repository/UserRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/IT-Company/src/main/java/com/SIEBS/ITCompany/service/AuthenticationService.java" beforeDir="false" afterPath="$PROJECT_DIR$/IT-Company/src/main/java/com/SIEBS/ITCompany/service/AuthenticationService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/IT-Company/src/main/java/com/SIEBS/ITCompany/service/JwtService.java" beforeDir="false" afterPath="$PROJECT_DIR$/IT-Company/src/main/java/com/SIEBS/ITCompany/service/JwtService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/IT-Company/src/main/java/com/SIEBS/ITCompany/service/MagicLinkService.java" beforeDir="false" afterPath="$PROJECT_DIR$/IT-Company/src/main/java/com/SIEBS/ITCompany/service/MagicLinkService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/IT-Company/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/IT-Company/src/main/resources/application.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/IT-Company/src/main/resources/myCA.pem" beforeDir="false" afterPath="$PROJECT_DIR$/IT-Company/src/main/resources/myCA.pem" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/IT-Company/src/main/resources/server.crt" beforeDir="false" afterPath="$PROJECT_DIR$/IT-Company/src/main/resources/server.crt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/IT-Company/src/main/resources/server.csr" beforeDir="false" afterPath="$PROJECT_DIR$/IT-Company/src/main/resources/server.csr" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/IT-Company/src/main/resources/server.key" beforeDir="false" afterPath="$PROJECT_DIR$/IT-Company/src/main/resources/server.key" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/IT-Company/src/main/resources/server.p12" beforeDir="false" afterPath="$PROJECT_DIR$/IT-Company/src/main/resources/server.p12" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/IT-CompanyFE/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/IT-CompanyFE/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/IT-CompanyFE/client.crt" beforeDir="false" afterPath="$PROJECT_DIR$/IT-CompanyFE/client.crt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/IT-CompanyFE/client.csr" beforeDir="false" afterPath="$PROJECT_DIR$/IT-CompanyFE/client.csr" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/IT-CompanyFE/client.key" beforeDir="false" afterPath="$PROJECT_DIR$/IT-CompanyFE/client.key" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/IT-CompanyFE/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/IT-CompanyFE/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/IT-CompanyFE/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/IT-CompanyFE/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/IT-CompanyFE/src/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/IT-CompanyFE/src/App.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/IT-CompanyFE/src/pages/Login.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/IT-CompanyFE/src/pages/Login.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/IT-CompanyFE/src/pages/PasswordlessLogin.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/IT-CompanyFE/src/pages/PasswordlessLogin.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/IT-CompanyFE/src/pages/ViewAllEmployees.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/IT-CompanyFE/src/pages/ViewAllEmployees.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
