@@ -38,6 +38,7 @@ public class AuthenticationService {
   private final JwtService jwtService;
   private final AuthenticationManager authenticationManager;
   private final MagicLinkService magicLinkService;
+  private final EmailService emailService;
 
   public AuthenticationResponse authenticate(AuthenticationRequest request) {
     try{
@@ -180,7 +181,9 @@ public class AuthenticationService {
     String url = "https://localhost:8081/api/v1/auth/authenticate?token=" + jwtToken;
     magicLinkService.Save(MagicLink.builder().used(false).token(jwtToken).build());
     System.out.println(url);
+    String message = "Hello " + user.getFirstname() + ", this is your access link: " + url;
     //ovjde ide slanje linka na mejl
+    emailService.sendMail(user.getEmail(), "IT-Company: Passwordless login", url);
     return url;
   }
 
