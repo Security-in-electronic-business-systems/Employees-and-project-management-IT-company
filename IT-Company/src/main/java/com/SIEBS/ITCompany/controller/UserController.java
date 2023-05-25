@@ -7,6 +7,7 @@ import com.SIEBS.ITCompany.model.EmployeeProject;
 import com.SIEBS.ITCompany.model.Project;
 import com.SIEBS.ITCompany.model.User;
 
+import com.SIEBS.ITCompany.service.AuthenticationService;
 import com.SIEBS.ITCompany.service.EmailService;
 import com.SIEBS.ITCompany.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -31,8 +32,8 @@ public class UserController {
     private final EmailService emailService;
     @Autowired
     private final UserService userService;
-
-
+    @Autowired
+    private final AuthenticationService authService;
 
     @PostMapping("/send")
     public String sendMail(@RequestParam(value = "file", required = false)MultipartFile[] file, String to, String subject, String body){
@@ -156,9 +157,8 @@ public class UserController {
 
     @PostMapping("/registration/accept")
     public ResponseEntity<MessageResponse> registrationAccept(@RequestBody RegistrationAccept request){
-        userService.updateRegistrationDate(request.getEmail(), new Date());
-        userService.approveUser(request.getEmail());
-        String response = emailService.sendMail(request.getEmail(), "Registration request - ACCEPTED", "LINK DODAJ");
+        String link = authService.generateTokenForRegistration(request.getEmail());
+        String response = emailService.sendMail(request.getEmail(), "Registration request - ACCEPTED", "Verificate your account by clicing on this link: "+link + " .");
         if (response == "Success!"){
             MessageResponse message = new MessageResponse("Registration request successfully accepted.");
             return ResponseEntity.ok(message);

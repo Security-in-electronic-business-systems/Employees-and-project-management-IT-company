@@ -184,7 +184,16 @@ public class AuthenticationService {
     return url;
   }
 
-  private boolean isTokenForPasswordlessLoginValid(String token){
+  public String generateTokenForRegistration(String email){
+    var user = repository.findByEmail(email).orElse(null);
+    var jwtToken = jwtService.generateTokenForPasswordlessLogin(user);
+    String url = "https://localhost:8081/api/v1/auth/register/verificate?token=" + jwtToken +"&email="+email;
+    magicLinkService.Save(MagicLink.builder().used(false).token(jwtToken).build());
+    System.out.println(url);
+    return url;
+  }
+
+  public boolean isTokenForPasswordlessLoginValid(String token){
     if(magicLinkService.isTokenUsed(token)){
       return false;
     }else if(jwtService.isTokenExpired(token)){
