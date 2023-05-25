@@ -23,6 +23,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.Optional;
 
 @Service
@@ -94,6 +95,8 @@ public class AuthenticationService {
   public MessageResponse register(RegisterRequest request) {
     Optional<User> tmp = repository.findByEmail(request.getEmail());
     Role role = roleRepository.findByName(request.getRole());
+    //Provjera jedinstvenosti mejla i provjera da li je korisniku sa navedenim emailom odbijen zahtjev za registraciju u posljednjih 10min
+
     if (!tmp.isPresent()){
       var user = User.builder()
               .firstname(request.getFirstname())
@@ -102,6 +105,7 @@ public class AuthenticationService {
               .password(passwordEncoder.encode(request.getPassword()))
               .phoneNumber(request.getPhoneNumber())
               .isApproved(false)
+              .registrationDate(null)
               .title(request.getTitle())
               .address(request.getAddress())
               .role(role)
@@ -109,11 +113,42 @@ public class AuthenticationService {
       var address =addressRepository.save(request.getAddress());
       var savedUser = repository.save(user);
       return MessageResponse.builder()
-              .message("Success!")
-              .build();
+              .message("Success!").build();
+    }else{
+      User user = tmp.get();
+      if (user.isApproved()==true){
+        return MessageResponse.builder()
+                .message("User with that email already exist!").build();
+      }else{
+        if (user.getRegistrationDate()==null){
+          return MessageResponse.builder()
+                  .message("Your request is waiting for the admin's response!").build();
+        }else{
+          Date checkDate = new Date(user.getRegistrationDate().getTime() + 10 * 60 * 1000);
+          Date now = new Date();
+          if (!checkDate.after(now)){
+            User updatedUser = tmp.get();
+            updatedUser.setFirstname(request.getFirstname());
+            updatedUser.setLastname(request.getLastname());
+            updatedUser.setPassword(request.getPassword());
+            updatedUser.setPhoneNumber(request.getPhoneNumber());
+            updatedUser.setRegistrationDate(null);
+            updatedUser.setTitle(request.getTitle());
+            updatedUser.setAddress(request.getAddress());
+            updatedUser.setRole(role);
+
+            addressRepository.save(request.getAddress());
+            repository.update(updatedUser);
+            return MessageResponse.builder()
+                    .message("Request is successfully made again with these params!: " + user).build();
+
+          }else{
+            return MessageResponse.builder()
+                    .message("You can not send new registration request until: " +checkDate + "!").build();
+          }
+        }
+      }
     }
-    return MessageResponse.builder()
-            .message("User with that email already exist!").build();
   }
 
   public AuthenticationResponse generateAccessAndRefresToken(String token) {

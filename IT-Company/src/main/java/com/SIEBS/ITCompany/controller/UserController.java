@@ -13,6 +13,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -34,14 +36,27 @@ public class UserController {
 
     @PostMapping("/send")
     public String sendMail(@RequestParam(value = "file", required = false)MultipartFile[] file, String to, String subject, String body){
-        return emailService.sendMail(file, to, subject, body);
+        return emailService.sendMail(to, subject, body);
     }
 
 
-/*    @GetMapping("/registration/requests")
+    @GetMapping("/registration/requests")
     public List<RegistrationRequestResponse> getRegistrationRequests(){
+        List<User> users = userService.getRegistrationRequests();
 
-    }*/
+        List<RegistrationRequestResponse> usersResponse = users.stream()
+                .map(user -> RegistrationRequestResponse.builder()
+                        .firstname(user.getFirstname())
+                        .lastname(user.getLastname())
+                        .email(user.getEmail())
+                        .phoneNumber(user.getPhoneNumber())
+                        .isApproved(user.isApproved())
+                        .title(user.getTitle())
+                        .role(user.getRole())
+                        .build())
+                .collect(Collectors.toList());
+        return usersResponse;
+    }
 
     @GetMapping("/getAll")
     public ResponseEntity<List<UsersResponse>> getAllUsers() {
@@ -125,6 +140,34 @@ public class UserController {
             return ResponseEntity.badRequest().body(response);
         }
     }
+
+    @PostMapping("/registration/decline")
+    public ResponseEntity<MessageResponse> registrationDecline(@RequestBody RegistrationDecline request){
+        userService.updateRegistrationDate(request.getEmail(), new Date());
+        String response = emailService.sendMail(request.getEmail(), "Registration request - DECLINED", request.getDescription());
+        if (response == "Success!"){
+            MessageResponse message = new MessageResponse("Registration request successfully declined.");
+            return ResponseEntity.ok(message);
+        }else{
+            MessageResponse message = new MessageResponse("Error declining registration request.");
+            return ResponseEntity.badRequest().body(message);
+        }
+    }
+
+    @PostMapping("/registration/accept")
+    public ResponseEntity<MessageResponse> registrationAccept(@RequestBody RegistrationAccept request){
+        userService.updateRegistrationDate(request.getEmail(), new Date());
+        userService.approveUser(request.getEmail());
+        String response = emailService.sendMail(request.getEmail(), "Registration request - ACCEPTED", "LINK DODAJ");
+        if (response == "Success!"){
+            MessageResponse message = new MessageResponse("Registration request successfully accepted.");
+            return ResponseEntity.ok(message);
+        }else{
+            MessageResponse message = new MessageResponse("Error accepting registration request.");
+            return ResponseEntity.badRequest().body(message);
+        }
+    }
+
 
     @GetMapping("/get")
     public ResponseEntity<UsersResponse> get() {

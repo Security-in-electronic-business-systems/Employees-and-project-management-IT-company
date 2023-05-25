@@ -1,15 +1,12 @@
 package com.SIEBS.ITCompany.dto;
 
 import com.SIEBS.ITCompany.model.Role;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
-@Setter
+@Builder
+@Data
 public class RegistrationRequestResponse {
     private String firstname;
     private String lastname;
