@@ -12,6 +12,7 @@ import Projects from './pages/Projects';
 import Profil from './pages/Profil';
 import SessionExpired from './pages/SessionExpired';
 import TokenExpired from './pages/TokenExpired';import RegisterAdmin from './pages/RegisterAdmin';
+import ViewRegistrationRequests from './pages/ViewRegistrationRequests';
 0
 
 function App(){
@@ -24,6 +25,7 @@ function App(){
       <Navbar/>
       <div>
         <Routes>
+          <Route path="/ViewAllRegistrationRequests" element={<ViewRegistrationRequests/>} />
           <Route path="/ViewAll" element={<ViewAllEmployees/>} />
           <Route path="/ViewAllProjects" element={<Projects/>} />
           <Route path="/profil" element={<Profil/>} />

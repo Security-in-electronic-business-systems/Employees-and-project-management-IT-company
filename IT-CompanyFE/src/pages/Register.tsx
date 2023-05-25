@@ -1,5 +1,4 @@
 import { SyntheticEvent, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { FaChalkboardTeacher, FaEnvelope, FaLock, FaPhone, FaSearchLocation, FaUser, FaUserTag } from "react-icons/fa";
 
 export function Register() {
@@ -8,9 +7,7 @@ export function Register() {
   const [email, setEmail] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [title, setTitle] = useState("");
-  const [, setEmailError] = useState("");
   const [password, setPassword] = useState("");
-  //const [inputValue, setInputValue] = useState('');
   const [repeatPassword, setRepeatPassword] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [country, setCountry] = useState("");
@@ -18,8 +15,6 @@ export function Register() {
   const [street, setStreet] = useState("");
   const [number, setNumber] = useState("");
   const [role, setRole] = useState("");
-
-  const navigate = useNavigate();
 
   const handleSubmit = async (event: SyntheticEvent) => {
     event.preventDefault();
@@ -53,21 +48,19 @@ export function Register() {
         "email": email,
         "password":password,
         "phoneNumber": phoneNumber,
+        "title": title,
         "address": {"country": country, "city": city, "street": street, "number": number},
         "role": role
       }),
     })
       .then((response) => {
-        if (response.status === 302) {
-          setEmailError("Email already exists.");
-          return;
-        }
-        if (response.ok) {
-          navigate("/Login");
-        }
+        return response.text(); // Pristupanje telu odgovora kao tekstu
+      })
+      .then((text) => {
+        console.log("Poruka sa servera:", text); // Ispisivanje poruke u konzoli
       })
       .catch((error) => console.log(error));
-  };
+    };
 
   const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[@#$%^&+=!])(?=.*[a-zA-Z]).{8,}$/;
 
@@ -179,6 +172,7 @@ export function Register() {
             onChange={(event) => setRole(event.target.value)}
             required
           >
+            <option value="" selected disabled>Select role</option>
             <option value="SOFTWARE_ENGINEER">SOFTWARE_ENGINEER</option>
             <option value="PROJECT_MANAGER">PROJECT_MANAGER</option>
             <option value="HR_MANAGER">HR_MANAGER</option>

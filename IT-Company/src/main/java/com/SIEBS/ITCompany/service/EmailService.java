@@ -14,5 +14,5 @@ import org.springframework.web.multipart.MultipartFile;
 
 
 public interface EmailService {
-    public String sendMail(MultipartFile[] file, String to, String subject, String body);
+    public String sendMail( String to, String subject, String body);
 }

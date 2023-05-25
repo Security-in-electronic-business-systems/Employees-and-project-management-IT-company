@@ -8,6 +8,8 @@ import com.SIEBS.ITCompany.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -26,6 +28,36 @@ public class UserService {
         List<User> users = repository.findAll();
         return users;
     }
+
+    public List<User> getRegistrationRequests() {
+        List<User> users = repository.findByIsApprovedFalse();
+        List<User> filteredUsers = new ArrayList<>();
+        for (User user: users){
+            if (user.getRegistrationDate()==null){
+                filteredUsers.add(user);
+            }else{
+                Date checkDate = new Date(user.getRegistrationDate().getTime() + 10 * 60 * 1000);
+                Date now = new Date();
+                if (checkDate.before(now)){
+                    filteredUsers.add(user);
+                }
+            }
+        }
+        return filteredUsers;
+    }
+    public void updateRegistrationDate(String email, Date newDate) {
+        try {
+            repository.updateRegistrationDate(email, newDate);
+            System.out.println("Korisnik je uspešno ažuriran.");
+        } catch (Exception e) {
+            System.out.println("Došlo je do greške pri ažuriranju korisnika: " + e.getMessage());
+        }
+    }
+
+    public void approveUser(String email){
+        repository.updateIsApproved(email, true);
+    }
+
 
     public List<Project> getAllProjects() {
         List<Project> projects = projectRepository.findAll();

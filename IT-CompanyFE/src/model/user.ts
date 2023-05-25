@@ -6,9 +6,9 @@ export class User {
     phoneNumber='';
     title = '';
     address : Address = new Address('','','','');
-    role = '';
+    role:Role = new Role('');
   
-    constructor(firstname: string, lastname: string, email: string, password: string, phoneNumber: string, title: string, role: string) {
+    constructor(firstname: string, lastname: string, email: string, password: string, phoneNumber: string, title: string, role: Role) {
       this.firstname = firstname;
       this.lastname = lastname;
       this.email = email;
@@ -38,4 +38,11 @@ export class Address{
         this.street = street;
         this.number = number;
     }
+}
+
+export class Role{
+  name='';
+  constructor(name:string){
+    this.name=name;
+  }
 }

@@ -109,7 +109,7 @@ public class AuthenticationController {
   public ResponseEntity<MessageResponse> register(
           @RequestBody RegisterRequest request
   ) {
-    return ResponseEntity.ok(service.register(request));
+    return new ResponseEntity<>(service.register(request), HttpStatus.OK);
   }
 
   @PostMapping("/refresh-token")
