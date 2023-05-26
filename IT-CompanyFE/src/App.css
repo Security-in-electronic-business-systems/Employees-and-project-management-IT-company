@@ -31,3 +31,9 @@
     display: flex;
     justify-content: flex-end;
   }
+
+  .custom-toast {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+  }

@@ -98,6 +98,10 @@ public class UserService {
         return savedProject;
     }
 
+    public Optional<User> findByEmail(String email){
+        return repository.findByEmail(email);
+    }
+
     public boolean updateUser(UsersResponse usersResponse) {
         Optional<User> userOptional = repository.findByEmail(usersResponse.getEmail());
         User user = userOptional.orElse(null);

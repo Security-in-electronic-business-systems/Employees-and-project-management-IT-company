@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -95,6 +96,31 @@ public class AuthenticationController {
     return ResponseEntity.status(HttpStatus.FOUND)
             .location(tokenExpiredUri)
             .body(authResponse);
+
+  }
+
+  @GetMapping("/register/verificate")
+  public ResponseEntity<MessageResponse> verificateRegistration(
+          @RequestParam("token") String token,@RequestParam("email") String email,
+          HttpServletRequest request,
+          HttpServletResponse response
+  ) {
+    URI login = URI.create("http://localhost:3000/login");
+    URI tokenExpiredUri = URI.create("http://localhost:3000/token-expired");
+    if(service.isTokenForPasswordlessLoginValid(token)){
+      magicLinkService.setUsedByToken(token);
+      userService.updateRegistrationDate(email, new Date());
+      userService.approveUser(email);
+      MessageResponse message = new MessageResponse("Link is valid, you are registered!");
+
+      return ResponseEntity.status(HttpStatus.FOUND)
+              .location(login)
+              .body(message);
+    }
+    MessageResponse message = new MessageResponse("Link is not valid!");
+    return ResponseEntity.status(HttpStatus.FOUND)
+            .location(tokenExpiredUri)
+            .body(message);
 
   }
 
