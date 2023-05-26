@@ -1,5 +1,7 @@
 import { SyntheticEvent, useState } from "react";
 import { FaChalkboardTeacher, FaEnvelope, FaLock, FaPhone, FaSearchLocation, FaUser, FaUserTag } from "react-icons/fa";
+import Toast from 'react-bootstrap/Toast';
+import '../App.css';
 
 export function Register() {
   const [name, setName] = useState("");
@@ -15,6 +17,8 @@ export function Register() {
   const [street, setStreet] = useState("");
   const [number, setNumber] = useState("");
   const [role, setRole] = useState("");
+  const [showToast, setShowToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState("");
 
   const handleSubmit = async (event: SyntheticEvent) => {
     event.preventDefault();
@@ -24,7 +28,6 @@ export function Register() {
       setPasswordError("Please enter your password.");
       return;
     }
-    console.log(isValidPassword(password))
     if(isValidPassword(password)===false){
       setPasswordError("Lozinka mora da sadrzi minimalno 8 karaktera, veliko slovo, broj i specijalni karakter(@#$%^&+=!)!")
       return;
@@ -57,7 +60,11 @@ export function Register() {
         return response.text(); // Pristupanje telu odgovora kao tekstu
       })
       .then((text) => {
-        console.log("Poruka sa servera:", text); // Ispisivanje poruke u konzoli
+        setToastMessage(text);
+        setShowToast(true);
+        setTimeout(() => {
+          setShowToast(false);
+        }, 3000);
       })
       .catch((error) => console.log(error));
     };
@@ -69,6 +76,7 @@ export function Register() {
   };
 
   return (
+  <div>
     <form className="col-md-6 mx-auto" onSubmit={handleSubmit}>
       <blockquote className="blockquote text-center">
         <p className="mb-0">Register as new user</p>
@@ -224,6 +232,15 @@ export function Register() {
       </div>      
       <button type="submit" className="btn btn-primary">Submit</button>
     </form>
+
+    <Toast show={showToast} onClose={() => setShowToast(false)} delay={3000} autohide className="custom-toast">
+                <Toast.Header closeButton={false}>
+                <strong className="me-auto">Toast Poruka</strong>
+                </Toast.Header>
+                <Toast.Body>{toastMessage}</Toast.Body>
+    </Toast>
+
+  </div>
 
   );
   }  

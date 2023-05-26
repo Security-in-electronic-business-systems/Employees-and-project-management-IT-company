@@ -5,10 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4c611d39-afa5-411e-8e8b-fb0c98d133ae" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/IT-Company/src/main/java/com/SIEBS/ITCompany/dto/HmacRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/IT-Company/src/main/java/com/SIEBS/ITCompany/service/HmacService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/IT-Company/src/main/java/com/SIEBS/ITCompany/controller/AuthenticationController.java" beforeDir="false" afterPath="$PROJECT_DIR$/IT-Company/src/main/java/com/SIEBS/ITCompany/controller/AuthenticationController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/IT-Company/src/main/java/com/SIEBS/ITCompany/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/IT-Company/src/main/java/com/SIEBS/ITCompany/controller/UserController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/IT-Company/src/main/java/com/SIEBS/ITCompany/service/AuthenticationService.java" beforeDir="false" afterPath="$PROJECT_DIR$/IT-Company/src/main/java/com/SIEBS/ITCompany/service/AuthenticationService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/IT-Company/src/main/java/com/SIEBS/ITCompany/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/IT-Company/src/main/java/com/SIEBS/ITCompany/service/UserService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/IT-Company/src/main/java/com/SIEBS/ITCompany/service/impl/EmailServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/IT-Company/src/main/java/com/SIEBS/ITCompany/service/impl/EmailServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/IT-CompanyFE/src/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/IT-CompanyFE/src/App.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -93,5 +96,26 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/IT-Company/src/main/java/com/SIEBS/ITCompany/controller/UserController.java</url>
+          <line>160</line>
+          <option name="timeStamp" value="4" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/IT-Company/src/main/java/com/SIEBS/ITCompany/controller/UserController.java</url>
+          <line>176</line>
+          <option name="timeStamp" value="5" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/IT-Company/src/main/java/com/SIEBS/ITCompany/controller/UserController.java</url>
+          <line>172</line>
+          <option name="timeStamp" value="8" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>
