@@ -14,5 +14,5 @@ public class RegistrationRequestResponse {
     private String phoneNumber;
     private boolean isApproved;
     private String title;
-    private Role role;
+    private RoleDTO role;
 }

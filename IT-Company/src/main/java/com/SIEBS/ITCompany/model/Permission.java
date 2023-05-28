@@ -16,10 +16,18 @@ public class Permission {
     @GeneratedValue
     private Integer id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "role_id")
     private Role role;
 
     private Methods permision;
 
+    @Override
+    public String toString() {
+        return "Permission{" +
+                "id=" + id +
+                ", role=" + role +
+                ", permision=" + permision +
+                '}';
+    }
 }

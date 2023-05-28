@@ -36,7 +36,7 @@ function RolePermissions() {
     })
       .then((response) => response.json())
       .then((data) => {
-        if (data.length === 0) {
+        /* if (data.length === 0) {
           const initialPermissions: Permission[] = [
             {
               id: 1,
@@ -60,17 +60,17 @@ function RolePermissions() {
             }
           ];
           setPermissions(initialPermissions);
-        } else {
+        } else { */
           setPermissions(data);
-        }
+    //    }
       })
       .catch((error) => console.log(error));
   }, []);
 
-  const handlePermissionChange = (roleId: number, method: Methods) => {
+  const handlePermissionChange = (roleS: string, method: Methods) => {
     setPermissions((prevPermissions) =>
       prevPermissions.map((permission) => {
-        if (permission.id === roleId) {
+        if (permission.role === roleS) {
           const updatedMethods = permission.methods.includes(method)
             ? permission.methods.filter((m) => m !== method)
             : [...permission.methods, method];
@@ -118,7 +118,7 @@ function RolePermissions() {
                           className="form-check-input"
                           type="checkbox"
                           checked={permission.methods.includes(method)}
-                          onChange={() => handlePermissionChange(permission.id, method)}
+                          onChange={() => handlePermissionChange(permission.role, method)}
                         />
                         <label className="form-check-label">{method}</label>
                       </div>

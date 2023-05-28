@@ -163,7 +163,7 @@ public class UserService {
 
     public boolean savePermissions(List<PermissionDTO> permissionDTOs) {
         try {
-            permissionRepository.deleteAll();
+            permissionRepository.deleteAllPer();
             List<Permission> permissions = new ArrayList<>();
             for (PermissionDTO permissionDTO : permissionDTOs) {
                 Role role = roleRepository.findByName(permissionDTO.getRole());

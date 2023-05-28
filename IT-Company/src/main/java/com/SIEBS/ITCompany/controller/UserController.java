@@ -57,7 +57,7 @@ public class UserController {
                         .phoneNumber(user.getPhoneNumber())
                         .isApproved(user.isApproved())
                         .title(user.getTitle())
-                        .role(user.getRole())
+                        .role(new RoleDTO(user.getRole().getId(), user.getRole().getName()))
                         .build())
                 .collect(Collectors.toList());
         return usersResponse;
@@ -80,7 +80,7 @@ public class UserController {
                         .phoneNumber(user.getPhoneNumber())
                         .title(user.getTitle())
                         .address(user.getAddress())
-                        .role(user.getRole())
+                        .role(new RoleDTO(user.getRole().getId(), user.getRole().getName()))
                         .build())
                 .collect(Collectors.toList());
 
@@ -214,7 +214,7 @@ public class UserController {
                 .phoneNumber(user.getPhoneNumber())
                 .title(user.getTitle())
                 .address(user.getAddress())
-                .role(user.getRole())
+                .role(new RoleDTO(user.getRole().getId(), user.getRole().getName()))
                 .build();
 
         return ResponseEntity.ok(usersResponse);

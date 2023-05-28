@@ -23,7 +23,7 @@ public class PermissionService {
         List<Permission> permissions= repository.findAll();
         for (Permission per: permissions) {
             for (UserRole role: loggedUser.getRoles()) {
-               if (per.getRole() == role.getRole()){
+               if (per.getRole().getName().equals(role.getRole().getName())){
                    if (per.getPermision().toString().equals(permission)){
                        return true;
                    }

@@ -16,12 +16,20 @@ public class UserRole {
     @GeneratedValue
     private Integer id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "role_id")
     private Role role;
 
+    @Override
+    public String toString() {
+        return "UserRole{" +
+                "id=" + id +
+                ", user=" + user +
+                ", role=" + role +
+                '}';
+    }
 }

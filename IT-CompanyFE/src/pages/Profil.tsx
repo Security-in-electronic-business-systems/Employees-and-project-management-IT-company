@@ -162,7 +162,7 @@ function Profil() {
             id="role"
             onChange={(event) => setRole(event.target.value)}
             required
-            disabled={!isEditMode} // Onemogućite unos u načinu prikaza
+            disabled={true} // Onemogućite unos u načinu prikaza
           >
             <option value="SOFTWARE_ENGINEER">SOFTWARE_ENGINEER</option>
             <option value="PROJECT_MANAGER">PROJECT_MANAGER</option>

@@ -59,7 +59,8 @@ function CreateProject() {
       .then((data) => {
         setEmployees(data);
       })
-      .catch((error) => console.log(error));
+      .catch((error) =>
+       console.log(error) );
   }, []);
 
   const handleEmployeeChange = (event: ChangeEvent<HTMLSelectElement>) => {
@@ -163,6 +164,8 @@ function CreateProject() {
         setEmployeeDetails([]);
       } else {
         // Greška pri kreiranju projekta
+        if (response.status==403)
+          window.alert("You don't have permission!")
         console.error('Error creating project:', response.statusText);
       }
     } catch (error) {

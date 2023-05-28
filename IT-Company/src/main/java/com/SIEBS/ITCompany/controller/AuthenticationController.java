@@ -144,7 +144,6 @@ public class AuthenticationController {
     service.refreshToken(request, response);
   }
 
-  @PreAuthorize("@permissionService.hasPermission('GET_LOGIN_RESPONSE')")
   @GetMapping("/getLoginResponse")
   public ResponseEntity<LoginResponse> getLoginResponse(
           HttpServletRequest request,
@@ -161,7 +160,7 @@ public class AuthenticationController {
             .title(user.getTitle())
             .phoneNumber(user.getPhoneNumber())
             .address(user.getAddress())
-            .role(user.getRole())
+            .role(new RoleDTO(user.getRole().getId(), user.getRole().getName()))
             .message("Successfully!")
             .build());
   }
