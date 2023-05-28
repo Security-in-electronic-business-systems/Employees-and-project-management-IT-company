@@ -7,6 +7,7 @@ import com.SIEBS.ITCompany.model.EmployeeProject;
 import com.SIEBS.ITCompany.model.Project;
 import com.SIEBS.ITCompany.model.User;
 
+import com.SIEBS.ITCompany.repository.PermissionRepository;
 import com.SIEBS.ITCompany.service.AuthenticationService;
 import com.SIEBS.ITCompany.service.EmailService;
 import com.SIEBS.ITCompany.service.HmacService;
@@ -36,6 +37,7 @@ public class UserController {
     private final AuthenticationService authService;
     @Autowired
     private final HmacService hmacService;
+
 
     @PostMapping("/send")
     public String sendMail(@RequestParam(value = "file", required = false)MultipartFile[] file, String to, String subject, String body){
@@ -107,7 +109,7 @@ public class UserController {
                             .map(employeeProject -> {
                                 EmployeeProjectDTO employeeProjectDTO = new EmployeeProjectDTO();
                                 employeeProjectDTO.setID(employeeProject.getId());
-                                employeeProjectDTO.setUser(createUsersResponse(employeeProject.getUser()));  // Konverzija User objekta u UserDTO
+                                employeeProjectDTO.setUser(userService.createUsersResponse(employeeProject.getUser()));
                                 employeeProjectDTO.setJobDescription(employeeProject.getJobDescription());
                                 employeeProjectDTO.setStartDate(employeeProject.getStartDate());
                                 employeeProjectDTO.setEndDate(employeeProject.getEndDate());
@@ -123,13 +125,6 @@ public class UserController {
         return ResponseEntity.ok(projectsDTO);
     }
 
-    private UsersResponse createUsersResponse(User user) {
-        UsersResponse userDTO = new UsersResponse();
-        userDTO.setUserId(user.getId());
-        userDTO.setFirstname(user.getFirstname());
-        userDTO.setLastname(user.getLastname());
-        return userDTO;
-    }
     @PreAuthorize("@permissionService.hasPermission('CREATE_PROJECT')")
     @PostMapping("/createProject")
     public ResponseEntity<MessageResponse> createProject(@RequestBody ProjectDTO projectDTO) {
@@ -237,4 +232,23 @@ public class UserController {
             return ResponseEntity.badRequest().body(response);
         }
     }
+
+    @GetMapping("/permissions")
+    public ResponseEntity<List<PermissionDTO>> getPermissions() {
+        return ResponseEntity.ok(userService.getAllPermission());
+    }
+
+    @PostMapping("/permissions")
+    public ResponseEntity<MessageResponse> savePermissions(@RequestBody List<PermissionDTO> permissionDTOList) {
+        boolean isSaved = userService.savePermissions(permissionDTOList);
+
+        if (isSaved) {
+            MessageResponse response = new MessageResponse("Permissions saved successfully.");
+            return ResponseEntity.ok(response);
+        } else {
+            MessageResponse response = new MessageResponse("Error saving permissions.");
+            return ResponseEntity.badRequest().body(response);
+        }
+    }
+
 }

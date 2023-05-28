@@ -30,6 +30,8 @@ public class Role implements GrantedAuthority {
 
     @OneToMany(mappedBy = "role")
     private List<UserRole> roles;
+    @OneToMany(mappedBy = "role")
+    private List<Permission> permissions;
 
     @JsonIgnore
     @Override
