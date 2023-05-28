@@ -28,6 +28,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+
 public class AuthenticationService {
   private final UserRepository repository;
   private final TokenRepository tokenRepository;
@@ -38,6 +39,7 @@ public class AuthenticationService {
   private final JwtService jwtService;
   private final AuthenticationManager authenticationManager;
   private final MagicLinkService magicLinkService;
+  private User loggedUser;
 
   public AuthenticationResponse authenticate(AuthenticationRequest request) {
     try{
@@ -72,6 +74,7 @@ public class AuthenticationService {
     }
     var user = repository.findByEmail(request.getEmail())
         .orElseThrow();
+    loggedUser = user;
     var jwtToken = jwtService.generateToken(user);
     var refreshToken = jwtService.generateRefreshToken(user);
     return AuthenticationResponse
@@ -271,5 +274,9 @@ public class AuthenticationService {
 
   public User getUserByEmail(String email){
     return repository.findByEmail(email).orElse(null);
+  }
+
+  public User getLoggedUser() {
+    return loggedUser;
   }
 }

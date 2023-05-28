@@ -14,6 +14,7 @@ import com.SIEBS.ITCompany.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
@@ -59,7 +60,7 @@ public class UserController {
                 .collect(Collectors.toList());
         return usersResponse;
     }
-
+    @PreAuthorize("@permissionService.hasPermission('GET_ALL_USERS')")
     @GetMapping("/getAll")
     public ResponseEntity<List<UsersResponse>> getAllUsers() {
         List<User> users = userService.getAllUsers();
@@ -83,7 +84,7 @@ public class UserController {
 
         return ResponseEntity.ok(usersResponse);
     }
-
+    @PreAuthorize("@permissionService.hasPermission('GET_ALL_PROJECTS')")
     @GetMapping("/getAllProjects")
     public ResponseEntity<List<ProjectDTO>> getAllProjects() {
         List<Project> projects = userService.getAllProjects();
@@ -129,7 +130,7 @@ public class UserController {
         userDTO.setLastname(user.getLastname());
         return userDTO;
     }
-
+    @PreAuthorize("@permissionService.hasPermission('CREATE_PROJECT')")
     @PostMapping("/createProject")
     public ResponseEntity<MessageResponse> createProject(@RequestBody ProjectDTO projectDTO) {
         Project savedProject = userService.createProject(projectDTO);
@@ -205,7 +206,7 @@ public class UserController {
         }
     }
 
-
+    @PreAuthorize("@permissionService.hasPermission('GET_USER')")
     @GetMapping("/get")
     public ResponseEntity<UsersResponse> get() {
         User user = userService.findById(152);
@@ -223,7 +224,7 @@ public class UserController {
 
         return ResponseEntity.ok(usersResponse);
     }
-
+    @PreAuthorize("@permissionService.hasPermission('UPDATE_USER')")
     @PutMapping("/update")
     public ResponseEntity<MessageResponse> updateUser(@RequestBody UsersResponse usersResponse) {
         boolean isUpdated = userService.updateUser(usersResponse);

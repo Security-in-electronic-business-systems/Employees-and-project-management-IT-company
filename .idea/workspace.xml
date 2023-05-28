@@ -5,13 +5,19 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4c611d39-afa5-411e-8e8b-fb0c98d133ae" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/IT-Company/src/main/java/com/SIEBS/ITCompany/dto/HmacRequest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/IT-Company/src/main/java/com/SIEBS/ITCompany/service/HmacService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/IT-Company/src/main/java/com/SIEBS/ITCompany/model/Methods.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/IT-Company/src/main/java/com/SIEBS/ITCompany/model/Permission.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/IT-Company/src/main/java/com/SIEBS/ITCompany/model/UserRole.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/IT-Company/src/main/java/com/SIEBS/ITCompany/repository/PermissionRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/IT-Company/src/main/java/com/SIEBS/ITCompany/service/PermissionService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/IT-Company/src/main/java/com/SIEBS/ITCompany/config/SecurityConfiguration.java" beforeDir="false" afterPath="$PROJECT_DIR$/IT-Company/src/main/java/com/SIEBS/ITCompany/config/SecurityConfiguration.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/IT-Company/src/main/java/com/SIEBS/ITCompany/controller/AuthenticationController.java" beforeDir="false" afterPath="$PROJECT_DIR$/IT-Company/src/main/java/com/SIEBS/ITCompany/controller/AuthenticationController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/IT-Company/src/main/java/com/SIEBS/ITCompany/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/IT-Company/src/main/java/com/SIEBS/ITCompany/controller/UserController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/IT-Company/src/main/java/com/SIEBS/ITCompany/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/IT-Company/src/main/java/com/SIEBS/ITCompany/service/UserService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/IT-Company/src/main/java/com/SIEBS/ITCompany/service/impl/EmailServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/IT-Company/src/main/java/com/SIEBS/ITCompany/service/impl/EmailServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/IT-CompanyFE/src/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/IT-CompanyFE/src/App.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/IT-Company/src/main/java/com/SIEBS/ITCompany/model/Role.java" beforeDir="false" afterPath="$PROJECT_DIR$/IT-Company/src/main/java/com/SIEBS/ITCompany/model/Role.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/IT-Company/src/main/java/com/SIEBS/ITCompany/model/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/IT-Company/src/main/java/com/SIEBS/ITCompany/model/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/IT-Company/src/main/java/com/SIEBS/ITCompany/service/AuthenticationService.java" beforeDir="false" afterPath="$PROJECT_DIR$/IT-Company/src/main/java/com/SIEBS/ITCompany/service/AuthenticationService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -21,6 +27,7 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
+        <option value="Enum" />
         <option value="Class" />
       </list>
     </option>
@@ -102,18 +109,23 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/IT-Company/src/main/java/com/SIEBS/ITCompany/controller/UserController.java</url>
-          <line>160</line>
+          <line>161</line>
           <option name="timeStamp" value="4" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/IT-Company/src/main/java/com/SIEBS/ITCompany/controller/UserController.java</url>
-          <line>176</line>
+          <line>177</line>
           <option name="timeStamp" value="5" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/IT-Company/src/main/java/com/SIEBS/ITCompany/controller/UserController.java</url>
-          <line>172</line>
+          <line>173</line>
           <option name="timeStamp" value="8" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/IT-Company/src/main/java/com/SIEBS/ITCompany/service/PermissionService.java</url>
+          <line>21</line>
+          <option name="timeStamp" value="9" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

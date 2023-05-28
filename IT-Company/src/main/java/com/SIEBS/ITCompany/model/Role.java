@@ -8,6 +8,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 
+import java.util.List;
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -25,6 +27,9 @@ public class Role implements GrantedAuthority {
 
     @Column(name="name")
     String name;
+
+    @OneToMany(mappedBy = "role")
+    private List<UserRole> roles;
 
     @JsonIgnore
     @Override
