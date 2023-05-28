@@ -1,15 +1,9 @@
 package com.SIEBS.ITCompany.service;
 
 import com.SIEBS.ITCompany.dto.*;
-import com.SIEBS.ITCompany.model.MagicLink;
-import com.SIEBS.ITCompany.model.Role;
-import com.SIEBS.ITCompany.model.Token;
-import com.SIEBS.ITCompany.repository.AddressRepository;
-import com.SIEBS.ITCompany.repository.RoleRepository;
-import com.SIEBS.ITCompany.repository.TokenRepository;
+import com.SIEBS.ITCompany.model.*;
+import com.SIEBS.ITCompany.repository.*;
 import com.SIEBS.ITCompany.enumerations.TokenType;
-import com.SIEBS.ITCompany.model.User;
-import com.SIEBS.ITCompany.repository.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -23,7 +17,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -39,6 +35,7 @@ public class AuthenticationService {
   private final JwtService jwtService;
   private final AuthenticationManager authenticationManager;
   private final MagicLinkService magicLinkService;
+  private final UserRoleRepository userRoleRepository;
   private User loggedUser;
 
   public AuthenticationResponse authenticate(AuthenticationRequest request) {
@@ -112,9 +109,26 @@ public class AuthenticationService {
               .title(request.getTitle())
               .address(request.getAddress())
               .role(role)
+              .roles(new ArrayList<>())
               .build();
       var address =addressRepository.save(request.getAddress());
       var savedUser = repository.save(user);
+      var primalRole = UserRole.builder()
+              .user(user)
+              .role(role)
+              .build();
+      userRoleRepository.save(primalRole);
+      List<UserRole> userRoles = new ArrayList<>();
+      for (String roleString:request.getRoles()) {
+        Role r = roleRepository.findByName(roleString);
+        var userRole = UserRole.builder()
+                .user(user)
+                .role(r)
+                .build();
+        userRoleRepository.save(userRole);
+        userRoles.add(userRole);
+      }
+      user.setRoles(userRoles);
       return MessageResponse.builder()
               .message("Success!").build();
     }else{

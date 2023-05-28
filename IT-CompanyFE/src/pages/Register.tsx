@@ -19,6 +19,20 @@ export function Register() {
   const [role, setRole] = useState("");
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
+  const [addRoles, setAddRoles] = useState<string[]>([])
+
+  const handleRoleChange = (value:string) => {
+    if (addRoles.includes(value)) {
+      // Ako je već odabrana, uklonite vrijednost iz addRoles
+      const updatedRoles = addRoles.filter((role) => role !== value);
+      setAddRoles(updatedRoles);
+    } else {
+      // Ako nije odabrana, dodajte vrijednost u addRoles
+      const updatedRoles = [...addRoles, value];
+      setAddRoles(updatedRoles);
+    }
+    console.log(addRoles)
+  };
 
   const handleSubmit = async (event: SyntheticEvent) => {
     event.preventDefault();
@@ -53,7 +67,8 @@ export function Register() {
         "phoneNumber": phoneNumber,
         "title": title,
         "address": {"country": country, "city": city, "street": street, "number": number},
-        "role": role
+        "role": role,
+        "roles": addRoles
       }),
     })
       .then((response) => {
@@ -186,6 +201,45 @@ export function Register() {
             <option value="HR_MANAGER">HR_MANAGER</option>
           </select>
         </div>
+        <div className="col">
+          <label className="form-label">
+            <FaUserTag className="me-2" />Role
+          </label>
+          <div>
+            <label>
+              <input
+                type="checkbox"
+                value="SOFTWARE_ENGINEER"
+                checked={addRoles.includes('SOFTWARE_ENGINEER')}
+                onChange={() => handleRoleChange('SOFTWARE_ENGINEER')}
+              />
+              SOFTWARE_ENGINEER
+            </label>
+          </div>
+          <div>
+            <label>
+              <input
+                type="checkbox"
+                value="PROJECT_MANAGER"
+                checked={addRoles.includes('PROJECT_MANAGER')}
+                onChange={() => handleRoleChange('PROJECT_MANAGER')}
+              />
+              PROJECT_MANAGER
+            </label>
+          </div>
+          <div>
+            <label>
+              <input
+                type="checkbox"
+                value="HR_MANAGER"
+                checked={addRoles.includes('HR_MANAGER')}
+                onChange={() => handleRoleChange('HR_MANAGER')}
+              />
+              HR_MANAGER
+            </label>
+          </div>
+        </div>
+
       </div>
       <div className="row mb-3">
         <div className="col">
