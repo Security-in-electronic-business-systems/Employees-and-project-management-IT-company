@@ -19,5 +19,5 @@ public class UsersResponse {
     private String phoneNumber;
     private String title;
     private Address address;
-    private Role role;
+    private RoleDTO role;
 }

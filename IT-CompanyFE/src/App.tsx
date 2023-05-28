@@ -14,6 +14,7 @@ import SessionExpired from './pages/SessionExpired';
 import TokenExpired from './pages/TokenExpired';import RegisterAdmin from './pages/RegisterAdmin';
 import ViewRegistrationRequests from './pages/ViewRegistrationRequests';
 import HMACVerification from './pages/HMACVerification';
+import RolePermissions from './pages/RolePermissions';
 0
 
 function App(){
@@ -40,6 +41,7 @@ function App(){
           <Route path="/wait-room" element={<WaitRoom/>} />
           <Route path="/session-expired" element={<SessionExpired/>} />
           <Route path="/token-expired" element={<TokenExpired/>} />
+          <Route path="/permissions" element={<RolePermissions/>} />
         </Routes>
       </div>
     </>

@@ -1,11 +1,13 @@
 package com.SIEBS.ITCompany.service;
 
 import com.SIEBS.ITCompany.dto.EmployeeProjectDTO;
+import com.SIEBS.ITCompany.dto.PermissionDTO;
 import com.SIEBS.ITCompany.dto.ProjectDTO;
 import com.SIEBS.ITCompany.dto.UsersResponse;
 import com.SIEBS.ITCompany.model.*;
 import com.SIEBS.ITCompany.repository.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -21,6 +23,8 @@ public class UserService {
     private final ProjectRepository projectRepository;
     private final AddressRepository addressRepository;
     private final RoleRepository roleRepository;
+
+    private final PermissionRepository permissionRepository;
 
     private final EmployeeProjectRepository employeeProjectsRepository;
 
@@ -131,7 +135,53 @@ public class UserService {
         return updatedUser != null;
     }
 
+    public UsersResponse createUsersResponse(User user) {
+        UsersResponse userDTO = new UsersResponse();
+        userDTO.setUserId(user.getId());
+        userDTO.setFirstname(user.getFirstname());
+        userDTO.setLastname(user.getLastname());
+        return userDTO;
+    }
+    public List<PermissionDTO> getAllPermission(){
+        List<PermissionDTO> permissionDTOS = new ArrayList<>();
+        List <Role> roles = roleRepository.findAll();
+        List <Permission> permissions = permissionRepository.findAll();
+        for (Role role: roles) {
+            PermissionDTO permissionDTO = new PermissionDTO();
+            permissionDTO.setRole(role.getName());
+            permissionDTO.setMethods(new ArrayList<>());
+            for (Permission per: permissions) {
+                if (per.getRole()==role){
+                    permissionDTO.setId(per.getId());
+                    permissionDTO.addMethod(per.getPermision());
+                }
+            }
+            permissionDTOS.add(permissionDTO);
+        }
+        return permissionDTOS;
+    }
 
-
+    public boolean savePermissions(List<PermissionDTO> permissionDTOs) {
+        try {
+            permissionRepository.deleteAllPer();
+            List<Permission> permissions = new ArrayList<>();
+            for (PermissionDTO permissionDTO : permissionDTOs) {
+                Role role = roleRepository.findByName(permissionDTO.getRole());
+                if (role != null) {
+                    for (Methods method : permissionDTO.getMethods()) {
+                        Permission permission = new Permission();
+                        permission.setRole(role);
+                        permission.setPermision(method);
+                        permissions.add(permission);
+                    }
+                }
+            }
+            permissionRepository.saveAll(permissions);
+            return true; // Operacija uspešna
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false; // Greška prilikom čuvanja dozvola
+        }
+    }
 
 }

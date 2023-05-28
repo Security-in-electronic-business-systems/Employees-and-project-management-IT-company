@@ -5,10 +5,7 @@ import com.SIEBS.ITCompany.dto.MessageResponse;
 import com.SIEBS.ITCompany.dto.RegisterRequest;
 import com.SIEBS.ITCompany.dto.*;
 import com.SIEBS.ITCompany.model.User;
-import com.SIEBS.ITCompany.service.AuthenticationService;
-import com.SIEBS.ITCompany.service.UserService;
-import com.SIEBS.ITCompany.service.JwtService;
-import com.SIEBS.ITCompany.service.MagicLinkService;
+import com.SIEBS.ITCompany.service.*;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -34,6 +31,7 @@ public class AuthenticationController {
   private final UserService userService;
   private final JwtService jwtService;
   private final MagicLinkService magicLinkService;
+  private final PermissionService permissionService;
 
 
   @PostMapping("/authenticate")
@@ -162,7 +160,7 @@ public class AuthenticationController {
             .title(user.getTitle())
             .phoneNumber(user.getPhoneNumber())
             .address(user.getAddress())
-            .role(user.getRole())
+            .role(new RoleDTO(user.getRole().getId(), user.getRole().getName()))
             .message("Successfully!")
             .build());
   }
