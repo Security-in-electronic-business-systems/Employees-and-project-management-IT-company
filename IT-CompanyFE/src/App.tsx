@@ -15,6 +15,9 @@ import TokenExpired from './pages/TokenExpired';import RegisterAdmin from './pag
 import ViewRegistrationRequests from './pages/ViewRegistrationRequests';
 import HMACVerification from './pages/HMACVerification';
 import RolePermissions from './pages/RolePermissions';
+import EnginerProfil from './pages/EnginerProfil';
+import ProjectManagerProfil from './pages/ProjectManagerProfil';
+import CareerPage from './pages/CareerPage';
 0
 
 function App(){
@@ -42,6 +45,9 @@ function App(){
           <Route path="/session-expired" element={<SessionExpired/>} />
           <Route path="/token-expired" element={<TokenExpired/>} />
           <Route path="/permissions" element={<RolePermissions/>} />
+          <Route path="/enginerProfil" element={<EnginerProfil/>} />
+          <Route path="/projectManagerProfil" element={<ProjectManagerProfil/>} />
+          <Route path="/careerPage" element={<CareerPage/>} />
         </Routes>
       </div>
     </>

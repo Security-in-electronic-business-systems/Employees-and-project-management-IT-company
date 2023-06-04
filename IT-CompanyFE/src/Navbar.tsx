@@ -1,5 +1,5 @@
 import { Link, useNavigate  } from 'react-router-dom';
-import { useLoggedUser } from './hooks/UseLoggedUserInformation';
+import { UseLoggedUser } from './hooks/UseLoggedUserInformation';
   
 
 function Navbar() {
@@ -38,7 +38,7 @@ function Navbar() {
   })
   };
 
-  const loggedUser = useLoggedUser()
+  const loggedUser = UseLoggedUser()
 
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light" style={navStyle}>

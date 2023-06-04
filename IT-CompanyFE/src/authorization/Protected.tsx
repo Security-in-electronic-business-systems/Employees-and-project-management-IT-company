@@ -1,5 +1,5 @@
 import UnauthorizedAccess from "../pages/UnauthorizedAccess";
-import { useLoggedUser } from "../hooks/UseLoggedUserInformation";
+import { UseLoggedUser } from "../hooks/UseLoggedUserInformation";
 
 
 interface ProtectedProps {
@@ -24,7 +24,7 @@ const Protected: React.FC<ProtectedProps> = ({ children, role }) => {
     });
   }, []);*/
 
-  const loggedUser = useLoggedUser()
+  const loggedUser = UseLoggedUser()
 
   if (loggedUser && loggedUser.role.name === role) {
     return <>{children}</>;
