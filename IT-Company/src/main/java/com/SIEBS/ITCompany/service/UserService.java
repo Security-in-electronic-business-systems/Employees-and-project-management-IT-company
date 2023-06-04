@@ -1,9 +1,6 @@
 package com.SIEBS.ITCompany.service;
 
-import com.SIEBS.ITCompany.dto.EmployeeProjectDTO;
-import com.SIEBS.ITCompany.dto.PermissionDTO;
-import com.SIEBS.ITCompany.dto.ProjectDTO;
-import com.SIEBS.ITCompany.dto.UsersResponse;
+import com.SIEBS.ITCompany.dto.*;
 import com.SIEBS.ITCompany.model.*;
 import com.SIEBS.ITCompany.repository.*;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +24,7 @@ public class UserService {
     private final PermissionRepository permissionRepository;
 
     private final EmployeeProjectRepository employeeProjectsRepository;
+    private final SkillRepository skillRepository;
 
     public List<User> getAllUsers() {
         List<User> users = repository.findAll();
@@ -184,4 +182,59 @@ public class UserService {
         }
     }
 
+    public boolean createSkill(SkillDTO skillDTO) {
+        Skill skill = new Skill();
+        try {
+
+            Optional<User> userOptional = findByEmail(skillDTO.getEmail());
+            User user = userOptional.orElse(null);
+            skill.setName(skillDTO.getName());
+            skill.setUser(user);
+            skill.setGrade(skillDTO.getGrade());
+
+            // Sačuvaj skill
+            Skill savedSkill =  skillRepository.save(skill);
+
+            return true;
+        }catch (Exception e) {
+            e.printStackTrace();
+            return false; // Greška prilikom čuvanja dozvola
+        }
+
+    }
+
+    public List<AllSkillDTO> getSkills(String email) {
+        System.out.println("****************************"+email);
+        List<Skill> allSkills = skillRepository.findAll();
+        List<AllSkillDTO> skills = new ArrayList<>();
+
+        Optional<User> userOptional = findByEmail(email);
+        User user = userOptional.orElse(null);
+
+        for (Skill s : allSkills){
+            AllSkillDTO dto = new AllSkillDTO();
+            if(s.getUser().getId() == user.getId()){
+                dto.setId(s.getId());
+                dto.setName(s.getName());
+                dto.setGrade(s.getGrade());
+                skills.add(dto);
+            }
+        }
+
+        System.out.println("****************************");
+        return skills;
+    }
+
+
+    public boolean editSkill(AllSkillDTO skillResponse) {
+        Optional<Skill> skilOptionall =  skillRepository.findById( Long.valueOf(skillResponse.getId()).intValue());
+        Skill skill = skilOptionall.orElse(null);
+        if (skill == null) {
+            return false;
+        }
+        skill.setGrade(skillResponse.getGrade());
+        skillRepository.save(skill);
+        return true;
+
+    }
 }

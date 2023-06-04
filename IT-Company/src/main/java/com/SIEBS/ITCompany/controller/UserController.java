@@ -5,9 +5,11 @@ import com.SIEBS.ITCompany.dto.RegistrationRequestResponse;
 import com.SIEBS.ITCompany.dto.*;
 import com.SIEBS.ITCompany.model.EmployeeProject;
 import com.SIEBS.ITCompany.model.Project;
+import com.SIEBS.ITCompany.model.Skill;
 import com.SIEBS.ITCompany.model.User;
 
 import com.SIEBS.ITCompany.repository.PermissionRepository;
+import com.SIEBS.ITCompany.repository.SkillRepository;
 import com.SIEBS.ITCompany.service.AuthenticationService;
 import com.SIEBS.ITCompany.service.EmailService;
 import com.SIEBS.ITCompany.service.HmacService;
@@ -250,5 +252,43 @@ public class UserController {
             return ResponseEntity.badRequest().body(response);
         }
     }
+
+    @PostMapping("/addSkill")
+    public ResponseEntity<MessageResponse> saveSkill(@RequestBody SkillDTO skill) {
+        boolean isSaved = userService.createSkill(skill);
+
+        if (isSaved) {
+            MessageResponse response = new MessageResponse("Skill saved successfully.");
+            return ResponseEntity.ok(response);
+        } else {
+            MessageResponse response = new MessageResponse("Error saving skill.");
+            return ResponseEntity.badRequest().body(response);
+        }
+    }
+
+    @PreAuthorize("@permissionService.hasPermission('UPDATE_USER')")
+    @GetMapping("/getAllSkill")
+    @ResponseBody
+    public ResponseEntity<List<AllSkillDTO>> getSkillForUser() {
+        User user = authService.getLoggedUser();
+        return ResponseEntity.ok(userService.getSkills(user.getEmail()));
+    }
+
+    @PreAuthorize("@permissionService.hasPermission('UPDATE_USER')")
+    @PutMapping("/editSkill")
+    @ResponseBody
+    public ResponseEntity<MessageResponse> editSkill(@RequestBody AllSkillDTO allSkillDTO) {
+        boolean isUpdated = userService.editSkill(allSkillDTO);
+        if (isUpdated) {
+            MessageResponse response = new MessageResponse("Skill updated successfully.");
+            return ResponseEntity.ok(response);
+        } else {
+            MessageResponse response = new MessageResponse("Error updating skill.");
+            return ResponseEntity.badRequest().body(response);
+        }
+
+    }
+
+
 
 }
