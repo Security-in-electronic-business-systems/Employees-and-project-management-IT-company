@@ -1,4 +1,4 @@
-import React, { SyntheticEvent, useEffect, useState } from 'react';
+import React, { ChangeEvent, SyntheticEvent, useEffect, useState } from 'react';
 import { UseLoggedUser } from '../hooks/UseLoggedUserInformation';
 import { FaEdit } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
@@ -25,6 +25,8 @@ function CareerPage() {
   const [edit, setEdit] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
   const [id, setId] = useState(-1);
+  const [file, setFile] = useState<File>();
+
 
   useEffect(() => {
     
@@ -87,7 +89,60 @@ function CareerPage() {
     } catch (error) {
       console.error('Error:', error);
     }
+    window.location.reload()
   };
+
+  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      setFile(e.target.files[0]);
+    }
+  };
+
+  const handleUploadClick = async () => {
+    if (!file) {
+      return;
+    }
+  
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+  
+      const response = await fetch('https://localhost:8081/api/v1/user/upload', {
+        method: 'POST',
+        body: formData,
+      });
+  
+      if (response.ok) {
+        console.log('File uploaded successfully!');
+      } else {
+        console.error('Failed to upload file!');
+      }
+    } catch (error) {
+      console.error('Error uploading file:', error);
+    }
+  };
+  
+
+  const handleDownloadClick = () => {
+    fetch(`https://localhost:8081/api/v1/user/download`)
+      .then(response => response.blob())
+      .then(blob => {
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', 'CV.pdf');
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(url);
+      })
+      .catch(error => {
+        console.error('Greška prilikom preuzimanja fajla:', error);
+      });
+  };
+    
+  
+  
 
 
   const handleEdit = async (event: SyntheticEvent) => {
@@ -225,6 +280,19 @@ function CareerPage() {
         </button>
     
       </form>
+      <br></br><br></br><br></br>
+      <span><h3>CV</h3>
+      <button onClick={handleDownloadClick} className="btn btn-primary">
+          Download
+        </button></span>
+      
+      <div>
+      <input type="file" className="form-control" onChange={handleFileChange} />
+
+      <div>{file && `${file.name} - ${file.type}`}</div>
+
+      <button onClick={handleUploadClick} className="btn btn-primary">Upload</button>
+    </div>
     </div>
   );
 }
