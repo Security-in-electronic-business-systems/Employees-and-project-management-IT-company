@@ -3,10 +3,7 @@ package com.SIEBS.ITCompany.controller;
 import com.SIEBS.ITCompany.dto.RegistrationRequestResponse;
 
 import com.SIEBS.ITCompany.dto.*;
-import com.SIEBS.ITCompany.model.EmployeeProject;
-import com.SIEBS.ITCompany.model.Project;
-import com.SIEBS.ITCompany.model.Skill;
-import com.SIEBS.ITCompany.model.User;
+import com.SIEBS.ITCompany.model.*;
 
 import com.SIEBS.ITCompany.repository.PermissionRepository;
 import com.SIEBS.ITCompany.repository.SkillRepository;
@@ -16,10 +13,17 @@ import com.SIEBS.ITCompany.service.HmacService;
 import com.SIEBS.ITCompany.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -288,7 +292,51 @@ public class UserController {
         }
 
     }
+    @PreAuthorize("@permissionService.hasPermission('UPDATE_USER')")
+    @PostMapping("/upload")
+    @ResponseBody
+    public ResponseEntity<MessageResponse> uploadFile(@RequestParam("file") MultipartFile multipartFile) {
+        try {
+            // Čitanje sadržaja fajla
+            byte[] fileData = multipartFile.getBytes();
+            User user = authService.getLoggedUser();
 
 
+            // Čuvanje fajla u bazi podataka
+            File fileEntity = new File();
+            fileEntity.setUser(user);
+            fileEntity.setFileData(fileData);
+            List<File> allFiles = userService.getFile();
+            for(File f: allFiles){
+                if(f.getUser().getId() == user.getId()){
+                    userService.deleteFile(f.getId());
+                }
+            }
+
+            userService.saveFile(fileEntity);
+
+            MessageResponse response = new MessageResponse("File upload successfully.");
+            return ResponseEntity.ok(response);
+        } catch (IOException e) {
+            MessageResponse response = new MessageResponse("Error uploading.");
+            return ResponseEntity.badRequest().body(response);
+        }
+    }
+
+    @GetMapping("/download")
+    public ResponseEntity<byte[]>  downloadFile() throws IOException {
+        User user = authService.getLoggedUser();
+        byte[] fileBytes = userService.getFileBytesById(user);
+
+        if (fileBytes == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+        headers.setContentDispositionFormData("attachment", "file.pdf"); // Set the desired file name
+
+        return new ResponseEntity<>(fileBytes, headers, HttpStatus.OK);
+    }
 
 }

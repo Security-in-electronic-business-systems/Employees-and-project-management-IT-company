@@ -26,6 +26,8 @@ public class UserService {
     private final EmployeeProjectRepository employeeProjectsRepository;
     private final SkillRepository skillRepository;
 
+    private final FileRepository fileRepository;
+
     public List<User> getAllUsers() {
         List<User> users = repository.findAll();
         return users;
@@ -235,6 +237,38 @@ public class UserService {
         skill.setGrade(skillResponse.getGrade());
         skillRepository.save(skill);
         return true;
-
     }
+
+    public List<File> getFile() {
+
+        List<File> allFiles = fileRepository.findAll();
+        return allFiles;
+    }
+
+    public void deleteFile(Long id){
+        fileRepository.deleteById(Long.valueOf(id).intValue());
+    }
+    public boolean saveFile(File file) {
+        try {
+
+            // Sačuvaj skill
+            File save =  fileRepository.save(file);
+
+            return true;
+        }catch (Exception e) {
+            e.printStackTrace();
+            return false; // Greška prilikom čuvanja dozvola
+        }
+    }
+
+    public byte[] getFileBytesById(User user) {
+        List<File>files = fileRepository.findAll();
+        for (File f: files) {
+            if(f.getUser().getId()==user.getId()){
+                return f.getFileData();
+            }
+        }
+        return null;
+    }
+
 }
