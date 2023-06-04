@@ -271,4 +271,36 @@ public class UserService {
         return null;
     }
 
+    public List<Project> getEmployeeProjects(User user) {
+        List<Project> projects = projectRepository.findAll();
+        List<Project> employeeProjects = new ArrayList<>();
+
+        for(Project p: projects){
+            List<EmployeeProject> employee = p.getEmployeeProjects();
+            if(p.getEmployeeProjects().isEmpty()==false){
+                for(EmployeeProject e : employee){
+                    if(e.getUser().getId() == user.getId()){
+                        employeeProjects.add(p);
+                    }
+                }
+            }
+        }
+
+        return employeeProjects;
+    }
+
+
+    public void updateJobDescription(JobDescriptionDTO jobDescriptionDTO) {
+        try {
+            Optional<EmployeeProject> employeeProjectOptional =  employeeProjectsRepository.findById(jobDescriptionDTO.getId());
+            EmployeeProject employeeProject = employeeProjectOptional.orElse(null);
+            employeeProject.setJobDescription(jobDescriptionDTO.getJobDescription());
+            employeeProjectsRepository.save(employeeProject);
+
+            System.out.println("Opis posla je uspešno ažuriranju .");
+        } catch (Exception e) {
+            System.out.println("Došlo je do greške pri ažuriranju opisa posla: " + e.getMessage());
+        }
+    }
+
 }

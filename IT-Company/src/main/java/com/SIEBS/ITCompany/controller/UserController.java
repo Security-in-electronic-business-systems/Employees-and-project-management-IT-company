@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -337,6 +338,59 @@ public class UserController {
         headers.setContentDispositionFormData("attachment", "file.pdf"); // Set the desired file name
 
         return new ResponseEntity<>(fileBytes, headers, HttpStatus.OK);
+    }
+    @GetMapping("/getEmployeProjects")
+    public ResponseEntity<List<ProjectDTO>> getEmployeeProjects() {
+        User user = authService.getLoggedUser();
+        List<Project> projects = userService.getEmployeeProjects(user);
+        if (projects.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        List<ProjectDTO> projectsDTO = new ArrayList<>();
+
+        for(Project p: projects){
+            List<EmployeeProject>eProjects = p.getEmployeeProjects();
+            for(EmployeeProject e: eProjects){
+                if(e.getUser().getId() == user.getId()){
+                             projectsDTO = projects.stream()
+                            .map(project -> {
+                                ProjectDTO projectDTO = new ProjectDTO();
+                                projectDTO.setId(project.getId());
+                                projectDTO.setName(project.getName());
+                                projectDTO.setStartDate(project.getStartDate());
+                                projectDTO.setEndDate(project.getEndDate());
+                                projectDTO.setDescription(project.getDescription());
+
+                                List<EmployeeProject> employeeProjects = project.getEmployeeProjects();
+                                List<EmployeeProjectDTO> employeeProjectsDTO = employeeProjects.stream()
+                                        .map(employeeProject -> {
+                                            EmployeeProjectDTO employeeProjectDTO = new EmployeeProjectDTO();
+                                            employeeProjectDTO.setID(employeeProject.getId());
+                                            employeeProjectDTO.setUser(userService.createUsersResponse(employeeProject.getUser()));
+                                            employeeProjectDTO.setJobDescription(employeeProject.getJobDescription());
+                                            employeeProjectDTO.setStartDate(employeeProject.getStartDate());
+                                            employeeProjectDTO.setEndDate(employeeProject.getEndDate());
+                                            return employeeProjectDTO;
+                                        })
+                                        .collect(Collectors.toList());
+
+                                projectDTO.setEmployeeProjects(employeeProjectsDTO);
+                                return projectDTO;
+                            })
+                            .collect(Collectors.toList());
+                    return ResponseEntity.ok(projectsDTO);
+                }
+            }
+        }
+
+        return ResponseEntity.ok(projectsDTO);
+    }
+
+    @PreAuthorize("@permissionService.hasPermission('UPDATE_USER')")
+    @PutMapping("/editJobDescription")
+    @ResponseBody
+    public void editJobDescription(@RequestBody JobDescriptionDTO jobDescriptionDTO) {
+        userService.updateJobDescription(jobDescriptionDTO);
     }
 
 }
