@@ -303,4 +303,31 @@ public class UserService {
         }
     }
 
+    public void editEmployees(EditEmployeeDTO editEmployeeProjectDTO) {
+        try {
+            Optional<Project> projectOptional =  projectRepository.findById(editEmployeeProjectDTO.getId());
+            Project project = projectOptional.orElse(null);
+            List<EmployeeProject>oldEmployeeProjects = project.getEmployeeProjects();
+            EmployeeProject employeeProject=  new EmployeeProject();
+            System.out.println("****************OLD************** "+oldEmployeeProjects.size());
+
+            Optional<User> userOptional = repository.findById(editEmployeeProjectDTO.getUserId());
+            User user= userOptional.orElse(null);
+            employeeProject.setUser(user);
+            employeeProject.setProject(project);
+            employeeProject.setJobDescription(editEmployeeProjectDTO.getJobDescription());
+            employeeProject.setStartDate(editEmployeeProjectDTO.getStartDate());
+            employeeProject.setEndDate(editEmployeeProjectDTO.getEndDate());
+            oldEmployeeProjects.add(employeeProject);
+            System.out.println("****************NEW************** "+oldEmployeeProjects.size());
+            project.setEmployeeProjects(oldEmployeeProjects);
+            employeeProjectsRepository.save(employeeProject);
+            projectRepository.save(project);
+
+            System.out.println("Opis posla je uspešno ažuriranju .");
+        } catch (Exception e) {
+            System.out.println("Došlo je do greške pri ažuriranju opisa posla: " + e.getMessage());
+        }
+    }
+
 }

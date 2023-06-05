@@ -339,7 +339,7 @@ public class UserController {
 
         return new ResponseEntity<>(fileBytes, headers, HttpStatus.OK);
     }
-    @GetMapping("/getEmployeProjects")
+    @GetMapping("/getManagerProjects")
     public ResponseEntity<List<ProjectDTO>> getEmployeeProjects() {
         User user = authService.getLoggedUser();
         List<Project> projects = userService.getEmployeeProjects(user);
@@ -391,6 +391,58 @@ public class UserController {
     @ResponseBody
     public void editJobDescription(@RequestBody JobDescriptionDTO jobDescriptionDTO) {
         userService.updateJobDescription(jobDescriptionDTO);
+    }
+
+    @GetMapping("/getEmployeProjects")
+    public ResponseEntity<List<ProjectDTO>> getManagerProjects() {
+        User user = authService.getLoggedUser();
+        List<Project> projects = userService.getEmployeeProjects(user);
+        if (projects.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        List<ProjectDTO> projectsDTO = new ArrayList<>();
+
+        for(Project p: projects){
+            List<EmployeeProject>eProjects = p.getEmployeeProjects();
+            for(EmployeeProject e: eProjects){
+                    projectsDTO = projects.stream()
+                            .map(project -> {
+                                ProjectDTO projectDTO = new ProjectDTO();
+                                projectDTO.setId(project.getId());
+                                projectDTO.setName(project.getName());
+                                projectDTO.setStartDate(project.getStartDate());
+                                projectDTO.setEndDate(project.getEndDate());
+                                projectDTO.setDescription(project.getDescription());
+
+                                List<EmployeeProject> employeeProjects = project.getEmployeeProjects();
+                                List<EmployeeProjectDTO> employeeProjectsDTO = employeeProjects.stream()
+                                        .map(employeeProject -> {
+                                            EmployeeProjectDTO employeeProjectDTO = new EmployeeProjectDTO();
+                                            employeeProjectDTO.setID(employeeProject.getId());
+                                            employeeProjectDTO.setUser(userService.createUsersResponse(employeeProject.getUser()));
+                                            employeeProjectDTO.setJobDescription(employeeProject.getJobDescription());
+                                            employeeProjectDTO.setStartDate(employeeProject.getStartDate());
+                                            employeeProjectDTO.setEndDate(employeeProject.getEndDate());
+                                            return employeeProjectDTO;
+                                        })
+                                        .collect(Collectors.toList());
+
+                                projectDTO.setEmployeeProjects(employeeProjectsDTO);
+                                return projectDTO;
+                            })
+                            .collect(Collectors.toList());
+                    return ResponseEntity.ok(projectsDTO);
+                }
+        }
+
+        return ResponseEntity.ok(projectsDTO);
+    }
+
+    @PreAuthorize("@permissionService.hasPermission('UPDATE_USER')")
+    @PutMapping("/editEmployessOnProject")
+    @ResponseBody
+    public void editEmployessOnProject(@RequestBody EditEmployeeDTO editEmployeeDTO) {
+        userService.editEmployees(editEmployeeDTO);
     }
 
 }
