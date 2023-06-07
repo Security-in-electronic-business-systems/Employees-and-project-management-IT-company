@@ -2,10 +2,13 @@ package com.SIEBS.ITCompany.dto;
 
 import com.SIEBS.ITCompany.enumerations.Role;
 import com.SIEBS.ITCompany.model.Address;
+import com.SIEBS.ITCompany.model.UserRole;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -19,5 +22,6 @@ public class RegisterRequest {
     private String phoneNumber;
     private String title;
     private Address address;
-    private Role role;
+    private String role;
+    private List<String> roles;
 }

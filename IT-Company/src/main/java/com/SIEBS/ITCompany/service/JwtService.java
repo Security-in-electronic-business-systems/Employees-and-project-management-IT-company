@@ -1,18 +1,23 @@
 package com.SIEBS.ITCompany.service;
 
+import com.SIEBS.ITCompany.model.User;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
 import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
 
 @Service
@@ -22,6 +27,8 @@ public class JwtService {
   private String secretKey;
   @Value("${application.security.jwt.expiration}")
   private long jwtExpiration;
+  @Value("${application.security.jwt.passwordless-login.expiration}")
+  private long jwtForPasswordlessLoginExpiration;
   @Value("${application.security.jwt.refresh-token.expiration}")
   private long refreshExpiration;
 
@@ -43,6 +50,12 @@ public class JwtService {
       UserDetails userDetails
   ) {
     return buildToken(extraClaims, userDetails, jwtExpiration);
+  }
+
+  public String generateTokenForPasswordlessLogin(
+          UserDetails userDetails
+  ) {
+    return buildToken(new HashMap<>(), userDetails, jwtForPasswordlessLoginExpiration);
   }
 
   public String generateRefreshToken(
@@ -71,8 +84,19 @@ public class JwtService {
     return (username.equals(userDetails.getUsername())) && !isTokenExpired(token);
   }
 
-  private boolean isTokenExpired(String token) {
-    return extractExpiration(token).before(new Date());
+  public boolean tokenBelongsToTheUserButHasExpired(String token, UserDetails userDetails){
+    final String username = extractUsername(token);
+    return (username.equals(userDetails.getUsername())) && isTokenExpired(token);
+  }
+
+  public boolean isTokenExpired(String token) {
+    try {
+      final Date expiration = extractExpiration(token);
+      return expiration.before(new Date());
+    } catch (ExpiredJwtException e) {
+      // Token je istekao, rukovanje ovom situacijom
+      return true;
+    }
   }
 
   private Date extractExpiration(String token) {
