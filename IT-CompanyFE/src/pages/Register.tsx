@@ -1,5 +1,7 @@
 import { SyntheticEvent, useState } from "react";
 import { FaChalkboardTeacher, FaEnvelope, FaLock, FaPhone, FaSearchLocation, FaUser, FaUserTag } from "react-icons/fa";
+import Toast from 'react-bootstrap/Toast';
+import '../App.css';
 
 export function Register() {
   const [name, setName] = useState("");
@@ -15,6 +17,22 @@ export function Register() {
   const [street, setStreet] = useState("");
   const [number, setNumber] = useState("");
   const [role, setRole] = useState("");
+  const [showToast, setShowToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState("");
+  const [addRoles, setAddRoles] = useState<string[]>([])
+
+  const handleRoleChange = (value:string) => {
+    if (addRoles.includes(value)) {
+      // Ako je već odabrana, uklonite vrijednost iz addRoles
+      const updatedRoles = addRoles.filter((role) => role !== value);
+      setAddRoles(updatedRoles);
+    } else {
+      // Ako nije odabrana, dodajte vrijednost u addRoles
+      const updatedRoles = [...addRoles, value];
+      setAddRoles(updatedRoles);
+    }
+    console.log(addRoles)
+  };
 
   const handleSubmit = async (event: SyntheticEvent) => {
     event.preventDefault();
@@ -24,7 +42,6 @@ export function Register() {
       setPasswordError("Please enter your password.");
       return;
     }
-    console.log(isValidPassword(password))
     if(isValidPassword(password)===false){
       setPasswordError("Lozinka mora da sadrzi minimalno 8 karaktera, veliko slovo, broj i specijalni karakter(@#$%^&+=!)!")
       return;
@@ -50,14 +67,19 @@ export function Register() {
         "phoneNumber": phoneNumber,
         "title": title,
         "address": {"country": country, "city": city, "street": street, "number": number},
-        "role": role
+        "role": role,
+        "roles": addRoles
       }),
     })
       .then((response) => {
         return response.text(); // Pristupanje telu odgovora kao tekstu
       })
       .then((text) => {
-        console.log("Poruka sa servera:", text); // Ispisivanje poruke u konzoli
+        setToastMessage(text);
+        setShowToast(true);
+        setTimeout(() => {
+          setShowToast(false);
+        }, 3000);
       })
       .catch((error) => console.log(error));
     };
@@ -69,6 +91,7 @@ export function Register() {
   };
 
   return (
+  <div>
     <form className="col-md-6 mx-auto" onSubmit={handleSubmit}>
       <blockquote className="blockquote text-center">
         <p className="mb-0">Register as new user</p>
@@ -178,6 +201,45 @@ export function Register() {
             <option value="HR_MANAGER">HR_MANAGER</option>
           </select>
         </div>
+        <div className="col">
+          <label className="form-label">
+            <FaUserTag className="me-2" />Role
+          </label>
+          <div>
+            <label>
+              <input
+                type="checkbox"
+                value="SOFTWARE_ENGINEER"
+                checked={addRoles.includes('SOFTWARE_ENGINEER')}
+                onChange={() => handleRoleChange('SOFTWARE_ENGINEER')}
+              />
+              SOFTWARE_ENGINEER
+            </label>
+          </div>
+          <div>
+            <label>
+              <input
+                type="checkbox"
+                value="PROJECT_MANAGER"
+                checked={addRoles.includes('PROJECT_MANAGER')}
+                onChange={() => handleRoleChange('PROJECT_MANAGER')}
+              />
+              PROJECT_MANAGER
+            </label>
+          </div>
+          <div>
+            <label>
+              <input
+                type="checkbox"
+                value="HR_MANAGER"
+                checked={addRoles.includes('HR_MANAGER')}
+                onChange={() => handleRoleChange('HR_MANAGER')}
+              />
+              HR_MANAGER
+            </label>
+          </div>
+        </div>
+
       </div>
       <div className="row mb-3">
         <div className="col">
@@ -224,6 +286,15 @@ export function Register() {
       </div>      
       <button type="submit" className="btn btn-primary">Submit</button>
     </form>
+
+    <Toast show={showToast} onClose={() => setShowToast(false)} delay={3000} autohide className="custom-toast">
+                <Toast.Header closeButton={false}>
+                <strong className="me-auto">Toast Poruka</strong>
+                </Toast.Header>
+                <Toast.Body>{toastMessage}</Toast.Body>
+    </Toast>
+
+  </div>
 
   );
   }  

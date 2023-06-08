@@ -22,6 +22,6 @@ public class LoginResponse {
     private String phoneNumber;
     private String title;
     private Address address;
-    private Role role;
+    private RoleDTO role;
     private String message;
 }

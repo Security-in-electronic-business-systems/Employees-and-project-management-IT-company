@@ -5,10 +5,7 @@ import com.SIEBS.ITCompany.dto.MessageResponse;
 import com.SIEBS.ITCompany.dto.RegisterRequest;
 import com.SIEBS.ITCompany.dto.*;
 import com.SIEBS.ITCompany.model.User;
-import com.SIEBS.ITCompany.service.AuthenticationService;
-import com.SIEBS.ITCompany.service.UserService;
-import com.SIEBS.ITCompany.service.JwtService;
-import com.SIEBS.ITCompany.service.MagicLinkService;
+import com.SIEBS.ITCompany.service.*;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -22,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -33,6 +31,7 @@ public class AuthenticationController {
   private final UserService userService;
   private final JwtService jwtService;
   private final MagicLinkService magicLinkService;
+  private final PermissionService permissionService;
 
 
   @PostMapping("/authenticate")
@@ -98,6 +97,31 @@ public class AuthenticationController {
 
   }
 
+  @GetMapping("/register/verificate")
+  public ResponseEntity<MessageResponse> verificateRegistration(
+          @RequestParam("token") String token,@RequestParam("email") String email,
+          HttpServletRequest request,
+          HttpServletResponse response
+  ) {
+    URI login = URI.create("http://localhost:3000/login");
+    URI tokenExpiredUri = URI.create("http://localhost:3000/token-expired");
+    if(service.isTokenForPasswordlessLoginValid(token)){
+      magicLinkService.setUsedByToken(token);
+      userService.updateRegistrationDate(email, new Date());
+      userService.approveUser(email);
+      MessageResponse message = new MessageResponse("Link is valid, you are registered!");
+
+      return ResponseEntity.status(HttpStatus.FOUND)
+              .location(login)
+              .body(message);
+    }
+    MessageResponse message = new MessageResponse("Link is not valid!");
+    return ResponseEntity.status(HttpStatus.FOUND)
+            .location(tokenExpiredUri)
+            .body(message);
+
+  }
+
   @PostMapping("/generateAndSendToken")
   public ResponseEntity<MessageResponse> generateAndSendToken(
           @RequestBody PasswordlessAuthenticationRequest request
@@ -136,7 +160,7 @@ public class AuthenticationController {
             .title(user.getTitle())
             .phoneNumber(user.getPhoneNumber())
             .address(user.getAddress())
-            .role(user.getRole())
+            .role(new RoleDTO(user.getRole().getId(), user.getRole().getName()))
             .message("Successfully!")
             .build());
   }

@@ -26,7 +26,17 @@ public class EmailServiceImpl implements EmailService {
             mimeMessageHelper.setFrom(fromEmail);
             mimeMessageHelper.setTo(to);
             mimeMessageHelper.setSubject(subject);
-            mimeMessageHelper.setText(body);
+
+            StringBuilder htmlBody = new StringBuilder();
+            htmlBody.append("<html><body>");
+            htmlBody.append("<h1>").append(subject).append("</h1>");
+            htmlBody.append("<p>Postovani,</p>");
+            htmlBody.append("<p>").append(body).append("</p>");
+            htmlBody.append("<hr>");
+            htmlBody.append("<p></p>");
+            htmlBody.append("</body></html>");
+
+            mimeMessageHelper.setText(htmlBody.toString(), true);
 
             javaMailSender.send(mimeMessage);
             return "Success!";

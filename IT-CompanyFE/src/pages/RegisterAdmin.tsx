@@ -1,25 +1,38 @@
 import { SyntheticEvent, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { FaChalkboardTeacher, FaEnvelope, FaLock, FaPhone, FaSearchLocation, FaUser, FaUserTag } from "react-icons/fa";
+import Toast from 'react-bootstrap/Toast';
+import '../App.css';
 
-export function RegisterAdmin() {
+export function Register() {
   const [name, setName] = useState("");
   const [surname, setSurname] = useState("");
   const [email, setEmail] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [title, setTitle] = useState("");
-  const [, setEmailError] = useState("");
   const [password, setPassword] = useState("");
-  //const [inputValue, setInputValue] = useState('');
   const [repeatPassword, setRepeatPassword] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [country, setCountry] = useState("");
   const [city, setCity] = useState("");
   const [street, setStreet] = useState("");
   const [number, setNumber] = useState("");
-  const [role, setRole] = useState("");
+  const [, setRole] = useState("");
+  const [showToast, setShowToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState("");
+  const [addRoles, setAddRoles] = useState<string[]>([])
 
-  const navigate = useNavigate();
+  const handleRoleChange = (value:string) => {
+    if (addRoles.includes(value)) {
+      // Ako je već odabrana, uklonite vrijednost iz addRoles
+      const updatedRoles = addRoles.filter((role) => role !== value);
+      setAddRoles(updatedRoles);
+    } else {
+      // Ako nije odabrana, dodajte vrijednost u addRoles
+      const updatedRoles = [...addRoles, value];
+      setAddRoles(updatedRoles);
+    }
+    console.log(addRoles)
+  };
 
   const handleSubmit = async (event: SyntheticEvent) => {
     event.preventDefault();
@@ -29,7 +42,6 @@ export function RegisterAdmin() {
       setPasswordError("Please enter your password.");
       return;
     }
-    console.log(isValidPassword(password))
     if(isValidPassword(password)===false){
       setPasswordError("Lozinka mora da sadrzi minimalno 8 karaktera, veliko slovo, broj i specijalni karakter(@#$%^&+=!)!")
       return;
@@ -53,21 +65,24 @@ export function RegisterAdmin() {
         "email": email,
         "password":password,
         "phoneNumber": phoneNumber,
+        "title": title,
         "address": {"country": country, "city": city, "street": street, "number": number},
-        "role": role
+        "role": "ADMINISTRATOR",
+        "roles": addRoles
       }),
     })
       .then((response) => {
-        if (response.status === 302) {
-          setEmailError("Email already exists.");
-          return;
-        }
-        if (response.ok) {
-          navigate("/");
-        }
+        return response.text(); // Pristupanje telu odgovora kao tekstu
+      })
+      .then((text) => {
+        setToastMessage(text);
+        setShowToast(true);
+        setTimeout(() => {
+          setShowToast(false);
+        }, 3000);
       })
       .catch((error) => console.log(error));
-  };
+    };
 
   const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[@#$%^&+=!])(?=.*[a-zA-Z]).{8,}$/;
 
@@ -76,6 +91,7 @@ export function RegisterAdmin() {
   };
 
   return (
+  <div>
     <form className="col-md-6 mx-auto" onSubmit={handleSubmit}>
       <blockquote className="blockquote text-center">
         <p className="mb-0">Register as new user</p>
@@ -182,6 +198,45 @@ export function RegisterAdmin() {
             <option value="ADMINISTRATOR">ADMINISTRATOR</option>
           </select>
         </div>
+        <div className="col">
+          <label className="form-label">
+            <FaUserTag className="me-2" />Role
+          </label>
+          <div>
+            <label>
+              <input
+                type="checkbox"
+                value="SOFTWARE_ENGINEER"
+                checked={addRoles.includes('SOFTWARE_ENGINEER')}
+                onChange={() => handleRoleChange('SOFTWARE_ENGINEER')}
+              />
+              SOFTWARE_ENGINEER
+            </label>
+          </div>
+          <div>
+            <label>
+              <input
+                type="checkbox"
+                value="PROJECT_MANAGER"
+                checked={addRoles.includes('PROJECT_MANAGER')}
+                onChange={() => handleRoleChange('PROJECT_MANAGER')}
+              />
+              PROJECT_MANAGER
+            </label>
+          </div>
+          <div>
+            <label>
+              <input
+                type="checkbox"
+                value="HR_MANAGER"
+                checked={addRoles.includes('HR_MANAGER')}
+                onChange={() => handleRoleChange('HR_MANAGER')}
+              />
+              HR_MANAGER
+            </label>
+          </div>
+        </div>
+
       </div>
       <div className="row mb-3">
         <div className="col">
@@ -229,7 +284,16 @@ export function RegisterAdmin() {
       <button type="submit" className="btn btn-primary">Submit</button>
     </form>
 
+    <Toast show={showToast} onClose={() => setShowToast(false)} delay={3000} autohide className="custom-toast">
+                <Toast.Header closeButton={false}>
+                <strong className="me-auto">Toast Poruka</strong>
+                </Toast.Header>
+                <Toast.Body>{toastMessage}</Toast.Body>
+    </Toast>
+
+  </div>
+
   );
   }  
 
-  export default RegisterAdmin;
+  export default Register;

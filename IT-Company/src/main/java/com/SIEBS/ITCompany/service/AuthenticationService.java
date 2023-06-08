@@ -1,15 +1,9 @@
 package com.SIEBS.ITCompany.service;
 
 import com.SIEBS.ITCompany.dto.*;
-import com.SIEBS.ITCompany.model.MagicLink;
-import com.SIEBS.ITCompany.model.Role;
-import com.SIEBS.ITCompany.model.Token;
-import com.SIEBS.ITCompany.repository.AddressRepository;
-import com.SIEBS.ITCompany.repository.RoleRepository;
-import com.SIEBS.ITCompany.repository.TokenRepository;
+import com.SIEBS.ITCompany.model.*;
+import com.SIEBS.ITCompany.repository.*;
 import com.SIEBS.ITCompany.enumerations.TokenType;
-import com.SIEBS.ITCompany.model.User;
-import com.SIEBS.ITCompany.repository.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -23,11 +17,14 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+
 public class AuthenticationService {
   private final UserRepository repository;
   private final TokenRepository tokenRepository;
@@ -39,6 +36,8 @@ public class AuthenticationService {
   private final AuthenticationManager authenticationManager;
   private final MagicLinkService magicLinkService;
   private final EmailService emailService;
+  private final UserRoleRepository userRoleRepository;
+  private User loggedUser;
 
   public AuthenticationResponse authenticate(AuthenticationRequest request) {
     try{
@@ -73,6 +72,7 @@ public class AuthenticationService {
     }
     var user = repository.findByEmail(request.getEmail())
         .orElseThrow();
+    loggedUser = user;
     var jwtToken = jwtService.generateToken(user);
     var refreshToken = jwtService.generateRefreshToken(user);
     return AuthenticationResponse
@@ -87,7 +87,7 @@ public class AuthenticationService {
                     .title(user.getTitle())
                     .phoneNumber(user.getPhoneNumber())
                     .address(user.getAddress())
-                    .role(user.getRole())
+                    .role(new RoleDTO(user.getRole().getId(), user.getRole().getName()))
                     .message("Successfully!")
                     .build())
             .build();
@@ -110,9 +110,26 @@ public class AuthenticationService {
               .title(request.getTitle())
               .address(request.getAddress())
               .role(role)
+              .roles(new ArrayList<>())
               .build();
       var address =addressRepository.save(request.getAddress());
       var savedUser = repository.save(user);
+      var primalRole = UserRole.builder()
+              .user(user)
+              .role(role)
+              .build();
+      userRoleRepository.save(primalRole);
+      List<UserRole> userRoles = new ArrayList<>();
+      for (String roleString:request.getRoles()) {
+        Role r = roleRepository.findByName(roleString);
+        var userRole = UserRole.builder()
+                .user(user)
+                .role(r)
+                .build();
+        userRoleRepository.save(userRole);
+        userRoles.add(userRole);
+      }
+      user.setRoles(userRoles);
       return MessageResponse.builder()
               .message("Success!").build();
     }else{
@@ -187,7 +204,16 @@ public class AuthenticationService {
     return url;
   }
 
-  private boolean isTokenForPasswordlessLoginValid(String token){
+  public String generateTokenForRegistration(String email){
+    var user = repository.findByEmail(email).orElse(null);
+    var jwtToken = jwtService.generateTokenForPasswordlessLogin(user);
+    String url = "https://localhost:8081/api/v1/auth/register/verificate?token=" + jwtToken +"&email="+email;
+    magicLinkService.Save(MagicLink.builder().used(false).token(jwtToken).build());
+    System.out.println(url);
+    return url;
+  }
+
+  public boolean isTokenForPasswordlessLoginValid(String token){
     if(magicLinkService.isTokenUsed(token)){
       return false;
     }else if(jwtService.isTokenExpired(token)){
@@ -265,5 +291,9 @@ public class AuthenticationService {
 
   public User getUserByEmail(String email){
     return repository.findByEmail(email).orElse(null);
+  }
+
+  public User getLoggedUser() {
+    return loggedUser;
   }
 }

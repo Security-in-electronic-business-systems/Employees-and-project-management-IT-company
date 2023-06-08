@@ -1,12 +1,15 @@
 import { useEffect, useState } from "react";
 import { User } from "../model/user";
 import '../App.css';
+import Toast from 'react-bootstrap/Toast';
 
 function ViewRegistrationRequests(){
     const [users,setUsers] = useState<User[]>([]);
     const [showPopup, setShowPopup] = useState(false);
     const [rejectionReason, setRejectionReason] = useState("");
     const [selectedUser, setSelectedUser] = useState<User | null>(null);
+    const [showToast, setShowToast] = useState(false);
+    const [toastMessage, setToastMessage] = useState("");
   
 
     useEffect(() => {
@@ -52,6 +55,14 @@ function ViewRegistrationRequests(){
                   setShowPopup(false);
                   setRejectionReason("");
                   setSelectedUser(null);
+                  return response.text();
+                })
+                .then((text) => {
+                  setToastMessage(text);
+                  setShowToast(true);
+                  setTimeout(() => {
+                    setShowToast(false);
+                  }, 3000);
                 })
                 .catch((error) => {
                     console.log(error);
@@ -76,6 +87,14 @@ function ViewRegistrationRequests(){
                   setShowPopup(false);
                   setRejectionReason("");
                   setSelectedUser(null);
+                  return response.text();
+                })
+                .then((text) => {
+                  setToastMessage(text);
+                  setShowToast(true);
+                  setTimeout(() => {
+                    setShowToast(false);
+                  }, 3000);
                 })
                 .catch((error) => {
                     console.log(error);
@@ -172,6 +191,12 @@ function ViewRegistrationRequests(){
               </div>
             </div>
           )}
+            <Toast show={showToast} onClose={() => setShowToast(false)} delay={3000} autohide className="custom-toast">
+                <Toast.Header closeButton={false}>
+                <strong className="me-auto">Toast Poruka</strong>
+                </Toast.Header>
+                <Toast.Body>{toastMessage}</Toast.Body>
+            </Toast>
         </div>
       );
       

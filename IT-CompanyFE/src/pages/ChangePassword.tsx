@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useLoggedUser } from "../hooks/UseLoggedUserInformation";
+import { UseLoggedUser } from "../hooks/UseLoggedUserInformation";
 import { ResponseMessage } from "../model/ResponseMessage";
 
 function ChangePassword () {
@@ -12,7 +12,7 @@ function ChangePassword () {
   const [newPasswordError, setNewPasswordError] = useState("");
   const [repeatedNewPasswordError, setRepeatedNewPasswordError] = useState("");
 
-  const user = useLoggedUser();
+  const user = UseLoggedUser();
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault(); 

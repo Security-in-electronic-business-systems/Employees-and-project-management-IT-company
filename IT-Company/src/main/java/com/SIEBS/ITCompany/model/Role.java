@@ -6,7 +6,12 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.springframework.security.core.GrantedAuthority;
+
+import java.util.Arrays;
+import java.util.List;
 
 @Data
 @Builder
@@ -25,6 +30,16 @@ public class Role implements GrantedAuthority {
 
     @Column(name="name")
     String name;
+
+
+    @OneToMany(mappedBy = "role", cascade = CascadeType.ALL)
+    @Fetch(FetchMode.JOIN)
+    private List<UserRole> roles;
+
+
+    @OneToMany(mappedBy = "role", cascade = CascadeType.ALL)
+    @Fetch(FetchMode.JOIN)
+    private List<Permission> permissions;
 
     @JsonIgnore
     @Override
@@ -49,4 +64,13 @@ public class Role implements GrantedAuthority {
         this.id = id;
     }
 
+    @Override
+    public String toString() {
+        return "Role{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", roles=" + roles +
+                ", permissions=" + permissions +
+                '}';
+    }
 }
