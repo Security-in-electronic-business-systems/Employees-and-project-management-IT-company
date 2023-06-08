@@ -1,11 +1,11 @@
 package com.SIEBS.ITCompany.service;
 
-import com.SIEBS.ITCompany.dto.EmployeeProjectDTO;
-import com.SIEBS.ITCompany.dto.ProjectDTO;
-import com.SIEBS.ITCompany.dto.UsersResponse;
+import com.SIEBS.ITCompany.dto.*;
 import com.SIEBS.ITCompany.model.*;
 import com.SIEBS.ITCompany.repository.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -21,6 +21,7 @@ public class UserService {
     private final ProjectRepository projectRepository;
     private final AddressRepository addressRepository;
     private final RoleRepository roleRepository;
+    private final PasswordEncoder passwordEncoder;
 
     private final EmployeeProjectRepository employeeProjectsRepository;
 
@@ -128,6 +129,18 @@ public class UserService {
     }
 
 
+    public MessageResponse ChangePassword(ChangePasswordDTO changePasswordDTO) {
+        User user = repository.findByEmail(changePasswordDTO.getEmail()).orElse(null);
+        if(user == null){
+            return MessageResponse.builder().message("User not found!").build();
+        }
 
-
+        if(passwordEncoder.matches(changePasswordDTO.getOldPassword(), user.getPassword())){
+            user.setPassword(passwordEncoder.encode(changePasswordDTO.getNewPassword()));
+            repository.update(user);
+            return MessageResponse.builder().message("Successfully!").build();
+        }else{
+            return MessageResponse.builder().message("Old password is not correct!").build();
+        }
+    }
 }

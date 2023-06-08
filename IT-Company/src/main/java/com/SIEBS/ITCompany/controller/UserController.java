@@ -32,7 +32,10 @@ public class UserController {
     @Autowired
     private final UserService userService;
 
-
+    @PostMapping("/changePassword")
+    public ResponseEntity<MessageResponse> changePassword(@RequestBody ChangePasswordDTO changePasswordDTO){
+        return ResponseEntity.ok(userService.ChangePassword(changePasswordDTO));
+    }
 
     @PostMapping("/send")
     public String sendMail(@RequestParam(value = "file", required = false)MultipartFile[] file, String to, String subject, String body){
