@@ -26,7 +26,7 @@ const Protected: React.FC<ProtectedProps> = ({ children, role }) => {
 
   const loggedUser = UseLoggedUser()
 
-  if (loggedUser && loggedUser.role.name === role) {
+  if (loggedUser && loggedUser.role.name.toString() === role) {
     return <>{children}</>;
   } else {
     return <UnauthorizedAccess />;

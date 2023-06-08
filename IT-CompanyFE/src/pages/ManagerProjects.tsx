@@ -116,7 +116,7 @@ function ManagerProjects() {
       .catch((error) => console.log(error));
 
     navigate("/managerProjects");
-    // window.location.reload();
+    window.location.reload();
     console.log(isEditMode);
   };
 
