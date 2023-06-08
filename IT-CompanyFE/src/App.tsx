@@ -15,7 +15,13 @@ import TokenExpired from './pages/TokenExpired';import RegisterAdmin from './pag
 import ViewRegistrationRequests from './pages/ViewRegistrationRequests';
 import HMACVerification from './pages/HMACVerification';
 import RolePermissions from './pages/RolePermissions';
-0
+import EnginerProfil from './pages/EnginerProfil';
+import ProjectManagerProfil from './pages/ProjectManagerProfil';
+import CareerPage from './pages/CareerPage';
+import EmployeeProjects from './pages/EmployeeProjects';
+import ManagerProjects from './pages/ManagerProjects';
+import Protected from './authorization/Protected';
+
 
 function App(){
   useEffect(() => {
@@ -28,20 +34,26 @@ function App(){
       <div>
         <Routes>
           <Route path="/hmac" element={<HMACVerification/>} />
-          <Route path="/ViewAllRegistrationRequests" element={<ViewRegistrationRequests/>} />
-          <Route path="/ViewAll" element={<ViewAllEmployees/>} />
-          <Route path="/ViewAllProjects" element={<Projects/>} />
+          <Route path="/ViewAllRegistrationRequests" element={<Protected role={"ADMINISTRATOR"}><ViewRegistrationRequests/></Protected>} />
+          <Route path="/ViewAll" element={<Protected role={"ADMINISTRATOR"}><ViewAllEmployees/></Protected>} />
+          <Route path="/ViewAllProjects" element={<Protected role={"ADMINISTRATOR"}><Projects/></Protected>} />
           <Route path="/profil" element={<Profil/>} />
-          <Route path="/createProject" element={<CreateProject/>} />
+          <Route path="/createProject" element={<Protected role={"ADMINISTRATOR"}><CreateProject/></Protected>} />
           <Route path="/register" element={<Register/>} />
-          <Route path="/registerAdmin" element={<RegisterAdmin/>} />
+          <Route path="/registerAdmin" element={<Protected role={"ADMINISTRATOR"}><RegisterAdmin/></Protected>} />
+
           <Route path="/" element={<Home/>} />
           <Route path="/login" element={<Login/>} />
           <Route path="/passwordless-login" element={<PasswordlessLogin/>} />
           <Route path="/wait-room" element={<WaitRoom/>} />
           <Route path="/session-expired" element={<SessionExpired/>} />
           <Route path="/token-expired" element={<TokenExpired/>} />
-          <Route path="/permissions" element={<RolePermissions/>} />
+          <Route path="/permissions" element={<Protected role={"ADMINISTRATOR"}><RolePermissions/></Protected>} />
+          <Route path="/enginerProfil" element={<Protected role={"SOFTWARE_ENGINEER"}><EnginerProfil/></Protected>} />
+          <Route path="/projectManagerProfil" element={<Protected role={"PROJECT_MANAGER"}><ProjectManagerProfil/></Protected>} />
+          <Route path="/careerPage" element={<Protected role={"SOFTWARE_ENGINEER"}><CareerPage/></Protected>} />
+          <Route path="/employeeProjects" element={<Protected role={"SOFTWARE_ENGINEER"}><EmployeeProjects/></Protected>} />
+          <Route path="/managerProjects" element={<Protected role={"PROJECT_MANAGER"}><ManagerProjects/></Protected>} />
         </Routes>
       </div>
     </>

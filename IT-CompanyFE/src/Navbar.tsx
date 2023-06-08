@@ -1,5 +1,5 @@
 import { Link, useNavigate  } from 'react-router-dom';
-import { useLoggedUser } from './hooks/UseLoggedUserInformation';
+import { UseLoggedUser } from './hooks/UseLoggedUserInformation';
   
 
 function Navbar() {
@@ -38,7 +38,7 @@ function Navbar() {
   })
   };
 
-  const loggedUser = useLoggedUser()
+  const loggedUser = UseLoggedUser()
 
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light" style={navStyle}>
@@ -46,6 +46,61 @@ function Navbar() {
         <li className="nav-item active">
           <Link className="nav-link" to="/">Home</Link>
         </li>
+        {loggedUser?.role.name.toString() === "SOFTWARE_ENGINEER"  && (
+            <li className="nav-item active">
+          <Link className="nav-link" to="/enginerProfil">Profile</Link>
+        </li>)}
+        {loggedUser?.role.name.toString() === "SOFTWARE_ENGINEER"  && (
+            <li className="nav-item active">
+          <Link className="nav-link" to="/careerPage">Career page</Link>
+        </li>)}
+
+        {loggedUser?.role.name.toString() === "SOFTWARE_ENGINEER"  && (
+            <li className="nav-item active">
+          <Link className="nav-link" to="/employeeProjects">Projects</Link>
+        </li>)}
+        {loggedUser?.role.name.toString() === "PROJECT_MANAGER"  && (
+            <li className="nav-item active">
+          <Link className="nav-link" to="/projectManagerProfil">Profile</Link>
+        </li>)}
+        {loggedUser?.role.name.toString() === "PROJECT_MANAGER"  && (
+            <li className="nav-item active">
+          <Link className="nav-link" to="/managerProjects">Projects</Link>
+        </li>)}
+        {loggedUser?.role.name.toString() === "HR_MANAGER"  && (
+            <li className="nav-item active">
+          <Link className="nav-link" to="/profil">Profile</Link>
+        </li>)}
+
+        {loggedUser?.role.name.toString() === "ADMINISTRATOR"  && (
+            <li className="nav-item active">
+          <Link className="nav-link" to="/profil">Profile</Link>
+        </li>)}
+
+        {loggedUser?.role.name.toString() === "ADMINISTRATOR"  && (
+            <li className="nav-item active">
+          <Link className="nav-link" to="/ViewAllRegistrationRequests">RegistrationRequests</Link>
+        </li>)}
+        {loggedUser?.role.name.toString() === "ADMINISTRATOR"  && (
+            <li className="nav-item active">
+          <Link className="nav-link" to="/ViewAll">ViewUsers</Link>
+        </li>)}
+        {loggedUser?.role.name.toString() === "ADMINISTRATOR"  && (
+            <li className="nav-item active">
+          <Link className="nav-link" to="/ViewAllProjects">ViewProjects</Link>
+        </li>)}
+        {loggedUser?.role.name.toString() === "ADMINISTRATOR"  && (
+            <li className="nav-item active">
+          <Link className="nav-link" to="/createProject">CreateProject</Link>
+        </li>)}
+        {loggedUser?.role.name.toString() === "ADMINISTRATOR"  && (
+            <li className="nav-item active">
+          <Link className="nav-link" to="/registerAdmin">RegisterAdmin</Link>
+        </li>)}
+        {loggedUser?.role.name.toString() === "ADMINISTRATOR"  && (
+            <li className="nav-item active">
+          <Link className="nav-link" to="/permissions">Permissions</Link>
+        </li>)}
       </ul>
       <ul className="navbar-nav mr-auto" style={stylesRight}>
       <li className="nav-item active" >

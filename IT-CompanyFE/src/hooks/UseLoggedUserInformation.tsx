@@ -1,6 +1,6 @@
 import { LoginResponse } from "../model/login-response";
 
-export function useLoggedUser(): LoginResponse | null {
+export function UseLoggedUser(): LoginResponse | null {
     try {
       const loggedUser= localStorage.getItem('loggedUser');
       if (loggedUser) {

@@ -1,9 +1,6 @@
 package com.SIEBS.ITCompany.service;
 
-import com.SIEBS.ITCompany.dto.EmployeeProjectDTO;
-import com.SIEBS.ITCompany.dto.PermissionDTO;
-import com.SIEBS.ITCompany.dto.ProjectDTO;
-import com.SIEBS.ITCompany.dto.UsersResponse;
+import com.SIEBS.ITCompany.dto.*;
 import com.SIEBS.ITCompany.model.*;
 import com.SIEBS.ITCompany.repository.*;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +24,9 @@ public class UserService {
     private final PermissionRepository permissionRepository;
 
     private final EmployeeProjectRepository employeeProjectsRepository;
+    private final SkillRepository skillRepository;
+
+    private final FileRepository fileRepository;
 
     public List<User> getAllUsers() {
         List<User> users = repository.findAll();
@@ -181,6 +181,152 @@ public class UserService {
         } catch (Exception e) {
             e.printStackTrace();
             return false; // Greška prilikom čuvanja dozvola
+        }
+    }
+
+    public boolean createSkill(SkillDTO skillDTO) {
+        Skill skill = new Skill();
+        try {
+
+            Optional<User> userOptional = findByEmail(skillDTO.getEmail());
+            User user = userOptional.orElse(null);
+            skill.setName(skillDTO.getName());
+            skill.setUser(user);
+            skill.setGrade(skillDTO.getGrade());
+
+            // Sačuvaj skill
+            Skill savedSkill =  skillRepository.save(skill);
+
+            return true;
+        }catch (Exception e) {
+            e.printStackTrace();
+            return false; // Greška prilikom čuvanja dozvola
+        }
+
+    }
+
+    public List<AllSkillDTO> getSkills(String email) {
+        System.out.println("****************************"+email);
+        List<Skill> allSkills = skillRepository.findAll();
+        List<AllSkillDTO> skills = new ArrayList<>();
+
+        Optional<User> userOptional = findByEmail(email);
+        User user = userOptional.orElse(null);
+
+        for (Skill s : allSkills){
+            AllSkillDTO dto = new AllSkillDTO();
+            if(s.getUser().getId() == user.getId()){
+                dto.setId(s.getId());
+                dto.setName(s.getName());
+                dto.setGrade(s.getGrade());
+                skills.add(dto);
+            }
+        }
+
+        System.out.println("****************************");
+        return skills;
+    }
+
+
+    public boolean editSkill(AllSkillDTO skillResponse) {
+        Optional<Skill> skilOptionall =  skillRepository.findById( Long.valueOf(skillResponse.getId()).intValue());
+        Skill skill = skilOptionall.orElse(null);
+        if (skill == null) {
+            return false;
+        }
+        skill.setGrade(skillResponse.getGrade());
+        skillRepository.save(skill);
+        return true;
+    }
+
+    public List<File> getFile() {
+
+        List<File> allFiles = fileRepository.findAll();
+        return allFiles;
+    }
+
+    public void deleteFile(Long id){
+        fileRepository.deleteById(Long.valueOf(id).intValue());
+    }
+    public boolean saveFile(File file) {
+        try {
+
+            // Sačuvaj skill
+            File save =  fileRepository.save(file);
+
+            return true;
+        }catch (Exception e) {
+            e.printStackTrace();
+            return false; // Greška prilikom čuvanja dozvola
+        }
+    }
+
+    public byte[] getFileBytesById(User user) {
+        List<File>files = fileRepository.findAll();
+        for (File f: files) {
+            if(f.getUser().getId()==user.getId()){
+                return f.getFileData();
+            }
+        }
+        return null;
+    }
+
+    public List<Project> getEmployeeProjects(User user) {
+        List<Project> projects = projectRepository.findAll();
+        List<Project> employeeProjects = new ArrayList<>();
+
+        for(Project p: projects){
+            List<EmployeeProject> employee = p.getEmployeeProjects();
+            if(p.getEmployeeProjects().isEmpty()==false){
+                for(EmployeeProject e : employee){
+                    if(e.getUser().getId() == user.getId()){
+                        employeeProjects.add(p);
+                    }
+                }
+            }
+        }
+
+        return employeeProjects;
+    }
+
+
+    public void updateJobDescription(JobDescriptionDTO jobDescriptionDTO) {
+        try {
+            Optional<EmployeeProject> employeeProjectOptional =  employeeProjectsRepository.findById(jobDescriptionDTO.getId());
+            EmployeeProject employeeProject = employeeProjectOptional.orElse(null);
+            employeeProject.setJobDescription(jobDescriptionDTO.getJobDescription());
+            employeeProjectsRepository.save(employeeProject);
+
+            System.out.println("Opis posla je uspešno ažuriranju .");
+        } catch (Exception e) {
+            System.out.println("Došlo je do greške pri ažuriranju opisa posla: " + e.getMessage());
+        }
+    }
+
+    public void editEmployees(EditEmployeeDTO editEmployeeProjectDTO) {
+        try {
+            Optional<Project> projectOptional =  projectRepository.findById(editEmployeeProjectDTO.getId());
+            Project project = projectOptional.orElse(null);
+            List<EmployeeProject>oldEmployeeProjects = project.getEmployeeProjects();
+            EmployeeProject employeeProject=  new EmployeeProject();
+            System.out.println("****************OLD************** "+oldEmployeeProjects.size());
+
+            Optional<User> userOptional = repository.findById(editEmployeeProjectDTO.getUserId());
+            User user= userOptional.orElse(null);
+            employeeProject.setUser(user);
+            employeeProject.setProject(project);
+            employeeProject.setJobDescription(editEmployeeProjectDTO.getJobDescription());
+            employeeProject.setStartDate(editEmployeeProjectDTO.getStartDate());
+            employeeProject.setEndDate(editEmployeeProjectDTO.getEndDate());
+            oldEmployeeProjects.add(employeeProject);
+            System.out.println("****************NEW************** "+oldEmployeeProjects.size());
+            project.setEmployeeProjects(oldEmployeeProjects);
+            employeeProjectsRepository.save(employeeProject);
+            projectRepository.save(project);
+
+            System.out.println("Opis posla je uspešno ažuriranju .");
+        } catch (Exception e) {
+            System.out.println("Došlo je do greške pri ažuriranju opisa posla: " + e.getMessage());
         }
     }
 
