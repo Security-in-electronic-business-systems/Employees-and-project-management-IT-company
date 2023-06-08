@@ -258,6 +258,7 @@ public class UserController {
         }
     }
 
+    @PreAuthorize("@permissionService.hasPermission('ADD_SKILL')")
     @PostMapping("/addSkill")
     public ResponseEntity<MessageResponse> saveSkill(@RequestBody SkillDTO skill) {
         boolean isSaved = userService.createSkill(skill);
@@ -271,7 +272,7 @@ public class UserController {
         }
     }
 
-    @PreAuthorize("@permissionService.hasPermission('UPDATE_USER')")
+    @PreAuthorize("@permissionService.hasPermission('GET_ALL_SKILL')")
     @GetMapping("/getAllSkill")
     @ResponseBody
     public ResponseEntity<List<AllSkillDTO>> getSkillForUser() {
@@ -279,7 +280,7 @@ public class UserController {
         return ResponseEntity.ok(userService.getSkills(user.getEmail()));
     }
 
-    @PreAuthorize("@permissionService.hasPermission('UPDATE_USER')")
+    @PreAuthorize("@permissionService.hasPermission('EDIT_SKILL')")
     @PutMapping("/editSkill")
     @ResponseBody
     public ResponseEntity<MessageResponse> editSkill(@RequestBody AllSkillDTO allSkillDTO) {
@@ -293,7 +294,7 @@ public class UserController {
         }
 
     }
-    @PreAuthorize("@permissionService.hasPermission('UPDATE_USER')")
+    @PreAuthorize("@permissionService.hasPermission('ADD_CV')")
     @PostMapping("/upload")
     @ResponseBody
     public ResponseEntity<MessageResponse> uploadFile(@RequestParam("file") MultipartFile multipartFile) {
@@ -324,6 +325,7 @@ public class UserController {
         }
     }
 
+    @PreAuthorize("@permissionService.hasPermission('DOWNLOAD_CV')")
     @GetMapping("/download")
     public ResponseEntity<byte[]>  downloadFile() throws IOException {
         User user = authService.getLoggedUser();
@@ -339,6 +341,7 @@ public class UserController {
 
         return new ResponseEntity<>(fileBytes, headers, HttpStatus.OK);
     }
+    @PreAuthorize("@permissionService.hasPermission('GET_MANAGER_PROJECTS')")
     @GetMapping("/getManagerProjects")
     public ResponseEntity<List<ProjectDTO>> getEmployeeProjects() {
         User user = authService.getLoggedUser();
@@ -386,13 +389,14 @@ public class UserController {
         return ResponseEntity.ok(projectsDTO);
     }
 
-    @PreAuthorize("@permissionService.hasPermission('UPDATE_USER')")
+    @PreAuthorize("@permissionService.hasPermission('EDIT_JOB_DESCRIPTION')")
     @PutMapping("/editJobDescription")
     @ResponseBody
     public void editJobDescription(@RequestBody JobDescriptionDTO jobDescriptionDTO) {
         userService.updateJobDescription(jobDescriptionDTO);
     }
 
+    @PreAuthorize("@permissionService.hasPermission('GET_EMPLOYEE_PROJECTS')")
     @GetMapping("/getEmployeProjects")
     public ResponseEntity<List<ProjectDTO>> getManagerProjects() {
         User user = authService.getLoggedUser();
@@ -431,14 +435,30 @@ public class UserController {
                                 return projectDTO;
                             })
                             .collect(Collectors.toList());
-                    return ResponseEntity.ok(projectsDTO);
+
+                List<ProjectDTO>retProject = new ArrayList<>();
+                for(ProjectDTO dto : projectsDTO) {
+                    List<EmployeeProjectDTO> employeDto =  new ArrayList<>();
+                    for (EmployeeProjectDTO emplyee : dto.getEmployeeProjects()) {
+//                        System.out.println("========" + emplyee.getUser().getFirstname() + emplyee.getUser().getUserId());
+//                        System.out.println("====USER====" + user.getFirstname() + user.getId());
+
+
+                        if (emplyee.getUser().getUserId().equals(user.getId())) {
+                            employeDto.add(emplyee);
+//                            System.out.println("========" + e.getUser().getFirstname());
+                            dto.setEmployeeProjects(employeDto);
+                            retProject.add(dto);
+                        }
+                    }
+                }
+                    return ResponseEntity.ok(retProject);
                 }
         }
-
-        return ResponseEntity.ok(projectsDTO);
+            return ResponseEntity.ok(projectsDTO);
     }
 
-    @PreAuthorize("@permissionService.hasPermission('UPDATE_USER')")
+    @PreAuthorize("@permissionService.hasPermission('EDIT_EMPLOYEE_ON_PROJECT')")
     @PutMapping("/editEmployessOnProject")
     @ResponseBody
     public void editEmployessOnProject(@RequestBody EditEmployeeDTO editEmployeeDTO) {
