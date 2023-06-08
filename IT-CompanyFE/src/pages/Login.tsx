@@ -88,26 +88,6 @@ export function Login() {
     navigate("/passwordless-login"); 
   };  
 
-  const handleOnClick = async (event: SyntheticEvent) => {
-    event.preventDefault()
-
-    const response = await fetch("https://localhost:8081/api/v1/demo/endpoint", {
-    method: "GET",
-    headers: {
-      "Content-type": "application/json",
-    },
-    credentials: "include"
-    });
-    
-    if (response.status === 403) {
-      console.log("majmunee");
-      localStorage.setItem('loggedUser', "")
-      navigate("/session-expired")
-    } else {
-      const data = await response.json();
-      console.log(data);
-    }
-  };
 
   return (
     <div className="d-flex align-items-center justify-content-center" style={{ height: "80vh" }}>
@@ -140,7 +120,6 @@ export function Login() {
       <button type="submit" className="btn btn-primary btn-sm">Confirm</button>
       <div className="text-center mt-2">
         <a href="" onClick={handlePasswordlessLogin}>Login without password</a>
-        <button onClick={handleOnClick}>Klik</button>
       </div>
     </div>
   </form>

@@ -2,11 +2,7 @@ import { SyntheticEvent, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaChalkboardTeacher, FaEnvelope, FaPhone, FaSearchLocation, FaUser, FaUserTag } from "react-icons/fa";
 
-interface Role {
-  id: number;
-  name: string;
-}
-function Profil() {
+function ProjectManagerProfil() {
   const [name, setName] = useState("");
   const [surname, setSurname] = useState("");
   const [email, setEmail] = useState("");
@@ -16,7 +12,7 @@ function Profil() {
   const [city, setCity] = useState("");
   const [street, setStreet] = useState("");
   const [number, setNumber] = useState("");
-  const [role, setRole] = useState<Role>({ id: 0, name: "" });
+  const [role, setRole] = useState("");
   const [isEditMode, setIsEditMode] = useState(false); // Stanje za praćenje da li je uključen način izmene
 
   const navigate = useNavigate();
@@ -80,7 +76,7 @@ function Profil() {
   // Funkcija za rukovanje prelaskom nazad na pregled korisnika
   const handleCancel = () => {
     setIsEditMode(false); // Isključite način izmene
-    navigate("/profil"); // Navigirajte nazad na pregled korisnika
+    navigate("/projectProfilManager"); // Navigirajte nazad na pregled korisnika
   };
 
   return (
@@ -164,15 +160,13 @@ function Profil() {
           <select
             className="form-control"
             id="role"
-            //onChange={(event) => setRole(role)}
+            onChange={(event) => setRole(event.target.value)}
             required
-            value={role.name}
             disabled={true} // Onemogućite unos u načinu prikaza
           >
             <option value="SOFTWARE_ENGINEER">SOFTWARE_ENGINEER</option>
             <option value="PROJECT_MANAGER">PROJECT_MANAGER</option>
             <option value="HR_MANAGER">HR_MANAGER</option>
-            <option value="ADMINISTRATOR">ADMINISTRATOR</option>
           </select>
         </div>
       </div>
@@ -250,4 +244,4 @@ function Profil() {
   );
 }
 
-export default Profil;
+export default ProjectManagerProfil;
