@@ -11,6 +11,8 @@ import com.SIEBS.ITCompany.service.AuthenticationService;
 import com.SIEBS.ITCompany.service.EmailService;
 import com.SIEBS.ITCompany.service.HmacService;
 import com.SIEBS.ITCompany.service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
@@ -24,6 +26,7 @@ import org.springframework.web.bind.annotation.*;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -44,6 +47,35 @@ public class UserController {
     private final AuthenticationService authService;
     @Autowired
     private final HmacService hmacService;
+
+    @GetMapping("/checkIsForgotPasswordLinkValid")
+    public ResponseEntity verifyForgotPasswordLink(
+            @RequestParam("token") String token,
+            HttpServletResponse response
+    ){
+        URI changePasswordUri = URI.create("http://localhost:3000/changeForgotPassword/" + token);
+        URI tokenExpiredUri = URI.create("http://localhost:3000/token-expired");
+
+        if(!userService.isTokenFromForgotPasswordLinkValid(token)){
+            return ResponseEntity.status(HttpStatus.FOUND)
+                    .location(tokenExpiredUri)
+                    .body(null);
+        }else{
+            return ResponseEntity.status(HttpStatus.FOUND)
+                    .location(changePasswordUri)
+                    .body(null);
+        }
+    }
+
+    @PostMapping("/forgotPassword")
+    public ResponseEntity<MessageResponse> changePassword(@RequestBody ForgotPasswordDTO forgotPasswordDTO){
+        return ResponseEntity.ok(userService.SendMailForForgotPassword(forgotPasswordDTO.getEmail()));
+    }
+
+    @PostMapping("/changeForgottenPassword")
+    public ResponseEntity<MessageResponse> changeForgottenPassword(@RequestBody ChangeForgottenPasswordDTO changeForgottenPasswordDTO){
+        return ResponseEntity.ok(userService.ChangeForgottenPassword(changeForgottenPasswordDTO));
+    }
 
     @PostMapping("/changePassword")
     public ResponseEntity<MessageResponse> changePassword(@RequestBody ChangePasswordDTO changePasswordDTO){

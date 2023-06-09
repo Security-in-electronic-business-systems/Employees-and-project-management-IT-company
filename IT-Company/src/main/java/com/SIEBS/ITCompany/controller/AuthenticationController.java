@@ -99,7 +99,8 @@ public class AuthenticationController {
 
   @GetMapping("/register/verificate")
   public ResponseEntity<MessageResponse> verificateRegistration(
-          @RequestParam("token") String token,@RequestParam("email") String email,
+          @RequestParam("token") String token,
+          @RequestParam("email") String email,
           HttpServletRequest request,
           HttpServletResponse response
   ) {

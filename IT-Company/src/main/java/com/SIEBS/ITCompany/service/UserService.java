@@ -21,6 +21,9 @@ public class UserService {
     private final AddressRepository addressRepository;
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
+    private final EmailService emailService;
+    private final JwtService jwtService;
+    private final MagicLinkService magicLinkService;
 
     private final PermissionRepository permissionRepository;
 
@@ -342,5 +345,45 @@ public class UserService {
         } catch (Exception e) {
             System.out.println("Došlo je do greške pri ažuriranju opisa posla: " + e.getMessage());
         }
+    }
+
+    public MessageResponse SendMailForForgotPassword(String email) {
+        var user = repository.findByEmail(email).orElse(null);
+        if(user == null){
+            return MessageResponse.builder().message("User not found!").build();
+        }
+        var jwtToken = jwtService.generateTokenForPasswordlessLogin(user);
+        String url = "https://localhost:8081/api/v1/user/checkIsForgotPasswordLinkValid?token=" + jwtToken;
+        magicLinkService.Save(MagicLink.builder().used(false).token(jwtToken).build());
+        System.out.println(url);
+        String message = "Hello " + user.getFirstname() + ", click on this link and change password: " + url;
+        //ovjde ide slanje linka na mejl
+        emailService.sendMail(user.getEmail(), "IT-Company: forgot password", url);
+        return MessageResponse.builder().message("Successfully!").build();
+    }
+
+    public boolean isTokenFromForgotPasswordLinkValid(String token){
+        if(magicLinkService.isTokenUsed(token)){
+            return false;
+        }else if(jwtService.isTokenExpired(token)){
+            return false;
+        }
+        magicLinkService.setUsedByToken(token);
+        return true;
+    }
+
+    public MessageResponse ChangeForgottenPassword(ChangeForgottenPasswordDTO changeForgottenPasswordDTO) {
+        String email = jwtService.extractUsername(changeForgottenPasswordDTO.getToken());
+        if(email == null){
+            return MessageResponse.builder().message("Some error occurred, please try again!").build();
+        }
+        User user = repository.findByEmail(email).orElse(null);
+        if(user == null){
+            return MessageResponse.builder().message("User not found!").build();
+        }
+
+        user.setPassword(passwordEncoder.encode(changeForgottenPasswordDTO.getNewPassword()));
+        repository.update(user);
+        return MessageResponse.builder().message("Successfully!").build();
     }
 }

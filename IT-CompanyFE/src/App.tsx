@@ -22,6 +22,8 @@ import CareerPage from './pages/CareerPage';
 import EmployeeProjects from './pages/EmployeeProjects';
 import ManagerProjects from './pages/ManagerProjects';
 import Protected from './authorization/Protected';
+import { ForgotPassword } from './pages/ForgotPassword';
+import ChangeForgotPassword from './pages/ChangeForgotPassword';
 
 function App(){
   useEffect(() => {
@@ -55,6 +57,8 @@ function App(){
           <Route path="/careerPage" element={<Protected role={"SOFTWARE_ENGINEER"}><CareerPage/></Protected>} />
           <Route path="/employeeProjects" element={<Protected role={"SOFTWARE_ENGINEER"}><EmployeeProjects/></Protected>} />
           <Route path="/managerProjects" element={<Protected role={"PROJECT_MANAGER"}><ManagerProjects/></Protected>} />
+          <Route path="/forgotPassword" element={<ForgotPassword/>} />
+          <Route path="/changeForgotPassword/:token" element={<ChangeForgotPassword/>} />
         </Routes>
       </div>
     </>
