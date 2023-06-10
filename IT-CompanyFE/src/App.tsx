@@ -21,6 +21,7 @@ import CareerPage from './pages/CareerPage';
 import EmployeeProjects from './pages/EmployeeProjects';
 import ManagerProjects from './pages/ManagerProjects';
 import Protected from './authorization/Protected';
+import SearchUsers from './pages/SearchUsers';
 
 
 function App(){
@@ -41,6 +42,7 @@ function App(){
           <Route path="/createProject" element={<Protected role={"ADMINISTRATOR"}><CreateProject/></Protected>} />
           <Route path="/register" element={<Register/>} />
           <Route path="/registerAdmin" element={<Protected role={"ADMINISTRATOR"}><RegisterAdmin/></Protected>} />
+          <Route path="/search" element={<Protected role={"ADMINISTRATOR"}><SearchUsers/></Protected>} />
 
           <Route path="/" element={<Home/>} />
           <Route path="/login" element={<Login/>} />

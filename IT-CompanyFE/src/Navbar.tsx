@@ -101,6 +101,10 @@ function Navbar() {
             <li className="nav-item active">
           <Link className="nav-link" to="/permissions">Permissions</Link>
         </li>)}
+        {loggedUser?.role.name.toString() === "ADMINISTRATOR"  && (
+            <li className="nav-item active">
+          <Link className="nav-link" to="/search">SearchEngineers</Link>
+        </li>)}
       </ul>
       <ul className="navbar-nav mr-auto" style={stylesRight}>
       <li className="nav-item active" >
