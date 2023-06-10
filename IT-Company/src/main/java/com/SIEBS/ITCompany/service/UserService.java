@@ -330,4 +330,28 @@ public class UserService {
         }
     }
 
+    public List<User> search(SearchDTO searchDTO){
+        List<User> users = repository.search(searchDTO);
+        List<User> filterdUsers = new ArrayList<>();
+        Date currentDate = new Date();
+        for (User user:users) {
+            if (user.getRole().getName().equals("SOFTWARE_ENGINEER")){
+                Date registrationDate = user.getRegistrationDate();
+                if (registrationDate == null){
+                    filterdUsers.add(user);
+                    continue;
+                }
+                int diffMonth = (int) ((currentDate.getTime() - registrationDate.getTime()) / (1000L * 60L * 60L * 24L * 30L));
+                if (searchDTO.getMonthNum() == ""){
+                    filterdUsers.add(user);
+                }else{
+                    if (diffMonth >= Integer.parseInt(searchDTO.getMonthNum())){
+                        filterdUsers.add(user);
+                    }
+                }
+            }
+        }
+        return filterdUsers;
+    }
+
 }

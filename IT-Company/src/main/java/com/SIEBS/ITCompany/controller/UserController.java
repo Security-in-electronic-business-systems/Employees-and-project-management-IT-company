@@ -465,4 +465,27 @@ public class UserController {
         userService.editEmployees(editEmployeeDTO);
     }
 
+    @PostMapping("/search")
+    public ResponseEntity<List<UsersResponse>> search(@RequestBody SearchDTO request) {
+        List<User> users =userService.search(request);
+        if (users.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+
+        List<UsersResponse> usersResponse = users.stream()
+                .map(user -> UsersResponse.builder()
+                        .userId(user.getId())
+                        .firstname(user.getFirstname())
+                        .lastname(user.getLastname())
+                        .email(user.getEmail())
+                        .phoneNumber(user.getPhoneNumber())
+                        .title(user.getTitle())
+                        .address(user.getAddress())
+                        .role(new RoleDTO(user.getRole().getId(), user.getRole().getName()))
+                        .build())
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(usersResponse);
+    }
+
 }
