@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.crypto.SecretKey;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -20,6 +21,7 @@ public class UserService {
     private final ProjectRepository projectRepository;
     private final AddressRepository addressRepository;
     private final RoleRepository roleRepository;
+    private final KeystoreService keystoreService;
 
     private final PermissionRepository permissionRepository;
 
@@ -102,8 +104,11 @@ public class UserService {
         return savedProject;
     }
 
-    public Optional<User> findByEmail(String email){
-        return repository.findByEmail(email);
+    public Optional<User> findByEmail(String email) throws Exception {
+        Optional<User> user = repository.findByEmail(email);
+        SecretKey secretKey = keystoreService.getKey(user.get().getEmail(),user.get().getPhoneNumber());
+        user.get().setTitle(keystoreService.decrypt(user.get().getTitle(), secretKey));
+        return user;
     }
 
     public boolean updateUser(UsersResponse usersResponse) {
@@ -205,7 +210,7 @@ public class UserService {
 
     }
 
-    public List<AllSkillDTO> getSkills(String email) {
+    public List<AllSkillDTO> getSkills(String email) throws Exception {
         System.out.println("****************************"+email);
         List<Skill> allSkills = skillRepository.findAll();
         List<AllSkillDTO> skills = new ArrayList<>();

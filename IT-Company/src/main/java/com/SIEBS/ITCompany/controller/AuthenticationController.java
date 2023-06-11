@@ -132,7 +132,7 @@ public class AuthenticationController {
   @PostMapping("/register")
   public ResponseEntity<MessageResponse> register(
           @RequestBody RegisterRequest request
-  ) {
+  ) throws Exception {
     return new ResponseEntity<>(service.register(request), HttpStatus.OK);
   }
 

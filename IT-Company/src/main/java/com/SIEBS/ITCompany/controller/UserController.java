@@ -172,7 +172,7 @@ public class UserController {
     }
 
     @PostMapping("/registration/accept")
-    public ResponseEntity<MessageResponse> registrationAccept(@RequestBody RegistrationAccept request){
+    public ResponseEntity<MessageResponse> registrationAccept(@RequestBody RegistrationAccept request) throws Exception {
         String link = authService.generateTokenForRegistration(request.getEmail());
         Optional<User> user = userService.findByEmail(request.getEmail());
         String secretKey;
@@ -275,7 +275,7 @@ public class UserController {
     @PreAuthorize("@permissionService.hasPermission('GET_ALL_SKILL')")
     @GetMapping("/getAllSkill")
     @ResponseBody
-    public ResponseEntity<List<AllSkillDTO>> getSkillForUser() {
+    public ResponseEntity<List<AllSkillDTO>> getSkillForUser() throws Exception {
         User user = authService.getLoggedUser();
         return ResponseEntity.ok(userService.getSkills(user.getEmail()));
     }
@@ -486,6 +486,22 @@ public class UserController {
                 .collect(Collectors.toList());
 
         return ResponseEntity.ok(usersResponse);
+    }
+
+    @GetMapping("/findByEmail")
+    public RegistrationRequestResponse findByEmail() throws Exception {
+        Optional<User> user = userService.findByEmail("t@kjnjkngfghhgvvvvvv");
+
+        RegistrationRequestResponse usersResponse = RegistrationRequestResponse.builder()
+                        .firstname(user.get().getFirstname())
+                        .lastname(user.get().getLastname())
+                        .email(user.get().getEmail())
+                        .phoneNumber(user.get().getPhoneNumber())
+                        .isApproved(user.get().isApproved())
+                        .title(user.get().getTitle())
+                        .role(new RoleDTO(user.get().getRole().getId(), user.get().getRole().getName()))
+                        .build();
+        return usersResponse;
     }
 
 }
