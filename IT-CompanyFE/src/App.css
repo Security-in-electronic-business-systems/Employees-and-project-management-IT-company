@@ -37,3 +37,12 @@
     top: 20px;
     right: 20px;
   }
+
+  .checkbox-label {
+    display: flex;
+    align-items: center;
+  }
+
+  .checkbox-input {
+    margin-left: 10px;
+  }

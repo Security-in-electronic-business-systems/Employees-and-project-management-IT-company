@@ -9,6 +9,7 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.jboss.aerogear.security.otp.Totp;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -57,7 +58,6 @@ public class AuthenticationService {
     }catch (Exception e){
 
     }
-
     try{
       authenticationManager.authenticate(
               new UsernamePasswordAuthenticationToken(
@@ -74,8 +74,23 @@ public class AuthenticationService {
                       .build())
               .build();
     }
+    //do ovog dijela koda je dosao samo ako je tacna lozinka i email
     var user = repository.findByEmail(request.getEmail())
         .orElseThrow();
+
+    if (user.isUsing2FA()) {
+      Totp totp = new Totp(user.getSecret());
+      if (!isValidLong(request.getCode()) || !totp.verify(request.getCode())) {
+        return AuthenticationResponse
+                .builder()
+                .loginResponse(LoginResponse
+                        .builder()
+                        .message("Validation code is not correct!")
+                        .build())
+                .build();
+      }
+    }
+
     loggedUser = user;
     var jwtToken = jwtService.generateToken(user);
     var refreshToken = jwtService.generateRefreshToken(user);
@@ -95,6 +110,15 @@ public class AuthenticationService {
                     .message("Successfully!")
                     .build())
             .build();
+  }
+
+  private boolean isValidLong(String code) {
+    try {
+      Long.parseLong(code);
+    } catch (NumberFormatException e) {
+      return false;
+    }
+    return true;
   }
 
   public String encodeTitle(RegisterRequest request) throws Exception {

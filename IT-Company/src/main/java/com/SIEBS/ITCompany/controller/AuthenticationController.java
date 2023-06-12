@@ -10,6 +10,7 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -21,6 +22,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -32,6 +34,7 @@ public class AuthenticationController {
   private final JwtService jwtService;
   private final MagicLinkService magicLinkService;
   private final PermissionService permissionService;
+  private final EmailService emailService;
 
 
   @PostMapping("/authenticate")
@@ -164,6 +167,30 @@ public class AuthenticationController {
             .message("Successfully!")
             .build());
   }
+  @PostMapping("/qr")
+  public ResponseEntity<MessageResponse> generateQR(@RequestBody Email email) throws Exception {
+    Optional<User> user = userService.findByEmail(email.getEmail());
+    if (user.get().isUsing2FA()){
+      String QRurl = userService.generateQRUrl(user.get());
+      StringBuilder htmlBody = new StringBuilder();
+      htmlBody.append("<h3>Scan this Barcode using Google Authenticator app on your phone to use it later in login!</h3>");
+      htmlBody.append("<img src=").append(QRurl).append(" alt='QR Code' />");
+
+      String response = emailService.sendMail(user.get().getEmail(), "Scan QR code", htmlBody.toString());
+      if (response == "Success!"){
+        MessageResponse message = new MessageResponse("Check your email and scan QR code!");
+        return ResponseEntity.ok(message);
+      }else{
+        MessageResponse message = new MessageResponse("Error sending QR code.");
+        return ResponseEntity.badRequest().body(message);
+      }
+    }else{
+      MessageResponse message = new MessageResponse("User does not have an option for two-way authentication!");
+      return ResponseEntity.badRequest().body(message);
+    }
+
+  }
+
 
 
 }

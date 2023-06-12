@@ -117,6 +117,9 @@ function Navbar() {
           )}
         </li>
         <li className="nav-item active" >
+          {loggedUser == null && <Link className="nav-link" to="/qrlogin">QR Login</Link>}
+        </li>
+        <li className="nav-item active" >
             <button className="btn btn-outline-success my-2 my-sm-0" type="submit" onClick={handleButtonClick}>Register</button>
         </li>
       </ul>

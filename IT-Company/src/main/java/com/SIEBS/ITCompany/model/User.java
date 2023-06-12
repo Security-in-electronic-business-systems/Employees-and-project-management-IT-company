@@ -9,6 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+import org.jboss.aerogear.security.otp.api.Base32;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -22,7 +23,6 @@ import java.util.List;
 @Data
 @Builder
 @NoArgsConstructor
-@AllArgsConstructor
 @Entity
 @Table(name = "_user")
 public class User implements UserDetails {
@@ -36,13 +36,13 @@ public class User implements UserDetails {
   private String password;
   private String phoneNumber;
   private boolean isApproved;
-
   @DateTimeFormat(pattern = "dd/MM/yyyy HH:mm")
   private Date registrationDate;
-
   private String title;
   @OneToOne
   private Address address;
+  private boolean isUsing2FA;
+  private String secret;
 
   @ManyToOne
   private Role role;
@@ -92,5 +92,24 @@ public class User implements UserDetails {
   @Override
   public boolean isEnabled() {
     return true;
+  }
+
+  public User(Integer id, String firstname, String lastname, String email, String password, String phoneNumber, boolean isApproved, Date registrationDate, String title, Address address, boolean isUsing2FA, String secret, Role role, List<UserRole> roles, List<Token> tokens, List<EmployeeProject> employeeProjects) {
+    this.id = id;
+    this.firstname = firstname;
+    this.lastname = lastname;
+    this.email = email;
+    this.password = password;
+    this.phoneNumber = phoneNumber;
+    this.isApproved = isApproved;
+    this.registrationDate = registrationDate;
+    this.title = title;
+    this.address = address;
+    this.isUsing2FA = isUsing2FA;
+    this.secret = Base32.random();
+    this.role = role;
+    this.roles = roles;
+    this.tokens = tokens;
+    this.employeeProjects = employeeProjects;
   }
 }
