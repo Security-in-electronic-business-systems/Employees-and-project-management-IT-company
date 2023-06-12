@@ -4,9 +4,11 @@ import com.SIEBS.ITCompany.dto.*;
 import com.SIEBS.ITCompany.model.*;
 import com.SIEBS.ITCompany.repository.*;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.crypto.SecretKey;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -20,6 +22,7 @@ public class UserService {
     private final ProjectRepository projectRepository;
     private final AddressRepository addressRepository;
     private final RoleRepository roleRepository;
+    private final KeystoreService keystoreService;
 
     private final PermissionRepository permissionRepository;
 
@@ -102,8 +105,11 @@ public class UserService {
         return savedProject;
     }
 
-    public Optional<User> findByEmail(String email){
-        return repository.findByEmail(email);
+    public Optional<User> findByEmail(String email) throws Exception {
+        Optional<User> user = repository.findByEmail(email);
+//        SecretKey secretKey = keystoreService.getKey(user.get().getEmail(),user.get().getPhoneNumber());
+//        user.get().setTitle(keystoreService.decrypt(user.get().getTitle(), secretKey));
+        return user;
     }
 
     public boolean updateUser(UsersResponse usersResponse) {
@@ -205,7 +211,7 @@ public class UserService {
 
     }
 
-    public List<AllSkillDTO> getSkills(String email) {
+    public List<AllSkillDTO> getSkills(String email) throws Exception {
         System.out.println("****************************"+email);
         List<Skill> allSkills = skillRepository.findAll();
         List<AllSkillDTO> skills = new ArrayList<>();
@@ -352,6 +358,17 @@ public class UserService {
             }
         }
         return filterdUsers;
+    }
+
+    public static String QR_PREFIX =
+            "https://chart.googleapis.com/chart?chs=200x200&chld=M%%7C0&cht=qr&chl=";
+    public static String APP_NAME = "IT-Company";
+
+    public String generateQRUrl(User user) throws UnsupportedEncodingException {
+        return QR_PREFIX + URLEncoder.encode(String.format(
+                        "otpauth://totp/%s:%s?secret=%s&issuer=%s",
+                        APP_NAME, user.getEmail(), user.getSecret(), APP_NAME),
+                "UTF-8");
     }
 
 }

@@ -9,6 +9,7 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.jboss.aerogear.security.otp.Totp;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -16,7 +17,10 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.crypto.SecretKey;
 import java.io.IOException;
+import java.security.KeyPair;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -37,6 +41,7 @@ public class AuthenticationService {
   private final MagicLinkService magicLinkService;
   private final EmailService emailService;
   private final UserRoleRepository userRoleRepository;
+  private final KeystoreService keystoreService;
   private User loggedUser;
 
   public AuthenticationResponse authenticate(AuthenticationRequest request) {
@@ -53,7 +58,6 @@ public class AuthenticationService {
     }catch (Exception e){
 
     }
-
     try{
       authenticationManager.authenticate(
               new UsernamePasswordAuthenticationToken(
@@ -70,8 +74,23 @@ public class AuthenticationService {
                       .build())
               .build();
     }
+    //do ovog dijela koda je dosao samo ako je tacna lozinka i email
     var user = repository.findByEmail(request.getEmail())
         .orElseThrow();
+
+    if (user.isUsing2FA()) {
+      Totp totp = new Totp(user.getSecret());
+      if (!isValidLong(request.getCode()) || !totp.verify(request.getCode())) {
+        return AuthenticationResponse
+                .builder()
+                .loginResponse(LoginResponse
+                        .builder()
+                        .message("Validation code is not correct!")
+                        .build())
+                .build();
+      }
+    }
+
     loggedUser = user;
     var jwtToken = jwtService.generateToken(user);
     var refreshToken = jwtService.generateRefreshToken(user);
@@ -93,7 +112,25 @@ public class AuthenticationService {
             .build();
   }
 
-  public MessageResponse register(RegisterRequest request) {
+  private boolean isValidLong(String code) {
+    try {
+      Long.parseLong(code);
+    } catch (NumberFormatException e) {
+      return false;
+    }
+    return true;
+  }
+
+  public String encodeTitle(RegisterRequest request) throws Exception {
+    SecretKey key = keystoreService.generateKey();
+    String encriptedValue = keystoreService.encrypt(request.getTitle(), key);
+    keystoreService.addKey(request.getEmail(), request.getPhoneNumber(), key);
+
+    return encriptedValue;
+  }
+
+
+  public MessageResponse register(RegisterRequest request) throws Exception {
     Optional<User> tmp = repository.findByEmail(request.getEmail());
     Role role = roleRepository.findByName(request.getRole());
     //Provjera jedinstvenosti mejla i provjera da li je korisniku sa navedenim emailom odbijen zahtjev za registraciju u posljednjih 10min
@@ -107,7 +144,7 @@ public class AuthenticationService {
               .phoneNumber(request.getPhoneNumber())
               .isApproved(false)
               .registrationDate(null)
-              .title(request.getTitle())
+              .title(encodeTitle(request))
               .address(request.getAddress())
               .role(role)
               .roles(new ArrayList<>())
