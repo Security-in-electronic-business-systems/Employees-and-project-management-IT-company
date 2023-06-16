@@ -69,6 +69,9 @@ export function Login() {
         }else if(loginResponse.message === "Your account are not approved by administrator!"){
           setPasswordError("Your account are not approved by administrator!")
           return
+        }else if(loginResponse.message === "Your account are blocked by administrator!"){
+          setPasswordError("Your account are blocked by administrator!")
+          return
         }
 
         setPasswordError("Some error occured, please try again!")
@@ -86,6 +89,10 @@ export function Login() {
 
   const handlePasswordlessLogin = () => {
     navigate("/passwordless-login"); 
+  };  
+  
+  const handleForgotPassword = () => {
+    navigate("/forgotPassword"); 
   };  
 
 
@@ -120,6 +127,9 @@ export function Login() {
       <button type="submit" className="btn btn-primary btn-sm">Confirm</button>
       <div className="text-center mt-2">
         <a href="" onClick={handlePasswordlessLogin}>Login without password</a>
+      </div>
+      <div className="text-center mt-2">
+        <a href="" onClick={handleForgotPassword}>Forgot password?</a>
       </div>
     </div>
   </form>

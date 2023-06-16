@@ -4,6 +4,7 @@ import com.SIEBS.ITCompany.dto.*;
 import com.SIEBS.ITCompany.model.*;
 import com.SIEBS.ITCompany.repository.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +25,7 @@ public class UserService {
     private final EmailService emailService;
     private final JwtService jwtService;
     private final MagicLinkService magicLinkService;
+    private final AuthenticationService authenticationService;
 
     private final PermissionRepository permissionRepository;
 
@@ -383,6 +385,29 @@ public class UserService {
         }
 
         user.setPassword(passwordEncoder.encode(changeForgottenPasswordDTO.getNewPassword()));
+        repository.update(user);
+        return MessageResponse.builder().message("Successfully!").build();
+    }
+
+    public MessageResponse BlockUser(String email) {
+        User user = repository.findByEmail(email).orElse(null);
+        if(user == null){
+            return MessageResponse.builder().message("User not found").build();
+        }
+
+        user.setBlocked(true);
+        authenticationService.revokeAllUserTokens(user);
+        repository.update(user);
+        return MessageResponse.builder().message("Successfully!").build();
+    }
+
+    public MessageResponse UnblockUser(String email) {
+        User user = repository.findByEmail(email).orElse(null);
+        if(user == null){
+            return MessageResponse.builder().message("User not found").build();
+        }
+
+        user.setBlocked(false);
         repository.update(user);
         return MessageResponse.builder().message("Successfully!").build();
     }

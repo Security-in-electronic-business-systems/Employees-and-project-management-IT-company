@@ -9,7 +9,7 @@ interface User {
   title: boolean;
   role: Role;
   address: Address;
-  blocked: boolean;
+  isBlocked: boolean;
 }
 
 interface Address {
@@ -27,7 +27,7 @@ interface Role {
 function ViewAllEmployees() {
   const [users, setUsers] = useState<User[]>([]);
 
-  useEffect(() => {
+  const fetchUsers = () => {
     fetch('https://localhost:8081/api/v1/user/getAll', {
       method: 'GET',
       headers: {
@@ -37,20 +37,14 @@ function ViewAllEmployees() {
     })
       .then((response) => response.json())
       .then((data) => {
-        setUsers((prevUsers) =>
-          data.map((user: User) => {
-            const prevUser = prevUsers.find((prevUser) => prevUser.userId === user.userId);
-            if (prevUser) {
-              return { ...user, blocked: prevUser.blocked };
-            }
-            return user;
-          })
-        );
+        setUsers(data);
       })
       .catch((error) => console.log(error));
+  };
+
+  useEffect(() => {
+    fetchUsers();
   }, []);
-  
-  
 
   const blockUser = async (userEmail: string) => {
     await fetch('https://localhost:8081/api/v1/user/blockUser', {
@@ -69,7 +63,7 @@ function ViewAllEmployees() {
         // Ažurirajte lokalno stanje korisnika nakon blokiranja
         setUsers((prevUsers) =>
           prevUsers.map((user) =>
-            user.email === userEmail ? { ...user, blocked: true } : user
+            user.email === userEmail ? { ...user, isBlocked: true } : user
           )
         );
       })
@@ -93,7 +87,7 @@ function ViewAllEmployees() {
         // Ažurirajte lokalno stanje korisnika nakon odblokiranja
         setUsers((prevUsers) =>
           prevUsers.map((user) =>
-            user.email === userEmail ? { ...user, blocked: false } : user
+            user.email === userEmail ? { ...user, isBlocked: false } : user
           )
         );
       })
@@ -111,9 +105,9 @@ function ViewAllEmployees() {
             <th>Email</th>
             <th>Phone number</th>
             <th>Title</th>
-            <th>Adresa</th>
+            <th>Address</th>
             <th>Role</th>
-            <th>Status</th>
+            <th>Blocked</th>
             <th>Action</th>
           </tr>
         </thead>
@@ -130,14 +124,24 @@ function ViewAllEmployees() {
                   `${user.address.street} ${user.address.number}, ${user.address.city}, ${user.address.country}`}
               </td>
               <td>{user.role.name}</td>
-              <td>{user.role.id === 4 ? "/" : user.blocked ? "Blocked" : "Not blocked"}</td>
               <td>
-                {user.role.id !== 4 && (
-                  <button
-                    onClick={() => (user.blocked ? unblockUser(user.email) : blockUser(user.email))}
-                  >
-                    {user.blocked ? "Unblock" : "Block"}
-                  </button>
+                {user.role.name.includes('ADMINISTRATOR') ? (
+                  '/'
+                ) : user.isBlocked ? (
+                  'Blocked'
+                ) : (
+                  'Not blocked'
+                )}
+              </td>
+              <td>
+                {!user.role.name.includes('ADMINISTRATOR') && (
+                  <>
+                    {user.isBlocked ? (
+                      <button onClick={() => unblockUser(user.email)}>Unblock User</button>
+                    ) : (
+                      <button onClick={() => blockUser(user.email)}>Block User</button>
+                    )}
+                  </>
                 )}
               </td>
             </tr>

@@ -48,6 +48,16 @@ public class UserController {
     @Autowired
     private final HmacService hmacService;
 
+    @PostMapping("/blockUser")
+    public ResponseEntity<MessageResponse> blockUser(@RequestBody ForgotPasswordDTO emailDTO){
+        return ResponseEntity.ok(userService.BlockUser(emailDTO.getEmail()));
+    }
+
+    @PostMapping("/unblockUser")
+    public ResponseEntity<MessageResponse> unblockUser(@RequestBody ForgotPasswordDTO emailDTO){
+        return ResponseEntity.ok(userService.UnblockUser(emailDTO.getEmail()));
+    }
+
     @GetMapping("/checkIsForgotPasswordLinkValid")
     public ResponseEntity verifyForgotPasswordLink(
             @RequestParam("token") String token,
@@ -124,6 +134,7 @@ public class UserController {
                         .title(user.getTitle())
                         .address(user.getAddress())
                         .role(new RoleDTO(user.getRole().getId(), user.getRole().getName()))
+                        .isBlocked(user.isBlocked())
                         .build())
                 .collect(Collectors.toList());
 

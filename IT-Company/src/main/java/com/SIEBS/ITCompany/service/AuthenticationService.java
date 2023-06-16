@@ -49,6 +49,14 @@ public class AuthenticationService {
                         .message("Your account are not approved by administrator!")
                         .build())
                 .build();
+      }else if(repository.findByEmail(request.getEmail()).orElse(null).isBlocked()){
+        return AuthenticationResponse
+                .builder()
+                .loginResponse(LoginResponse
+                        .builder()
+                        .message("Your account are blocked by administrator!")
+                        .build())
+                .build();
       }
     }catch (Exception e){
 
@@ -75,6 +83,9 @@ public class AuthenticationService {
     loggedUser = user;
     var jwtToken = jwtService.generateToken(user);
     var refreshToken = jwtService.generateRefreshToken(user);
+    revokeAllUserTokens(user);
+    saveUserToken(user, jwtToken);
+    saveUserToken(user, refreshToken);
     return AuthenticationResponse
             .builder()
             .accessToken(jwtToken)
@@ -174,7 +185,7 @@ public class AuthenticationService {
     if (isTokenValid) {
       String email = jwtService.extractUsername(token);
       var user = repository.findByEmail(email).orElse(null);
-      if (user == null) {
+      if (user == null || user.isBlocked() || !user.isApproved()) {
         return null;
       }
       var jwtToken = jwtService.generateToken(user);
@@ -193,7 +204,12 @@ public class AuthenticationService {
     var user = repository.findByEmail(request.getEmail()).orElse(null);
     if(user == null){
       return "User not found!";
+    }else if(user.isBlocked()){
+      return "Your account are blocked by administrator!";
+    }else if(!user.isApproved()){
+      return "Your account are not approved by administrator!";
     }
+
     var jwtToken = jwtService.generateTokenForPasswordlessLogin(user);
     String url = "https://localhost:8081/api/v1/auth/authenticate?token=" + jwtToken;
     magicLinkService.Save(MagicLink.builder().used(false).token(jwtToken).build());

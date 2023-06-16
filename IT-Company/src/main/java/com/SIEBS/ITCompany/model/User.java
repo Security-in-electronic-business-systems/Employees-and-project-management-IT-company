@@ -36,6 +36,7 @@ public class User implements UserDetails {
   private String password;
   private String phoneNumber;
   private boolean isApproved;
+  private boolean isBlocked;
 
   @DateTimeFormat(pattern = "dd/MM/yyyy HH:mm")
   private Date registrationDate;
