@@ -8,6 +8,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.crypto.SecretKey;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -26,6 +29,7 @@ public class UserService {
     private final JwtService jwtService;
     private final MagicLinkService magicLinkService;
     private final AuthenticationService authenticationService;
+    private final KeystoreService keystoreService;
 
     private final PermissionRepository permissionRepository;
 
@@ -108,8 +112,11 @@ public class UserService {
         return savedProject;
     }
 
-    public Optional<User> findByEmail(String email){
-        return repository.findByEmail(email);
+    public Optional<User> findByEmail(String email) throws Exception {
+        Optional<User> user = repository.findByEmail(email);
+//        SecretKey secretKey = keystoreService.getKey(user.get().getEmail(),user.get().getPhoneNumber());
+//        user.get().setTitle(keystoreService.decrypt(user.get().getTitle(), secretKey));
+        return user;
     }
 
     public boolean updateUser(UsersResponse usersResponse) {
@@ -211,7 +218,7 @@ public class UserService {
 
     }
 
-    public List<AllSkillDTO> getSkills(String email) {
+    public List<AllSkillDTO> getSkills(String email) throws Exception {
         System.out.println("****************************"+email);
         List<Skill> allSkills = skillRepository.findAll();
         List<AllSkillDTO> skills = new ArrayList<>();
@@ -410,5 +417,39 @@ public class UserService {
         user.setBlocked(false);
         repository.update(user);
         return MessageResponse.builder().message("Successfully!").build();
+    }
+    public List<User> search(SearchDTO searchDTO){
+        List<User> users = repository.search(searchDTO);
+        List<User> filterdUsers = new ArrayList<>();
+        Date currentDate = new Date();
+        for (User user:users) {
+            if (user.getRole().getName().equals("SOFTWARE_ENGINEER")){
+                Date registrationDate = user.getRegistrationDate();
+                if (registrationDate == null){
+                    filterdUsers.add(user);
+                    continue;
+                }
+                int diffMonth = (int) ((currentDate.getTime() - registrationDate.getTime()) / (1000L * 60L * 60L * 24L * 30L));
+                if (searchDTO.getMonthNum() == ""){
+                    filterdUsers.add(user);
+                }else{
+                    if (diffMonth >= Integer.parseInt(searchDTO.getMonthNum())){
+                        filterdUsers.add(user);
+                    }
+                }
+            }
+        }
+        return filterdUsers;
+    }
+
+    public static String QR_PREFIX =
+            "https://chart.googleapis.com/chart?chs=200x200&chld=M%%7C0&cht=qr&chl=";
+    public static String APP_NAME = "IT-Company";
+
+    public String generateQRUrl(User user) throws UnsupportedEncodingException {
+        return QR_PREFIX + URLEncoder.encode(String.format(
+                        "otpauth://totp/%s:%s?secret=%s&issuer=%s",
+                        APP_NAME, user.getEmail(), user.getSecret(), APP_NAME),
+                "UTF-8");
     }
 }

@@ -101,6 +101,10 @@ function Navbar() {
             <li className="nav-item active">
           <Link className="nav-link" to="/permissions">Permissions</Link>
         </li>)}
+        {loggedUser?.role.name.toString() === "ADMINISTRATOR"  && (
+            <li className="nav-item active">
+          <Link className="nav-link" to="/search">SearchEngineers</Link>
+        </li>)}
       </ul>
       <ul className="navbar-nav mr-auto" style={stylesRight}>
       <li className="nav-item active" >
@@ -111,6 +115,9 @@ function Navbar() {
             //<Link className="nav-link" to="/logout">Logout</Link>
             <button className="btn btn-light" type="submit" onClick={handleLogout}>Logout</button>
           )}
+        </li>
+        <li className="nav-item active" >
+          {loggedUser == null && <Link className="nav-link" to="/qrlogin">QR Login</Link>}
         </li>
         <li className="nav-item active" >
             <button className="btn btn-outline-success my-2 my-sm-0" type="submit" onClick={handleButtonClick}>Register</button>

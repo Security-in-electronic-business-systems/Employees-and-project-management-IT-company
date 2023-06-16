@@ -7,6 +7,7 @@ export function Login() {
   const [password, setPassword] = useState("");
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
+  const [code, setCode] = useState("");
 
   const navigate = useNavigate();
   let loginResponse: LoginResponse
@@ -52,7 +53,8 @@ export function Login() {
       },
       body: JSON.stringify({
         "email": email,
-        "password": password
+        "password": password,
+        "code": code,
       }),
       credentials: "include"
     }).then(res => res.json())
@@ -71,6 +73,9 @@ export function Login() {
           return
         }else if(loginResponse.message === "Your account are blocked by administrator!"){
           setPasswordError("Your account are blocked by administrator!")
+          return
+        }else if(loginResponse.message === "Validation code is not correct!"){
+          setPasswordError("Validation code is not correct!")
           return
         }
 
@@ -122,6 +127,12 @@ export function Login() {
         onChange={(event) => setPassword(event.target.value)}
       />
       {passwordError && <div className="text-danger">{passwordError}</div>}
+    </div>
+    <div>
+      <label>Google Authenticator Verification Code <i>(optional)</i></label>
+      <input type='text' id='code' className="form-control"
+        value={code}
+        onChange={(event) => setCode(event.target.value)}/>
     </div>
     <div className="d-grid mt-4">
       <button type="submit" className="btn btn-primary btn-sm">Confirm</button>

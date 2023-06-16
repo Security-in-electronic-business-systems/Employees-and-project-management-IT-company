@@ -1,5 +1,6 @@
 package com.SIEBS.ITCompany.repository;
 
+import com.SIEBS.ITCompany.dto.SearchDTO;
 import com.SIEBS.ITCompany.model.User;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -31,6 +32,11 @@ public interface UserRepository extends JpaRepository<User, Integer> {
   @Transactional
   @Query("UPDATE User u SET u.firstname = :#{#user.firstname},u.lastname = :#{#user.lastname},u.password = :#{#user.password},u.phoneNumber = :#{#user.phoneNumber},u.registrationDate = :#{#user.registrationDate},u.address = :#{#user.address},u.role = :#{#user.role},u.title = :#{#user.title}  WHERE u.email = :#{#user.email}")
   void update(@Param("user") User user);
+
+  @Query("SELECT u FROM User u WHERE u.email LIKE CONCAT('%', :#{#searchDTO.email}, '%') " +
+          "AND u.firstname LIKE CONCAT('%', :#{#searchDTO.name}, '%') " +
+          "AND u.lastname LIKE CONCAT('%', :#{#searchDTO.surname}, '%')")
+  List<User> search(@Param("searchDTO") SearchDTO searchDTO);
 
 
 }

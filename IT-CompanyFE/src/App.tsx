@@ -24,6 +24,8 @@ import ManagerProjects from './pages/ManagerProjects';
 import Protected from './authorization/Protected';
 import { ForgotPassword } from './pages/ForgotPassword';
 import ChangeForgotPassword from './pages/ChangeForgotPassword';
+import SearchUsers from './pages/SearchUsers';
+import { QRLog } from './pages/QRLog';
 
 function App(){
   useEffect(() => {
@@ -43,6 +45,7 @@ function App(){
           <Route path="/createProject" element={<Protected role={"ADMINISTRATOR"}><CreateProject/></Protected>} />
           <Route path="/register" element={<Register/>} />
           <Route path="/registerAdmin" element={<Protected role={"ADMINISTRATOR"}><RegisterAdmin/></Protected>} />
+          <Route path="/search" element={<Protected role={"ADMINISTRATOR"}><SearchUsers/></Protected>} />
 
           <Route path="/" element={<Home/>} />
           <Route path="/login" element={<Login/>} />
@@ -59,6 +62,7 @@ function App(){
           <Route path="/managerProjects" element={<Protected role={"PROJECT_MANAGER"}><ManagerProjects/></Protected>} />
           <Route path="/forgotPassword" element={<ForgotPassword/>} />
           <Route path="/changeForgotPassword/:token" element={<ChangeForgotPassword/>} />
+          <Route path="/qrlogin" element={<QRLog/>} />
         </Routes>
       </div>
     </>

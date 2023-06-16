@@ -219,7 +219,7 @@ public class UserController {
     }
 
     @PostMapping("/registration/accept")
-    public ResponseEntity<MessageResponse> registrationAccept(@RequestBody RegistrationAccept request){
+    public ResponseEntity<MessageResponse> registrationAccept(@RequestBody RegistrationAccept request) throws Exception {
         String link = authService.generateTokenForRegistration(request.getEmail());
         Optional<User> user = userService.findByEmail(request.getEmail());
         String secretKey;
@@ -322,7 +322,7 @@ public class UserController {
     @PreAuthorize("@permissionService.hasPermission('GET_ALL_SKILL')")
     @GetMapping("/getAllSkill")
     @ResponseBody
-    public ResponseEntity<List<AllSkillDTO>> getSkillForUser() {
+    public ResponseEntity<List<AllSkillDTO>> getSkillForUser() throws Exception {
         User user = authService.getLoggedUser();
         return ResponseEntity.ok(userService.getSkills(user.getEmail()));
     }
@@ -510,6 +510,45 @@ public class UserController {
     @ResponseBody
     public void editEmployessOnProject(@RequestBody EditEmployeeDTO editEmployeeDTO) {
         userService.editEmployees(editEmployeeDTO);
+    }
+
+    @PostMapping("/search")
+    public ResponseEntity<List<UsersResponse>> search(@RequestBody SearchDTO request) {
+        List<User> users =userService.search(request);
+        if (users.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+
+        List<UsersResponse> usersResponse = users.stream()
+                .map(user -> UsersResponse.builder()
+                        .userId(user.getId())
+                        .firstname(user.getFirstname())
+                        .lastname(user.getLastname())
+                        .email(user.getEmail())
+                        .phoneNumber(user.getPhoneNumber())
+                        .title(user.getTitle())
+                        .address(user.getAddress())
+                        .role(new RoleDTO(user.getRole().getId(), user.getRole().getName()))
+                        .build())
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(usersResponse);
+    }
+
+    @GetMapping("/findByEmail")
+    public RegistrationRequestResponse findByEmail() throws Exception {
+        Optional<User> user = userService.findByEmail("t@kjnjkngfghhgvvvvvv");
+
+        RegistrationRequestResponse usersResponse = RegistrationRequestResponse.builder()
+                        .firstname(user.get().getFirstname())
+                        .lastname(user.get().getLastname())
+                        .email(user.get().getEmail())
+                        .phoneNumber(user.get().getPhoneNumber())
+                        .isApproved(user.get().isApproved())
+                        .title(user.get().getTitle())
+                        .role(new RoleDTO(user.get().getRole().getId(), user.get().getRole().getName()))
+                        .build();
+        return usersResponse;
     }
 
 }
