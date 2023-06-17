@@ -4,11 +4,9 @@ import com.SIEBS.ITCompany.dto.*;
 import com.SIEBS.ITCompany.model.*;
 import com.SIEBS.ITCompany.repository.*;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.crypto.SecretKey;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -38,15 +36,25 @@ public class UserService {
 
     private final FileRepository fileRepository;
 
-    public List<User> getAllUsers() {
+    public List<User> getAllUsers() throws Exception {
         List<User> users = repository.findAll();
+        for (User user: users) {
+            UserDecoded userDecoded = keystoreService.decryptUser(user);
+            user.setTitle(userDecoded.getTitle());
+            user.setAddress(userDecoded.getAdress());
+        }
         return users;
     }
 
-    public List<User> getRegistrationRequests() {
+    public List<User> getRegistrationRequests() throws Exception {
         List<User> users = repository.findByIsApprovedFalse();
         List<User> filteredUsers = new ArrayList<>();
         for (User user: users){
+            //dekodiranje----------------------
+            UserDecoded userDecoded = keystoreService.decryptUser(user);
+            user.setTitle(userDecoded.getTitle());
+            user.setAddress(userDecoded.getAdress());
+            //-----------------------------------
             if (user.getRegistrationDate()==null){
                 filteredUsers.add(user);
             }else{
@@ -114,8 +122,11 @@ public class UserService {
 
     public Optional<User> findByEmail(String email) throws Exception {
         Optional<User> user = repository.findByEmail(email);
-//        SecretKey secretKey = keystoreService.getKey(user.get().getEmail(),user.get().getPhoneNumber());
-//        user.get().setTitle(keystoreService.decrypt(user.get().getTitle(), secretKey));
+
+        UserDecoded decryptedUser = keystoreService.decryptUser(user.get());
+        user.get().setTitle(decryptedUser.getTitle());
+        user.get().setAddress(decryptedUser.getAdress());
+
         return user;
     }
 
@@ -418,11 +429,16 @@ public class UserService {
         repository.update(user);
         return MessageResponse.builder().message("Successfully!").build();
     }
-    public List<User> search(SearchDTO searchDTO){
+    public List<User> search(SearchDTO searchDTO) throws Exception {
         List<User> users = repository.search(searchDTO);
         List<User> filterdUsers = new ArrayList<>();
         Date currentDate = new Date();
         for (User user:users) {
+            //dekodiranje----------------------
+            UserDecoded userDecoded = keystoreService.decryptUser(user);
+            user.setTitle(userDecoded.getTitle());
+            user.setAddress(userDecoded.getAdress());
+            //-----------------------------------
             if (user.getRole().getName().equals("SOFTWARE_ENGINEER")){
                 Date registrationDate = user.getRegistrationDate();
                 if (registrationDate == null){

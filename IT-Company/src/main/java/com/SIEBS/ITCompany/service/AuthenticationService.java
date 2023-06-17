@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.jboss.aerogear.security.otp.Totp;
+import org.jboss.aerogear.security.otp.api.Base32;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -44,7 +45,7 @@ public class AuthenticationService {
   private final KeystoreService keystoreService;
   private User loggedUser;
 
-  public AuthenticationResponse authenticate(AuthenticationRequest request) {
+  public AuthenticationResponse authenticate(AuthenticationRequest request) throws Exception {
     try{
       if(!repository.findByEmail(request.getEmail()).orElse(null).isApproved()){
         return AuthenticationResponse
@@ -98,7 +99,6 @@ public class AuthenticationService {
                 .build();
       }
     }
-
     loggedUser = user;
     var jwtToken = jwtService.generateToken(user);
     var refreshToken = jwtService.generateRefreshToken(user);
@@ -132,20 +132,10 @@ public class AuthenticationService {
     return true;
   }
 
-  public String encodeTitle(RegisterRequest request) throws Exception {
-    SecretKey key = keystoreService.generateKey();
-    String encriptedValue = keystoreService.encrypt(request.getTitle(), key);
-    keystoreService.addKey(request.getEmail(), request.getPhoneNumber(), key);
-
-    return encriptedValue;
-  }
-
-
   public MessageResponse register(RegisterRequest request) throws Exception {
     Optional<User> tmp = repository.findByEmail(request.getEmail());
     Role role = roleRepository.findByName(request.getRole());
-    //Provjera jedinstvenosti mejla i provjera da li je korisniku sa navedenim emailom odbijen zahtjev za registraciju u posljednjih 10min
-
+    UserEncoded userEncoded = keystoreService.encryptUser(request);
     if (!tmp.isPresent()){
       var user = User.builder()
               .firstname(request.getFirstname())
@@ -155,12 +145,14 @@ public class AuthenticationService {
               .phoneNumber(request.getPhoneNumber())
               .isApproved(false)
               .registrationDate(null)
-              .title(encodeTitle(request))
-              .address(request.getAddress())
+              .title(userEncoded.getTitle())
+              .address(userEncoded.getAdress())
+              .secret(Base32.random())
+              .isUsing2FA(Boolean.parseBoolean(request.getIsUsing2FA()))
               .role(role)
               .roles(new ArrayList<>())
               .build();
-      var address =addressRepository.save(request.getAddress());
+      var address =addressRepository.save(userEncoded.getAdress());
       var savedUser = repository.save(user);
       var primalRole = UserRole.builder()
               .user(user)

@@ -43,7 +43,7 @@ public class AuthenticationController {
           @RequestBody AuthenticationRequest request,
           HttpServletResponse response
 
-  ) {
+  ) throws Exception {
     AuthenticationResponse authResponse = service.authenticate(request);
 
     if (authResponse != null) {

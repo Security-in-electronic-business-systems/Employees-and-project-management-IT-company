@@ -99,7 +99,7 @@ public class UserController {
 
 
     @GetMapping("/registration/requests")
-    public List<RegistrationRequestResponse> getRegistrationRequests(){
+    public List<RegistrationRequestResponse> getRegistrationRequests() throws Exception {
         List<User> users = userService.getRegistrationRequests();
 
         List<RegistrationRequestResponse> usersResponse = users.stream()
@@ -117,7 +117,7 @@ public class UserController {
     }
     @PreAuthorize("@permissionService.hasPermission('GET_ALL_USERS')")
     @GetMapping("/getAll")
-    public ResponseEntity<List<UsersResponse>> getAllUsers() {
+    public ResponseEntity<List<UsersResponse>> getAllUsers() throws Exception {
         List<User> users = userService.getAllUsers();
 
         if (users.isEmpty()) {
@@ -513,7 +513,7 @@ public class UserController {
     }
 
     @PostMapping("/search")
-    public ResponseEntity<List<UsersResponse>> search(@RequestBody SearchDTO request) {
+    public ResponseEntity<List<UsersResponse>> search(@RequestBody SearchDTO request) throws Exception {
         List<User> users =userService.search(request);
         if (users.isEmpty()) {
             return ResponseEntity.noContent().build();
@@ -537,7 +537,7 @@ public class UserController {
 
     @GetMapping("/findByEmail")
     public RegistrationRequestResponse findByEmail() throws Exception {
-        Optional<User> user = userService.findByEmail("t@kjnjkngfghhgvvvvvv");
+        Optional<User> user = userService.findByEmail("pavle@gmail.com");
 
         RegistrationRequestResponse usersResponse = RegistrationRequestResponse.builder()
                         .firstname(user.get().getFirstname())

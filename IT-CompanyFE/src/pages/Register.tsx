@@ -17,7 +17,7 @@ export function Register() {
   const [street, setStreet] = useState("");
   const [number, setNumber] = useState("");
   const [role, setRole] = useState("");
-  const [isUsing2FA, setIsUsing2FA] = useState("");
+  const [isUsing2FA, setIsUsing2FA] = useState(false);
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
   const [addRoles, setAddRoles] = useState<string[]>([])
@@ -53,6 +53,7 @@ export function Register() {
     }
 
     setPasswordError("")
+    console.log(isUsing2FA)
 
     await fetch("https://localhost:8081/api/v1/auth/register", {
       method: "POST",
@@ -286,11 +287,14 @@ export function Register() {
           />
         </div>
         <div className="row mb-3">
-          <label className="checkbox-label">
-            Use Two step verification
-            <input type="checkbox" name="using2FA" value="true" className="checkbox-input" 
-            onChange={(event) => {setIsUsing2FA(event.target.value); console.log(isUsing2FA)}}/>
-          </label>
+        <label className="checkbox-label">
+              Use Two-step verification
+              <input
+                type="checkbox"
+                checked={isUsing2FA}
+                onChange={(event) => setIsUsing2FA(event.target.checked)}
+              />
+            </label>
         </div>
       </div>      
       <button type="submit" className="btn btn-primary">Submit</button>
