@@ -33,6 +33,7 @@ public class AuthenticationController {
   private final MagicLinkService magicLinkService;
   private final PermissionService permissionService;
   private final EmailService emailService;
+  private final NotificationController notificationController;
 
 
   @PostMapping("/authenticate")
@@ -45,6 +46,12 @@ public class AuthenticationController {
     AuthenticationResponse authResponse = service.authenticate(request);
 
     if (authResponse != null) {
+      if (authResponse.getLoginResponse().getMessage().equals("Your account are not approved by administrator!")) {
+        notificationController.createNotification("Login failed. Account are not approved by administrator. Email: " + service.removeDangerousCharacters(request.getEmail()));
+      }
+      if (authResponse.getLoginResponse().getMessage().equals("Email or password are not correct!")) {
+        notificationController.createNotification("Email or password are not correct. Email: " +  service.removeDangerousCharacters(request.getEmail()));
+      }
       Cookie accessTokenCookie = new Cookie("access_token", authResponse.getAccessToken());
       accessTokenCookie.setHttpOnly(true);
       accessTokenCookie.setDomain("localhost");
@@ -58,6 +65,7 @@ public class AuthenticationController {
       response.addCookie(refreshTokenCookie);
       return ResponseEntity.ok(authResponse.getLoginResponse());
     }
+
     return ResponseEntity.ok(authResponse.getLoginResponse());
 
   }
@@ -90,6 +98,7 @@ public class AuthenticationController {
               .location(waitRoomUri)
               .body(authResponse);
     }
+    notificationController.createNotification("Link was expired for user" + service.removeDangerousCharacters(authResponse.getLoginResponse().getEmail()));
     log.error("Link was expired for user" + service.removeDangerousCharacters(authResponse.getLoginResponse().getEmail()));
     //authResponse.getLoginResponse().setMessage("Link was expired!");
     return ResponseEntity.status(HttpStatus.FOUND)
@@ -117,6 +126,7 @@ public class AuthenticationController {
               .body(message);
     }
     MessageResponse message = new MessageResponse("Link is not valid!");
+    notificationController.createNotification("Link is not valid. Unsuccessful registration verification! Email: " + service.removeDangerousCharacters(email));
     log.warn("Link is not valid. Unsuccessful registration verification! Email: " + service.removeDangerousCharacters(email));
     return ResponseEntity.status(HttpStatus.FOUND)
             .location(tokenExpiredUri)

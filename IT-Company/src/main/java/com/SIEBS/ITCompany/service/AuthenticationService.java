@@ -11,8 +11,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.jboss.aerogear.security.otp.Totp;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -20,11 +18,8 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import javax.crypto.SecretKey;
 import java.io.IOException;
-import java.security.KeyPair;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -46,6 +41,7 @@ public class AuthenticationService {
   private final EmailService emailService;
   private final UserRoleRepository userRoleRepository;
   private final KeystoreService keystoreService;
+  private final UserService userService;
   private User loggedUser;
 
   public AuthenticationResponse authenticate(AuthenticationRequest request) {
@@ -99,6 +95,7 @@ public class AuthenticationService {
     }
 
     loggedUser = user;
+    userService.setLoggedUser(user);
     var jwtToken = jwtService.generateToken(user);
     var refreshToken = jwtService.generateRefreshToken(user);
     log.info("Login success! Email: " + removeDangerousCharacters(request.getEmail()));
@@ -358,5 +355,9 @@ public class AuthenticationService {
 
   public User getLoggedUser() {
     return loggedUser;
+  }
+
+  public void logoutLoggedUser() {
+    this.loggedUser = null;
   }
 }

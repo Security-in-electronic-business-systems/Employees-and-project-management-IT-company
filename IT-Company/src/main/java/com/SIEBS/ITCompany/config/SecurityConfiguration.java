@@ -1,5 +1,6 @@
 package com.SIEBS.ITCompany.config;
 
+import com.SIEBS.ITCompany.service.AuthenticationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -24,6 +25,7 @@ public class SecurityConfiguration {
   private final JwtAuthenticationFilter jwtAuthFilter;
   private final AuthenticationProvider authenticationProvider;
   private final LogoutHandler logoutHandler;
+
   @Autowired
   private final CustomWebAuthenticationDetailsSource authenticationDetailsSource;
 
@@ -47,7 +49,9 @@ public class SecurityConfiguration {
             .logout()
             .logoutUrl("/api/v1/auth/logout")
             .addLogoutHandler(logoutHandler)
-            .logoutSuccessHandler((request, response, authentication) -> SecurityContextHolder.clearContext())
+            .logoutSuccessHandler((request, response, authentication) -> {
+              SecurityContextHolder.clearContext();
+            } )
             .and()
             .formLogin() // Dodajte ovu liniju
             .authenticationDetailsSource(authenticationDetailsSource);

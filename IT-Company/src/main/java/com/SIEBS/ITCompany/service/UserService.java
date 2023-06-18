@@ -27,7 +27,7 @@ public class UserService {
     private final AddressRepository addressRepository;
     private final RoleRepository roleRepository;
     private final KeystoreService keystoreService;
-
+    private User loggedUser;
     private final PermissionRepository permissionRepository;
 
     private final EmployeeProjectRepository employeeProjectsRepository;
@@ -388,4 +388,15 @@ public class UserService {
                 "UTF-8");
     }
 
+    public User getLoggedUser() {
+        return loggedUser;
+    }
+
+    public void logoutLoggedUser() {
+        this.loggedUser = null;
+    }
+
+    public void setLoggedUser(User loggedUser) {
+        this.loggedUser = loggedUser;
+    }
 }

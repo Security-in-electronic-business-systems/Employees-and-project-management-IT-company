@@ -1,272 +1,82 @@
-18.06.2023. 12:10:40 | INFO  | [c.S.I.ItCompanyApplication] | Starting ItCompanyApplication using Java 17 with PID 4124 (C:\Users\HP\Desktop\8.semestar\bezbednost\projekat\Employees-and-project-management-IT-company\IT-Company\target\classes started by HP in C:\Users\HP\Desktop\8.semestar\bezbednost\projekat\Employees-and-project-management-IT-company\IT-Company)
-18.06.2023. 12:10:40 | DEBUG | [c.S.I.ItCompanyApplication] | Running with Spring Boot v3.0.1, Spring v6.0.3
-18.06.2023. 12:10:40 | INFO  | [c.S.I.ItCompanyApplication] | No active profile set, falling back to 1 default profile: "default"
-18.06.2023. 12:10:42 | INFO  | [o.s.d.r.c.RepositoryConfigurationDelegate] | Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-18.06.2023. 12:10:43 | INFO  | [o.s.d.r.c.RepositoryConfigurationDelegate] | Finished Spring Data repository scanning in 236 ms. Found 11 JPA repository interfaces.
-18.06.2023. 12:10:45 | INFO  | [o.s.b.w.e.t.TomcatWebServer] | Tomcat initialized with port(s): 8081 (https)
-18.06.2023. 12:10:45 | INFO  | [o.a.c.h.Http11NioProtocol] | Initializing ProtocolHandler ["https-jsse-nio-8081"]
-18.06.2023. 12:10:46 | INFO  | [o.a.c.c.StandardService] | Starting service [Tomcat]
-18.06.2023. 12:10:46 | INFO  | [o.a.c.c.StandardEngine] | Starting Servlet engine: [Apache Tomcat/10.1.4]
-18.06.2023. 12:10:46 | INFO  | [o.a.c.c.C.[.[.[/]   ] | Initializing Spring embedded WebApplicationContext
-18.06.2023. 12:10:46 | INFO  | [o.s.b.w.s.c.ServletWebServerApplicationContext] | Root WebApplicationContext: initialization completed in 6008 ms
-18.06.2023. 12:10:47 | INFO  | [o.h.j.i.u.LogHelper ] | HHH000204: Processing PersistenceUnitInfo [name: default]
-18.06.2023. 12:10:47 | INFO  | [o.h.Version         ] | HHH000412: Hibernate ORM core version 6.1.6.Final
-18.06.2023. 12:10:48 | WARN  | [o.h.o.deprecation   ] | HHH90000021: Encountered deprecated setting [javax.persistence.sharedCache.mode], use [jakarta.persistence.sharedCache.mode] instead
-18.06.2023. 12:10:48 | INFO  | [c.z.h.HikariDataSource] | HikariPool-1 - Starting...
-18.06.2023. 12:10:49 | INFO  | [c.z.h.p.HikariPool  ] | HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@6a4af081
-18.06.2023. 12:10:49 | INFO  | [c.z.h.HikariDataSource] | HikariPool-1 - Start completed.
-18.06.2023. 12:10:49 | INFO  | [SQL dialect         ] | HHH000400: Using dialect: org.hibernate.dialect.PostgreSQLDialect
-18.06.2023. 12:10:51 | INFO  | [o.h.e.t.j.p.i.JtaPlatformInitiator] | HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
-18.06.2023. 12:10:51 | INFO  | [o.s.o.j.LocalContainerEntityManagerFactoryBean] | Initialized JPA EntityManagerFactory for persistence unit 'default'
-18.06.2023. 12:10:53 | DEBUG | [c.S.I.c.JwtAuthenticationFilter] | Filter 'jwtAuthenticationFilter' configured for use
-18.06.2023. 12:10:54 | WARN  | [o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration] | spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-18.06.2023. 12:10:55 | INFO  | [o.s.s.w.DefaultSecurityFilterChain] | Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@3f60ba06, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@251d64d6, org.springframework.security.web.context.SecurityContextHolderFilter@2c2c1790, org.springframework.security.web.header.HeaderWriterFilter@28fa0ff8, org.springframework.web.filter.CorsFilter@4d96c290, org.springframework.security.web.authentication.logout.LogoutFilter@b41ceac, com.SIEBS.ITCompany.config.JwtAuthenticationFilter@4fd8aefe, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter@23972e02, org.springframework.security.web.authentication.ui.DefaultLoginPageGeneratingFilter@7bd76b79, org.springframework.security.web.authentication.ui.DefaultLogoutPageGeneratingFilter@17e96b3c, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@4723445c, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@7631fb3e, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@2d63534d, org.springframework.security.web.session.SessionManagementFilter@4698ae6, org.springframework.security.web.access.ExceptionTranslationFilter@3118ed2c, org.springframework.security.web.access.intercept.AuthorizationFilter@65595be7]
-18.06.2023. 12:10:55 | INFO  | [o.a.c.h.Http11NioProtocol] | Starting ProtocolHandler ["https-jsse-nio-8081"]
-18.06.2023. 12:10:57 | INFO  | [o.s.b.w.e.t.TomcatWebServer] | Tomcat started on port(s): 8081 (https) with context path ''
-18.06.2023. 12:10:57 | INFO  | [o.s.m.s.b.SimpleBrokerMessageHandler] | Starting...
-18.06.2023. 12:10:57 | INFO  | [o.s.m.s.b.SimpleBrokerMessageHandler] | BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@5aac9d67]]
-18.06.2023. 12:10:57 | INFO  | [o.s.m.s.b.SimpleBrokerMessageHandler] | Started.
-18.06.2023. 12:10:57 | INFO  | [c.S.I.ItCompanyApplication] | Started ItCompanyApplication in 17.576 seconds (process running for 19.574)
-18.06.2023. 12:11:04 | INFO  | [o.a.c.c.C.[.[.[/]   ] | Initializing Spring DispatcherServlet 'dispatcherServlet'
-18.06.2023. 12:11:04 | INFO  | [o.s.w.s.DispatcherServlet] | Initializing Servlet 'dispatcherServlet'
-18.06.2023. 12:11:04 | INFO  | [o.s.w.s.DispatcherServlet] | Completed initialization in 2 ms
-18.06.2023. 12:11:42 | ERROR | [c.S.I.s.AuthenticationService] | Email or password are not correct. Email: kralusdanijela@gmail.com
-18.06.2023. 12:11:42 | ERROR | [c.S.I.s.AuthenticationService] | Email or password are not correct. Email: kralusdanijela@gmail.com
-18.06.2023. 12:11:47 | INFO  | [c.S.I.s.AuthenticationService] | Login success! Email: kralusdanijela@gmail.com
-18.06.2023. 12:11:55 | INFO  | [o.s.w.s.c.WebSocketMessageBrokerStats] | WebSocketSession[2 current WS(2)-HttpStream(0)-HttpPoll(0), 18 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(16)-CONNECTED(16)-DISCONNECT(15)], stompBrokerRelay[null], inboundChannel[pool size = 8, active threads = 0, queued tasks = 0, completed tasks = 225], outboundChannel[pool size = 8, active threads = 0, queued tasks = 0, completed tasks = 58], sockJsScheduler[pool size = 4, active threads = 1, queued tasks = 3, completed tasks = 11]
-18.06.2023. 12:12:57 | INFO  | [o.s.w.s.m.SubProtocolWebSocketHandler] | No messages received after 63891 ms. Closing WebSocketServerSockJsSession[id=yqe2wk41].
-18.06.2023. 12:19:52 | INFO  | [o.s.w.s.m.SubProtocolWebSocketHandler] | No messages received after 105225 ms. Closing WebSocketServerSockJsSession[id=ngxipmrr].
-18.06.2023. 12:23:04 | ERROR | [o.a.c.c.C.[.[.[.[dispatcherServlet]] | Servlet.service() for servlet [dispatcherServlet] threw exception
-18.06.2023. 12:23:04 | ERROR | [o.a.c.c.C.[.[localhost]] | Exception Processing ErrorPage[errorCode=0, location=/error]
-18.06.2023. 12:27:00 | INFO  | [o.s.w.s.m.SubProtocolWebSocketHandler] | No messages received after 170092 ms. Closing WebSocketServerSockJsSession[id=0lx4rnok].
-18.06.2023. 12:27:00 | INFO  | [o.s.w.s.m.SubProtocolWebSocketHandler] | No messages received after 170047 ms. Closing WebSocketServerSockJsSession[id=waq3ht2t].
-18.06.2023. 12:27:00 | INFO  | [o.s.w.s.m.SubProtocolWebSocketHandler] | No messages received after 170137 ms. Closing WebSocketServerSockJsSession[id=rol5vqov].
-18.06.2023. 12:29:28 | ERROR | [o.a.c.c.C.[.[.[.[dispatcherServlet]] | Servlet.service() for servlet [dispatcherServlet] threw exception
-18.06.2023. 12:29:28 | ERROR | [o.a.c.c.C.[.[localhost]] | Exception Processing ErrorPage[errorCode=0, location=/error]
-18.06.2023. 12:39:14 | INFO  | [o.s.w.s.m.SubProtocolWebSocketHandler] | No messages received after 115112 ms. Closing WebSocketServerSockJsSession[id=ykrxpr5t].
-18.06.2023. 12:41:55 | INFO  | [o.s.w.s.c.WebSocketMessageBrokerStats] | WebSocketSession[160 current WS(160)-HttpStream(0)-HttpPoll(0), 395 total, 6 closed abnormally (6 connect failure, 0 send limit, 4 transport error)], stompSubProtocol[processed CONNECT(379)-CONNECTED(379)-DISCONNECT(212)], stompBrokerRelay[null], inboundChannel[pool size = 8, active threads = 0, queued tasks = 0, completed tasks = 7395], outboundChannel[pool size = 8, active threads = 0, queued tasks = 0, completed tasks = 50812], sockJsScheduler[pool size = 4, active threads = 1, queued tasks = 161, completed tasks = 493]
-18.06.2023. 12:44:37 | ERROR | [o.a.c.c.C.[.[.[.[dispatcherServlet]] | Servlet.service() for servlet [dispatcherServlet] threw exception
-18.06.2023. 12:44:37 | ERROR | [o.a.c.c.C.[.[localhost]] | Exception Processing ErrorPage[errorCode=0, location=/error]
-18.06.2023. 12:44:46 | ERROR | [o.a.c.c.C.[.[.[.[dispatcherServlet]] | Servlet.service() for servlet [dispatcherServlet] threw exception
-18.06.2023. 12:44:46 | ERROR | [o.a.c.c.C.[.[.[.[dispatcherServlet]] | Servlet.service() for servlet [dispatcherServlet] threw exception
-18.06.2023. 12:44:46 | ERROR | [o.a.c.c.C.[.[localhost]] | Exception Processing ErrorPage[errorCode=0, location=/error]
-18.06.2023. 12:44:46 | ERROR | [o.a.c.c.C.[.[localhost]] | Exception Processing ErrorPage[errorCode=0, location=/error]
-18.06.2023. 12:44:46 | ERROR | [o.a.c.c.C.[.[.[.[dispatcherServlet]] | Servlet.service() for servlet [dispatcherServlet] threw exception
-18.06.2023. 12:44:46 | ERROR | [o.a.c.c.C.[.[localhost]] | Exception Processing ErrorPage[errorCode=0, location=/error]
-18.06.2023. 12:44:49 | ERROR | [o.a.c.c.C.[.[.[.[dispatcherServlet]] | Servlet.service() for servlet [dispatcherServlet] threw exception
-18.06.2023. 12:44:49 | ERROR | [o.a.c.c.C.[.[.[.[dispatcherServlet]] | Servlet.service() for servlet [dispatcherServlet] threw exception
-18.06.2023. 12:44:49 | ERROR | [o.a.c.c.C.[.[localhost]] | Exception Processing ErrorPage[errorCode=0, location=/error]
-18.06.2023. 12:44:49 | ERROR | [o.a.c.c.C.[.[localhost]] | Exception Processing ErrorPage[errorCode=0, location=/error]
-18.06.2023. 12:44:49 | ERROR | [o.a.c.c.C.[.[.[.[dispatcherServlet]] | Servlet.service() for servlet [dispatcherServlet] threw exception
-18.06.2023. 12:44:49 | ERROR | [o.a.c.c.C.[.[localhost]] | Exception Processing ErrorPage[errorCode=0, location=/error]
-18.06.2023. 12:44:55 | ERROR | [o.a.c.c.C.[.[.[.[dispatcherServlet]] | Servlet.service() for servlet [dispatcherServlet] threw exception
-18.06.2023. 12:44:55 | ERROR | [o.a.c.c.C.[.[localhost]] | Exception Processing ErrorPage[errorCode=0, location=/error]
-18.06.2023. 12:44:56 | ERROR | [o.a.c.c.C.[.[.[.[dispatcherServlet]] | Servlet.service() for servlet [dispatcherServlet] threw exception
-18.06.2023. 12:44:56 | ERROR | [o.a.c.c.C.[.[.[.[dispatcherServlet]] | Servlet.service() for servlet [dispatcherServlet] threw exception
-18.06.2023. 12:44:56 | ERROR | [o.a.c.c.C.[.[localhost]] | Exception Processing ErrorPage[errorCode=0, location=/error]
-18.06.2023. 12:44:56 | ERROR | [o.a.c.c.C.[.[localhost]] | Exception Processing ErrorPage[errorCode=0, location=/error]
-18.06.2023. 12:44:56 | ERROR | [o.a.c.c.C.[.[.[.[dispatcherServlet]] | Servlet.service() for servlet [dispatcherServlet] threw exception
-18.06.2023. 12:44:56 | ERROR | [o.a.c.c.C.[.[localhost]] | Exception Processing ErrorPage[errorCode=0, location=/error]
-18.06.2023. 12:45:03 | ERROR | [o.a.c.c.C.[.[.[.[dispatcherServlet]] | Servlet.service() for servlet [dispatcherServlet] threw exception
-18.06.2023. 12:45:03 | ERROR | [o.a.c.c.C.[.[localhost]] | Exception Processing ErrorPage[errorCode=0, location=/error]
-18.06.2023. 12:45:03 | ERROR | [o.a.c.c.C.[.[.[.[dispatcherServlet]] | Servlet.service() for servlet [dispatcherServlet] threw exception
-18.06.2023. 12:45:03 | ERROR | [o.a.c.c.C.[.[localhost]] | Exception Processing ErrorPage[errorCode=0, location=/error]
-18.06.2023. 12:45:13 | ERROR | [o.a.c.c.C.[.[.[.[dispatcherServlet]] | Servlet.service() for servlet [dispatcherServlet] threw exception
-18.06.2023. 12:45:13 | ERROR | [o.a.c.c.C.[.[localhost]] | Exception Processing ErrorPage[errorCode=0, location=/error]
-18.06.2023. 12:45:19 | ERROR | [o.a.c.c.C.[.[.[.[dispatcherServlet]] | Servlet.service() for servlet [dispatcherServlet] threw exception
-18.06.2023. 12:45:19 | ERROR | [o.a.c.c.C.[.[localhost]] | Exception Processing ErrorPage[errorCode=0, location=/error]
-18.06.2023. 12:45:19 | ERROR | [o.a.c.c.C.[.[.[.[dispatcherServlet]] | Servlet.service() for servlet [dispatcherServlet] threw exception
-18.06.2023. 12:45:19 | ERROR | [o.a.c.c.C.[.[localhost]] | Exception Processing ErrorPage[errorCode=0, location=/error]
-18.06.2023. 12:45:19 | ERROR | [o.a.c.c.C.[.[.[.[dispatcherServlet]] | Servlet.service() for servlet [dispatcherServlet] threw exception
-18.06.2023. 12:45:19 | ERROR | [o.a.c.c.C.[.[localhost]] | Exception Processing ErrorPage[errorCode=0, location=/error]
-18.06.2023. 12:45:22 | ERROR | [o.a.c.c.C.[.[.[.[dispatcherServlet]] | Servlet.service() for servlet [dispatcherServlet] threw exception
-18.06.2023. 12:45:22 | ERROR | [o.a.c.c.C.[.[localhost]] | Exception Processing ErrorPage[errorCode=0, location=/error]
-18.06.2023. 12:45:22 | ERROR | [o.a.c.c.C.[.[.[.[dispatcherServlet]] | Servlet.service() for servlet [dispatcherServlet] threw exception
-18.06.2023. 12:45:22 | ERROR | [o.a.c.c.C.[.[localhost]] | Exception Processing ErrorPage[errorCode=0, location=/error]
-18.06.2023. 12:45:22 | ERROR | [o.a.c.c.C.[.[.[.[dispatcherServlet]] | Servlet.service() for servlet [dispatcherServlet] threw exception
-18.06.2023. 12:45:22 | ERROR | [o.a.c.c.C.[.[localhost]] | Exception Processing ErrorPage[errorCode=0, location=/error]
-18.06.2023. 12:45:22 | ERROR | [o.a.c.c.C.[.[.[.[dispatcherServlet]] | Servlet.service() for servlet [dispatcherServlet] threw exception
-18.06.2023. 12:45:22 | ERROR | [o.a.c.c.C.[.[localhost]] | Exception Processing ErrorPage[errorCode=0, location=/error]
-18.06.2023. 12:45:29 | ERROR | [o.a.c.c.C.[.[.[.[dispatcherServlet]] | Servlet.service() for servlet [dispatcherServlet] threw exception
-18.06.2023. 12:45:29 | ERROR | [o.a.c.c.C.[.[localhost]] | Exception Processing ErrorPage[errorCode=0, location=/error]
-18.06.2023. 12:45:29 | ERROR | [o.a.c.c.C.[.[.[.[dispatcherServlet]] | Servlet.service() for servlet [dispatcherServlet] threw exception
-18.06.2023. 12:45:29 | ERROR | [o.a.c.c.C.[.[localhost]] | Exception Processing ErrorPage[errorCode=0, location=/error]
-18.06.2023. 12:45:54 | ERROR | [o.a.c.c.C.[.[.[.[dispatcherServlet]] | Servlet.service() for servlet [dispatcherServlet] threw exception
-18.06.2023. 12:45:54 | ERROR | [o.a.c.c.C.[.[localhost]] | Exception Processing ErrorPage[errorCode=0, location=/error]
-18.06.2023. 12:45:54 | ERROR | [o.a.c.c.C.[.[.[.[dispatcherServlet]] | Servlet.service() for servlet [dispatcherServlet] threw exception
-18.06.2023. 12:45:54 | ERROR | [o.a.c.c.C.[.[localhost]] | Exception Processing ErrorPage[errorCode=0, location=/error]
-18.06.2023. 12:45:54 | ERROR | [o.a.c.c.C.[.[.[.[dispatcherServlet]] | Servlet.service() for servlet [dispatcherServlet] threw exception
-18.06.2023. 12:45:54 | ERROR | [o.a.c.c.C.[.[localhost]] | Exception Processing ErrorPage[errorCode=0, location=/error]
-18.06.2023. 12:46:00 | ERROR | [o.a.c.c.C.[.[.[.[dispatcherServlet]] | Servlet.service() for servlet [dispatcherServlet] threw exception
-18.06.2023. 12:46:00 | ERROR | [o.a.c.c.C.[.[.[.[dispatcherServlet]] | Servlet.service() for servlet [dispatcherServlet] threw exception
-18.06.2023. 12:46:00 | ERROR | [o.a.c.c.C.[.[localhost]] | Exception Processing ErrorPage[errorCode=0, location=/error]
-18.06.2023. 12:46:00 | ERROR | [o.a.c.c.C.[.[localhost]] | Exception Processing ErrorPage[errorCode=0, location=/error]
-18.06.2023. 12:46:07 | ERROR | [o.a.c.c.C.[.[.[.[dispatcherServlet]] | Servlet.service() for servlet [dispatcherServlet] threw exception
-18.06.2023. 12:46:07 | ERROR | [o.a.c.c.C.[.[localhost]] | Exception Processing ErrorPage[errorCode=0, location=/error]
-18.06.2023. 12:46:07 | ERROR | [o.a.c.c.C.[.[.[.[dispatcherServlet]] | Servlet.service() for servlet [dispatcherServlet] threw exception
-18.06.2023. 12:46:07 | ERROR | [o.a.c.c.C.[.[localhost]] | Exception Processing ErrorPage[errorCode=0, location=/error]
-18.06.2023. 12:46:07 | ERROR | [o.a.c.c.C.[.[.[.[dispatcherServlet]] | Servlet.service() for servlet [dispatcherServlet] threw exception
-18.06.2023. 12:46:07 | ERROR | [o.a.c.c.C.[.[localhost]] | Exception Processing ErrorPage[errorCode=0, location=/error]
-18.06.2023. 12:46:07 | ERROR | [o.a.c.c.C.[.[.[.[dispatcherServlet]] | Servlet.service() for servlet [dispatcherServlet] threw exception
-18.06.2023. 12:46:07 | ERROR | [o.a.c.c.C.[.[localhost]] | Exception Processing ErrorPage[errorCode=0, location=/error]
-18.06.2023. 12:46:19 | ERROR | [o.a.c.c.C.[.[.[.[dispatcherServlet]] | Servlet.service() for servlet [dispatcherServlet] threw exception
-18.06.2023. 12:46:19 | ERROR | [o.a.c.c.C.[.[localhost]] | Exception Processing ErrorPage[errorCode=0, location=/error]
-18.06.2023. 12:46:19 | ERROR | [o.a.c.c.C.[.[.[.[dispatcherServlet]] | Servlet.service() for servlet [dispatcherServlet] threw exception
-18.06.2023. 12:46:19 | ERROR | [o.a.c.c.C.[.[localhost]] | Exception Processing ErrorPage[errorCode=0, location=/error]
-18.06.2023. 12:46:19 | ERROR | [o.a.c.c.C.[.[.[.[dispatcherServlet]] | Servlet.service() for servlet [dispatcherServlet] threw exception
-18.06.2023. 12:46:19 | ERROR | [o.a.c.c.C.[.[.[.[dispatcherServlet]] | Servlet.service() for servlet [dispatcherServlet] threw exception
-18.06.2023. 12:46:19 | ERROR | [o.a.c.c.C.[.[localhost]] | Exception Processing ErrorPage[errorCode=0, location=/error]
-18.06.2023. 12:46:19 | ERROR | [o.a.c.c.C.[.[localhost]] | Exception Processing ErrorPage[errorCode=0, location=/error]
-18.06.2023. 12:46:54 | ERROR | [o.a.c.c.C.[.[.[.[dispatcherServlet]] | Servlet.service() for servlet [dispatcherServlet] threw exception
-18.06.2023. 12:46:54 | ERROR | [o.a.c.c.C.[.[localhost]] | Exception Processing ErrorPage[errorCode=0, location=/error]
-18.06.2023. 12:46:54 | ERROR | [o.a.c.c.C.[.[.[.[dispatcherServlet]] | Servlet.service() for servlet [dispatcherServlet] threw exception
-18.06.2023. 12:46:54 | ERROR | [o.a.c.c.C.[.[localhost]] | Exception Processing ErrorPage[errorCode=0, location=/error]
-18.06.2023. 12:47:01 | ERROR | [o.a.c.c.C.[.[.[.[dispatcherServlet]] | Servlet.service() for servlet [dispatcherServlet] threw exception
-18.06.2023. 12:47:01 | ERROR | [o.a.c.c.C.[.[localhost]] | Exception Processing ErrorPage[errorCode=0, location=/error]
-18.06.2023. 12:47:01 | ERROR | [o.a.c.c.C.[.[.[.[dispatcherServlet]] | Servlet.service() for servlet [dispatcherServlet] threw exception
-18.06.2023. 12:47:01 | ERROR | [o.a.c.c.C.[.[localhost]] | Exception Processing ErrorPage[errorCode=0, location=/error]
-18.06.2023. 12:47:01 | ERROR | [o.a.c.c.C.[.[.[.[dispatcherServlet]] | Servlet.service() for servlet [dispatcherServlet] threw exception
-18.06.2023. 12:47:01 | ERROR | [o.a.c.c.C.[.[.[.[dispatcherServlet]] | Servlet.service() for servlet [dispatcherServlet] threw exception
-18.06.2023. 12:47:01 | ERROR | [o.a.c.c.C.[.[.[.[dispatcherServlet]] | Servlet.service() for servlet [dispatcherServlet] threw exception
-18.06.2023. 12:47:01 | ERROR | [o.a.c.c.C.[.[localhost]] | Exception Processing ErrorPage[errorCode=0, location=/error]
-18.06.2023. 12:47:01 | ERROR | [o.a.c.c.C.[.[localhost]] | Exception Processing ErrorPage[errorCode=0, location=/error]
-18.06.2023. 12:47:01 | ERROR | [o.a.c.c.C.[.[localhost]] | Exception Processing ErrorPage[errorCode=0, location=/error]
-18.06.2023. 12:47:26 | ERROR | [o.a.c.c.C.[.[.[.[dispatcherServlet]] | Servlet.service() for servlet [dispatcherServlet] threw exception
-18.06.2023. 12:47:26 | ERROR | [o.a.c.c.C.[.[localhost]] | Exception Processing ErrorPage[errorCode=0, location=/error]
-18.06.2023. 12:47:26 | ERROR | [o.a.c.c.C.[.[.[.[dispatcherServlet]] | Servlet.service() for servlet [dispatcherServlet] threw exception
-18.06.2023. 12:47:26 | ERROR | [o.a.c.c.C.[.[localhost]] | Exception Processing ErrorPage[errorCode=0, location=/error]
-18.06.2023. 12:47:26 | ERROR | [o.a.c.c.C.[.[.[.[dispatcherServlet]] | Servlet.service() for servlet [dispatcherServlet] threw exception
-18.06.2023. 12:47:26 | ERROR | [o.a.c.c.C.[.[localhost]] | Exception Processing ErrorPage[errorCode=0, location=/error]
-18.06.2023. 12:47:26 | ERROR | [o.a.c.c.C.[.[.[.[dispatcherServlet]] | Servlet.service() for servlet [dispatcherServlet] threw exception
-18.06.2023. 12:47:26 | ERROR | [o.a.c.c.C.[.[localhost]] | Exception Processing ErrorPage[errorCode=0, location=/error]
-18.06.2023. 12:47:32 | ERROR | [o.a.c.c.C.[.[.[.[dispatcherServlet]] | Servlet.service() for servlet [dispatcherServlet] threw exception
-18.06.2023. 12:47:32 | ERROR | [o.a.c.c.C.[.[.[.[dispatcherServlet]] | Servlet.service() for servlet [dispatcherServlet] threw exception
-18.06.2023. 12:47:32 | ERROR | [o.a.c.c.C.[.[localhost]] | Exception Processing ErrorPage[errorCode=0, location=/error]
-18.06.2023. 12:47:32 | ERROR | [o.a.c.c.C.[.[localhost]] | Exception Processing ErrorPage[errorCode=0, location=/error]
-18.06.2023. 12:47:32 | ERROR | [o.a.c.c.CoyoteAdapter] | Exception while processing an asynchronous request
-18.06.2023. 12:47:32 | ERROR | [o.a.c.h.Http11NioProtocol] | Error reading request, ignored
-18.06.2023. 12:47:32 | ERROR | [o.a.c.c.C.[.[.[.[dispatcherServlet]] | Servlet.service() for servlet [dispatcherServlet] threw exception
-18.06.2023. 12:47:32 | ERROR | [o.a.c.c.C.[.[localhost]] | Exception Processing ErrorPage[errorCode=0, location=/error]
-18.06.2023. 12:47:32 | ERROR | [o.a.c.c.C.[.[.[.[dispatcherServlet]] | Servlet.service() for servlet [dispatcherServlet] threw exception
-18.06.2023. 12:47:32 | ERROR | [o.a.c.c.C.[.[localhost]] | Exception Processing ErrorPage[errorCode=0, location=/error]
-18.06.2023. 12:47:37 | ERROR | [o.a.c.c.C.[.[.[.[dispatcherServlet]] | Servlet.service() for servlet [dispatcherServlet] threw exception
-18.06.2023. 12:47:37 | ERROR | [o.a.c.c.C.[.[localhost]] | Exception Processing ErrorPage[errorCode=0, location=/error]
-18.06.2023. 12:47:38 | ERROR | [o.a.c.c.C.[.[.[.[dispatcherServlet]] | Servlet.service() for servlet [dispatcherServlet] threw exception
-18.06.2023. 12:47:38 | ERROR | [o.a.c.c.C.[.[.[.[dispatcherServlet]] | Servlet.service() for servlet [dispatcherServlet] threw exception
-18.06.2023. 12:47:38 | ERROR | [o.a.c.c.C.[.[localhost]] | Exception Processing ErrorPage[errorCode=0, location=/error]
-18.06.2023. 12:47:38 | ERROR | [o.a.c.c.C.[.[localhost]] | Exception Processing ErrorPage[errorCode=0, location=/error]
-18.06.2023. 12:47:38 | ERROR | [o.a.c.c.C.[.[.[.[dispatcherServlet]] | Servlet.service() for servlet [dispatcherServlet] threw exception
-18.06.2023. 12:47:38 | ERROR | [o.a.c.c.C.[.[localhost]] | Exception Processing ErrorPage[errorCode=0, location=/error]
-18.06.2023. 12:47:38 | ERROR | [o.a.c.c.C.[.[.[.[dispatcherServlet]] | Servlet.service() for servlet [dispatcherServlet] threw exception
-18.06.2023. 12:47:38 | ERROR | [o.a.c.c.C.[.[localhost]] | Exception Processing ErrorPage[errorCode=0, location=/error]
-18.06.2023. 12:47:39 | ERROR | [o.a.c.c.C.[.[.[.[dispatcherServlet]] | Servlet.service() for servlet [dispatcherServlet] threw exception
-18.06.2023. 12:47:39 | ERROR | [o.a.c.c.C.[.[localhost]] | Exception Processing ErrorPage[errorCode=0, location=/error]
-18.06.2023. 12:47:56 | WARN  | [o.s.w.s.m.SubProtocolWebSocketHandler] | Terminating 'WebSocketServerSockJsSession[id=daen3ivn]': Buffer size 2685354 bytes for session 'daen3ivn' exceeds the allowed limit 524288
-18.06.2023. 12:48:18 | INFO  | [o.s.m.s.b.SimpleBrokerMessageHandler] | Stopping...
-18.06.2023. 12:48:18 | INFO  | [o.s.m.s.b.SimpleBrokerMessageHandler] | BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@5aac9d67]]
-18.06.2023. 12:48:18 | INFO  | [o.s.m.s.b.SimpleBrokerMessageHandler] | Stopped.
-18.06.2023. 12:48:20 | INFO  | [o.s.o.j.LocalContainerEntityManagerFactoryBean] | Closing JPA EntityManagerFactory for persistence unit 'default'
-18.06.2023. 12:48:20 | INFO  | [c.z.h.HikariDataSource] | HikariPool-1 - Shutdown initiated...
-18.06.2023. 12:48:20 | INFO  | [c.z.h.HikariDataSource] | HikariPool-1 - Shutdown completed.
-18.06.2023. 13:17:01 | INFO  | [c.S.I.ItCompanyApplication] | Starting ItCompanyApplication using Java 17 with PID 2244 (C:\Users\HP\Desktop\8.semestar\bezbednost\projekat\Employees-and-project-management-IT-company\IT-Company\target\classes started by HP in C:\Users\HP\Desktop\8.semestar\bezbednost\projekat\Employees-and-project-management-IT-company\IT-Company)
-18.06.2023. 13:17:01 | DEBUG | [c.S.I.ItCompanyApplication] | Running with Spring Boot v3.0.1, Spring v6.0.3
-18.06.2023. 13:17:01 | INFO  | [c.S.I.ItCompanyApplication] | No active profile set, falling back to 1 default profile: "default"
-18.06.2023. 13:17:03 | INFO  | [o.s.d.r.c.RepositoryConfigurationDelegate] | Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-18.06.2023. 13:17:04 | INFO  | [o.s.d.r.c.RepositoryConfigurationDelegate] | Finished Spring Data repository scanning in 243 ms. Found 11 JPA repository interfaces.
-18.06.2023. 13:17:05 | INFO  | [o.s.b.w.e.t.TomcatWebServer] | Tomcat initialized with port(s): 8081 (https)
-18.06.2023. 13:17:06 | INFO  | [o.a.c.h.Http11NioProtocol] | Initializing ProtocolHandler ["https-jsse-nio-8081"]
-18.06.2023. 13:17:06 | INFO  | [o.a.c.c.StandardService] | Starting service [Tomcat]
-18.06.2023. 13:17:06 | INFO  | [o.a.c.c.StandardEngine] | Starting Servlet engine: [Apache Tomcat/10.1.4]
-18.06.2023. 13:17:06 | INFO  | [o.a.c.c.C.[.[.[/]   ] | Initializing Spring embedded WebApplicationContext
-18.06.2023. 13:17:06 | INFO  | [o.s.b.w.s.c.ServletWebServerApplicationContext] | Root WebApplicationContext: initialization completed in 4565 ms
-18.06.2023. 13:17:06 | INFO  | [o.h.j.i.u.LogHelper ] | HHH000204: Processing PersistenceUnitInfo [name: default]
-18.06.2023. 13:17:06 | INFO  | [o.h.Version         ] | HHH000412: Hibernate ORM core version 6.1.6.Final
-18.06.2023. 13:17:07 | WARN  | [o.h.o.deprecation   ] | HHH90000021: Encountered deprecated setting [javax.persistence.sharedCache.mode], use [jakarta.persistence.sharedCache.mode] instead
-18.06.2023. 13:17:07 | INFO  | [c.z.h.HikariDataSource] | HikariPool-1 - Starting...
-18.06.2023. 13:17:08 | INFO  | [c.z.h.p.HikariPool  ] | HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@aca2fc3
-18.06.2023. 13:17:08 | INFO  | [c.z.h.HikariDataSource] | HikariPool-1 - Start completed.
-18.06.2023. 13:17:08 | INFO  | [SQL dialect         ] | HHH000400: Using dialect: org.hibernate.dialect.PostgreSQLDialect
-18.06.2023. 13:17:10 | INFO  | [o.h.e.t.j.p.i.JtaPlatformInitiator] | HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
-18.06.2023. 13:17:10 | INFO  | [o.s.o.j.LocalContainerEntityManagerFactoryBean] | Initialized JPA EntityManagerFactory for persistence unit 'default'
-18.06.2023. 13:17:12 | DEBUG | [c.S.I.c.JwtAuthenticationFilter] | Filter 'jwtAuthenticationFilter' configured for use
-18.06.2023. 13:17:12 | WARN  | [o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration] | spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-18.06.2023. 13:17:13 | INFO  | [o.s.s.w.DefaultSecurityFilterChain] | Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@7308e2d6, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@37b97394, org.springframework.security.web.context.SecurityContextHolderFilter@4ee8ea84, org.springframework.security.web.header.HeaderWriterFilter@74c58f64, org.springframework.web.filter.CorsFilter@6f371390, org.springframework.security.web.authentication.logout.LogoutFilter@44835de9, com.SIEBS.ITCompany.config.JwtAuthenticationFilter@4075c0d8, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter@5963a2c9, org.springframework.security.web.authentication.ui.DefaultLoginPageGeneratingFilter@4ec1192f, org.springframework.security.web.authentication.ui.DefaultLogoutPageGeneratingFilter@4eba3c3f, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@1b0709e7, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@1e368085, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@7a90796c, org.springframework.security.web.session.SessionManagementFilter@5feceb2f, org.springframework.security.web.access.ExceptionTranslationFilter@1b1434ce, org.springframework.security.web.access.intercept.AuthorizationFilter@738a977d]
-18.06.2023. 13:17:13 | INFO  | [o.a.c.h.Http11NioProtocol] | Starting ProtocolHandler ["https-jsse-nio-8081"]
-18.06.2023. 13:17:14 | INFO  | [o.s.b.w.e.t.TomcatWebServer] | Tomcat started on port(s): 8081 (https) with context path ''
-18.06.2023. 13:17:14 | INFO  | [o.s.m.s.b.SimpleBrokerMessageHandler] | Starting...
-18.06.2023. 13:17:14 | INFO  | [o.s.m.s.b.SimpleBrokerMessageHandler] | BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@31d96cd6]]
-18.06.2023. 13:17:14 | INFO  | [o.s.m.s.b.SimpleBrokerMessageHandler] | Started.
-18.06.2023. 13:17:14 | INFO  | [c.S.I.ItCompanyApplication] | Started ItCompanyApplication in 13.744 seconds (process running for 15.809)
-18.06.2023. 13:17:55 | INFO  | [o.a.c.c.C.[.[.[/]   ] | Initializing Spring DispatcherServlet 'dispatcherServlet'
-18.06.2023. 13:17:55 | INFO  | [o.s.w.s.DispatcherServlet] | Initializing Servlet 'dispatcherServlet'
-18.06.2023. 13:17:55 | INFO  | [o.s.w.s.DispatcherServlet] | Completed initialization in 4 ms
-18.06.2023. 13:17:59 | INFO  | [c.S.I.s.AuthenticationService] | Login success! Email: kralusdanijela@gmail.com
-18.06.2023. 13:18:13 | INFO  | [o.s.w.s.c.WebSocketMessageBrokerStats] | WebSocketSession[2 current WS(2)-HttpStream(0)-HttpPoll(0), 4 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(3)-CONNECTED(3)-DISCONNECT(2)], stompBrokerRelay[null], inboundChannel[pool size = 8, active threads = 0, queued tasks = 0, completed tasks = 36], outboundChannel[pool size = 8, active threads = 0, queued tasks = 0, completed tasks = 9], sockJsScheduler[pool size = 4, active threads = 1, queued tasks = 3, completed tasks = 2]
-18.06.2023. 13:19:14 | INFO  | [o.s.w.s.m.SubProtocolWebSocketHandler] | No messages received after 68602 ms. Closing WebSocketServerSockJsSession[id=2br5q1ak].
-18.06.2023. 13:23:08 | ERROR | [o.a.c.c.C.[.[.[.[dispatcherServlet]] | Servlet.service() for servlet [dispatcherServlet] threw exception
-18.06.2023. 13:23:08 | ERROR | [o.a.c.c.C.[.[.[.[dispatcherServlet]] | Servlet.service() for servlet [dispatcherServlet] threw exception
-18.06.2023. 13:23:08 | ERROR | [o.a.c.c.C.[.[localhost]] | Exception Processing ErrorPage[errorCode=0, location=/error]
-18.06.2023. 13:23:08 | ERROR | [o.a.c.c.C.[.[localhost]] | Exception Processing ErrorPage[errorCode=0, location=/error]
-18.06.2023. 13:23:36 | INFO  | [o.s.w.s.m.SubProtocolWebSocketHandler] | No messages received after 69195 ms. Closing XhrStreamingSockJsSession[id=zv1t5uy2].
-18.06.2023. 13:25:01 | ERROR | [o.a.c.c.C.[.[.[.[dispatcherServlet]] | Servlet.service() for servlet [dispatcherServlet] threw exception
-18.06.2023. 13:25:01 | ERROR | [o.a.c.c.C.[.[localhost]] | Exception Processing ErrorPage[errorCode=0, location=/error]
-18.06.2023. 13:25:02 | ERROR | [o.a.c.c.C.[.[.[.[dispatcherServlet]] | Servlet.service() for servlet [dispatcherServlet] threw exception
-18.06.2023. 13:25:02 | ERROR | [o.a.c.c.C.[.[localhost]] | Exception Processing ErrorPage[errorCode=0, location=/error]
-18.06.2023. 13:29:22 | INFO  | [o.s.w.s.m.SubProtocolWebSocketHandler] | No messages received after 114207 ms. Closing WebSocketServerSockJsSession[id=3cu0zej5].
-18.06.2023. 13:29:22 | INFO  | [o.s.w.s.m.SubProtocolWebSocketHandler] | No messages received after 66656 ms. Closing WebSocketServerSockJsSession[id=bxtn1mga].
-18.06.2023. 13:37:13 | INFO  | [o.s.w.s.m.SubProtocolWebSocketHandler] | No messages received after 118584 ms. Closing WebSocketServerSockJsSession[id=or35vgie].
-18.06.2023. 13:48:13 | INFO  | [o.s.w.s.c.WebSocketMessageBrokerStats] | WebSocketSession[5 current WS(5)-HttpStream(0)-HttpPoll(0), 348 total, 5 closed abnormally (5 connect failure, 0 send limit, 3 transport error)], stompSubProtocol[processed CONNECT(329)-CONNECTED(328)-DISCONNECT(80)], stompBrokerRelay[null], inboundChannel[pool size = 8, active threads = 0, queued tasks = 0, completed tasks = 4194], outboundChannel[pool size = 8, active threads = 0, queued tasks = 0, completed tasks = 6873], sockJsScheduler[pool size = 4, active threads = 1, queued tasks = 6, completed tasks = 1059]
-18.06.2023. 14:01:41 | INFO  | [o.s.m.s.b.SimpleBrokerMessageHandler] | Stopping...
-18.06.2023. 14:01:41 | INFO  | [o.s.m.s.b.SimpleBrokerMessageHandler] | BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@31d96cd6]]
-18.06.2023. 14:01:41 | INFO  | [o.s.m.s.b.SimpleBrokerMessageHandler] | Stopped.
-18.06.2023. 14:01:41 | INFO  | [o.s.o.j.LocalContainerEntityManagerFactoryBean] | Closing JPA EntityManagerFactory for persistence unit 'default'
-18.06.2023. 14:01:41 | INFO  | [c.z.h.HikariDataSource] | HikariPool-1 - Shutdown initiated...
-18.06.2023. 14:01:41 | INFO  | [c.z.h.HikariDataSource] | HikariPool-1 - Shutdown completed.
-18.06.2023. 14:02:00 | INFO  | [c.S.I.ItCompanyApplication] | Starting ItCompanyApplication using Java 17 with PID 8596 (C:\Users\HP\Desktop\8.semestar\bezbednost\projekat\Employees-and-project-management-IT-company\IT-Company\target\classes started by HP in C:\Users\HP\Desktop\8.semestar\bezbednost\projekat\Employees-and-project-management-IT-company\IT-Company)
-18.06.2023. 14:02:00 | DEBUG | [c.S.I.ItCompanyApplication] | Running with Spring Boot v3.0.1, Spring v6.0.3
-18.06.2023. 14:02:00 | INFO  | [c.S.I.ItCompanyApplication] | No active profile set, falling back to 1 default profile: "default"
-18.06.2023. 14:02:02 | INFO  | [o.s.d.r.c.RepositoryConfigurationDelegate] | Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-18.06.2023. 14:02:02 | INFO  | [o.s.d.r.c.RepositoryConfigurationDelegate] | Finished Spring Data repository scanning in 485 ms. Found 11 JPA repository interfaces.
-18.06.2023. 14:02:05 | INFO  | [o.s.b.w.e.t.TomcatWebServer] | Tomcat initialized with port(s): 8081 (https)
-18.06.2023. 14:02:05 | INFO  | [o.a.c.h.Http11NioProtocol] | Initializing ProtocolHandler ["https-jsse-nio-8081"]
-18.06.2023. 14:02:05 | INFO  | [o.a.c.c.StandardService] | Starting service [Tomcat]
-18.06.2023. 14:02:05 | INFO  | [o.a.c.c.StandardEngine] | Starting Servlet engine: [Apache Tomcat/10.1.4]
-18.06.2023. 14:02:06 | INFO  | [o.a.c.c.C.[.[.[/]   ] | Initializing Spring embedded WebApplicationContext
-18.06.2023. 14:02:06 | INFO  | [o.s.b.w.s.c.ServletWebServerApplicationContext] | Root WebApplicationContext: initialization completed in 5566 ms
-18.06.2023. 14:02:06 | INFO  | [o.h.j.i.u.LogHelper ] | HHH000204: Processing PersistenceUnitInfo [name: default]
-18.06.2023. 14:02:06 | INFO  | [o.h.Version         ] | HHH000412: Hibernate ORM core version 6.1.6.Final
-18.06.2023. 14:02:07 | WARN  | [o.h.o.deprecation   ] | HHH90000021: Encountered deprecated setting [javax.persistence.sharedCache.mode], use [jakarta.persistence.sharedCache.mode] instead
-18.06.2023. 14:02:07 | INFO  | [c.z.h.HikariDataSource] | HikariPool-1 - Starting...
-18.06.2023. 14:02:08 | INFO  | [c.z.h.p.HikariPool  ] | HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@6c9bf3b5
-18.06.2023. 14:02:08 | INFO  | [c.z.h.HikariDataSource] | HikariPool-1 - Start completed.
-18.06.2023. 14:02:08 | INFO  | [SQL dialect         ] | HHH000400: Using dialect: org.hibernate.dialect.PostgreSQLDialect
-18.06.2023. 14:02:11 | INFO  | [o.h.e.t.j.p.i.JtaPlatformInitiator] | HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
-18.06.2023. 14:02:11 | INFO  | [o.s.o.j.LocalContainerEntityManagerFactoryBean] | Initialized JPA EntityManagerFactory for persistence unit 'default'
-18.06.2023. 14:02:12 | DEBUG | [c.S.I.c.JwtAuthenticationFilter] | Filter 'jwtAuthenticationFilter' configured for use
-18.06.2023. 14:02:13 | WARN  | [o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration] | spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-18.06.2023. 14:02:13 | INFO  | [o.s.s.w.DefaultSecurityFilterChain] | Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@490dc900, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@18e4bbec, org.springframework.security.web.context.SecurityContextHolderFilter@4d96c290, org.springframework.security.web.header.HeaderWriterFilter@23972e02, org.springframework.web.filter.CorsFilter@ab5af13, org.springframework.security.web.authentication.logout.LogoutFilter@37b97394, com.SIEBS.ITCompany.config.JwtAuthenticationFilter@dd26290, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter@7424a39e, org.springframework.security.web.authentication.ui.DefaultLoginPageGeneratingFilter@4664cd32, org.springframework.security.web.authentication.ui.DefaultLogoutPageGeneratingFilter@2f2e75ae, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@2d63534d, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@6316b9e3, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@8ccec82, org.springframework.security.web.session.SessionManagementFilter@10c95d9b, org.springframework.security.web.access.ExceptionTranslationFilter@3653bb61, org.springframework.security.web.access.intercept.AuthorizationFilter@8ea1521]
-18.06.2023. 14:02:14 | INFO  | [o.a.c.h.Http11NioProtocol] | Starting ProtocolHandler ["https-jsse-nio-8081"]
-18.06.2023. 14:02:14 | INFO  | [o.s.b.w.e.t.TomcatWebServer] | Tomcat started on port(s): 8081 (https) with context path ''
-18.06.2023. 14:02:14 | INFO  | [o.s.m.s.b.SimpleBrokerMessageHandler] | Starting...
-18.06.2023. 14:02:14 | INFO  | [o.s.m.s.b.SimpleBrokerMessageHandler] | BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@3f29e67e]]
-18.06.2023. 14:02:14 | INFO  | [o.s.m.s.b.SimpleBrokerMessageHandler] | Started.
-18.06.2023. 14:02:14 | INFO  | [c.S.I.ItCompanyApplication] | Started ItCompanyApplication in 15.455 seconds (process running for 17.138)
-18.06.2023. 14:02:20 | INFO  | [o.a.c.c.C.[.[.[/]   ] | Initializing Spring DispatcherServlet 'dispatcherServlet'
-18.06.2023. 14:02:20 | INFO  | [o.s.w.s.DispatcherServlet] | Initializing Servlet 'dispatcherServlet'
-18.06.2023. 14:02:20 | INFO  | [o.s.w.s.DispatcherServlet] | Completed initialization in 2 ms
-18.06.2023. 14:02:59 | ERROR | [o.a.c.c.C.[.[.[.[dispatcherServlet]] | Servlet.service() for servlet [dispatcherServlet] in context with path [] threw exception [Request processing failed: java.lang.NullPointerException: Cannot invoke "com.SIEBS.ITCompany.model.User.getEmail()" because the return value of "com.SIEBS.ITCompany.service.AuthenticationService.getLoggedUser()" is null] with root cause
-18.06.2023. 14:03:02 | ERROR | [o.a.c.c.C.[.[.[.[dispatcherServlet]] | Servlet.service() for servlet [dispatcherServlet] in context with path [] threw exception [Request processing failed: java.lang.NullPointerException: Cannot invoke "com.SIEBS.ITCompany.model.User.getEmail()" because the return value of "com.SIEBS.ITCompany.service.AuthenticationService.getLoggedUser()" is null] with root cause
-18.06.2023. 14:03:05 | ERROR | [o.a.c.c.C.[.[.[.[dispatcherServlet]] | Servlet.service() for servlet [dispatcherServlet] in context with path [] threw exception [Request processing failed: java.lang.NullPointerException: Cannot invoke "com.SIEBS.ITCompany.model.User.getEmail()" because the return value of "com.SIEBS.ITCompany.service.AuthenticationService.getLoggedUser()" is null] with root cause
-18.06.2023. 14:03:14 | INFO  | [o.s.w.s.c.WebSocketMessageBrokerStats] | WebSocketSession[2 current WS(2)-HttpStream(0)-HttpPoll(0), 2 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(2)-CONNECTED(2)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 8, active threads = 0, queued tasks = 0, completed tasks = 33], outboundChannel[pool size = 8, active threads = 0, queued tasks = 0, completed tasks = 16], sockJsScheduler[pool size = 4, active threads = 1, queued tasks = 3, completed tasks = 11]
-18.06.2023. 14:03:21 | INFO  | [c.S.I.s.AuthenticationService] | Login success! Email: kralusdanijela@gmail.com
-18.06.2023. 14:03:32 | INFO  | [c.S.I.c.UserController] | Permissions saved successfully. Admin:kralusdanijela@gmail.com
-18.06.2023. 14:04:39 | INFO  | [c.S.I.s.AuthenticationService] | Login success! Email: kralusdanijela@gmail.com
-18.06.2023. 14:04:44 | INFO  | [c.S.I.c.UserController] | Permissions saved successfully. Admin:kralusdanijela@gmail.com
-18.06.2023. 14:33:14 | INFO  | [o.s.w.s.c.WebSocketMessageBrokerStats] | WebSocketSession[4 current WS(4)-HttpStream(0)-HttpPoll(0), 4 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(4)-CONNECTED(4)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 105], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 98], sockJsScheduler[pool size = 4, active threads = 1, queued tasks = 5, completed tasks = 640]
-18.06.2023. 15:03:14 | INFO  | [o.s.w.s.c.WebSocketMessageBrokerStats] | WebSocketSession[4 current WS(4)-HttpStream(0)-HttpPoll(0), 4 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(4)-CONNECTED(4)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 105], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 98], sockJsScheduler[pool size = 4, active threads = 1, queued tasks = 5, completed tasks = 1289]
-18.06.2023. 15:19:33 | INFO  | [o.s.m.s.b.SimpleBrokerMessageHandler] | Stopping...
-18.06.2023. 15:19:33 | INFO  | [o.s.m.s.b.SimpleBrokerMessageHandler] | BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@3f29e67e]]
-18.06.2023. 15:19:33 | INFO  | [o.s.m.s.b.SimpleBrokerMessageHandler] | Stopped.
-18.06.2023. 15:19:34 | INFO  | [o.s.o.j.LocalContainerEntityManagerFactoryBean] | Closing JPA EntityManagerFactory for persistence unit 'default'
-18.06.2023. 15:19:34 | INFO  | [c.z.h.HikariDataSource] | HikariPool-1 - Shutdown initiated...
-18.06.2023. 15:19:34 | INFO  | [c.z.h.HikariDataSource] | HikariPool-1 - Shutdown completed.
+19.06.2023. 00:26:12 | INFO  | [c.S.I.ItCompanyApplication] | Starting ItCompanyApplication using Java 17 with PID 3692 (C:\Users\HP\Desktop\8.semestar\bezbednost\projekat\Employees-and-project-management-IT-company\IT-Company\target\classes started by HP in C:\Users\HP\Desktop\8.semestar\bezbednost\projekat\Employees-and-project-management-IT-company\IT-Company)
+19.06.2023. 00:26:12 | DEBUG | [c.S.I.ItCompanyApplication] | Running with Spring Boot v3.0.1, Spring v6.0.3
+19.06.2023. 00:26:12 | INFO  | [c.S.I.ItCompanyApplication] | No active profile set, falling back to 1 default profile: "default"
+19.06.2023. 00:26:14 | INFO  | [o.s.d.r.c.RepositoryConfigurationDelegate] | Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+19.06.2023. 00:26:14 | INFO  | [o.s.d.r.c.RepositoryConfigurationDelegate] | Finished Spring Data repository scanning in 272 ms. Found 12 JPA repository interfaces.
+19.06.2023. 00:26:16 | INFO  | [o.s.b.w.e.t.TomcatWebServer] | Tomcat initialized with port(s): 8081 (https)
+19.06.2023. 00:26:16 | INFO  | [o.a.c.h.Http11NioProtocol] | Initializing ProtocolHandler ["https-jsse-nio-8081"]
+19.06.2023. 00:26:16 | INFO  | [o.a.c.c.StandardService] | Starting service [Tomcat]
+19.06.2023. 00:26:16 | INFO  | [o.a.c.c.StandardEngine] | Starting Servlet engine: [Apache Tomcat/10.1.4]
+19.06.2023. 00:26:16 | INFO  | [o.a.c.c.C.[.[.[/]   ] | Initializing Spring embedded WebApplicationContext
+19.06.2023. 00:26:16 | INFO  | [o.s.b.w.s.c.ServletWebServerApplicationContext] | Root WebApplicationContext: initialization completed in 4118 ms
+19.06.2023. 00:26:16 | INFO  | [o.h.j.i.u.LogHelper ] | HHH000204: Processing PersistenceUnitInfo [name: default]
+19.06.2023. 00:26:16 | INFO  | [o.h.Version         ] | HHH000412: Hibernate ORM core version 6.1.6.Final
+19.06.2023. 00:26:17 | WARN  | [o.h.o.deprecation   ] | HHH90000021: Encountered deprecated setting [javax.persistence.sharedCache.mode], use [jakarta.persistence.sharedCache.mode] instead
+19.06.2023. 00:26:17 | INFO  | [c.z.h.HikariDataSource] | HikariPool-1 - Starting...
+19.06.2023. 00:26:18 | INFO  | [c.z.h.p.HikariPool  ] | HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@1fcaea93
+19.06.2023. 00:26:18 | INFO  | [c.z.h.HikariDataSource] | HikariPool-1 - Start completed.
+19.06.2023. 00:26:18 | INFO  | [SQL dialect         ] | HHH000400: Using dialect: org.hibernate.dialect.PostgreSQLDialect
+19.06.2023. 00:26:21 | INFO  | [o.h.e.t.j.p.i.JtaPlatformInitiator] | HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+19.06.2023. 00:26:21 | INFO  | [o.s.o.j.LocalContainerEntityManagerFactoryBean] | Initialized JPA EntityManagerFactory for persistence unit 'default'
+19.06.2023. 00:26:22 | DEBUG | [c.S.I.c.JwtAuthenticationFilter] | Filter 'jwtAuthenticationFilter' configured for use
+19.06.2023. 00:26:23 | WARN  | [o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration] | spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+19.06.2023. 00:26:24 | INFO  | [o.s.s.w.DefaultSecurityFilterChain] | Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@9223122, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@3c2b7322, org.springframework.security.web.context.SecurityContextHolderFilter@19d85bbe, org.springframework.security.web.header.HeaderWriterFilter@76334a3a, org.springframework.web.filter.CorsFilter@7731504, org.springframework.security.web.authentication.logout.LogoutFilter@6eed5b68, com.SIEBS.ITCompany.config.JwtAuthenticationFilter@7be95197, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter@248227db, org.springframework.security.web.authentication.ui.DefaultLoginPageGeneratingFilter@4951c45f, org.springframework.security.web.authentication.ui.DefaultLogoutPageGeneratingFilter@43c25e89, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@628721ba, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@67d8e214, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@5b71ccf2, org.springframework.security.web.session.SessionManagementFilter@28cfbcc, org.springframework.security.web.access.ExceptionTranslationFilter@5aa0d535, org.springframework.security.web.access.intercept.AuthorizationFilter@7f8586f9]
+19.06.2023. 00:26:24 | INFO  | [o.a.c.h.Http11NioProtocol] | Starting ProtocolHandler ["https-jsse-nio-8081"]
+19.06.2023. 00:26:25 | INFO  | [o.s.b.w.e.t.TomcatWebServer] | Tomcat started on port(s): 8081 (https) with context path ''
+19.06.2023. 00:26:25 | INFO  | [o.s.m.s.b.SimpleBrokerMessageHandler] | Starting...
+19.06.2023. 00:26:25 | INFO  | [o.s.m.s.b.SimpleBrokerMessageHandler] | BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@71586f]]
+19.06.2023. 00:26:25 | INFO  | [o.s.m.s.b.SimpleBrokerMessageHandler] | Started.
+19.06.2023. 00:26:25 | INFO  | [c.S.I.ItCompanyApplication] | Started ItCompanyApplication in 14.2 seconds (process running for 15.681)
+19.06.2023. 00:26:30 | INFO  | [o.a.c.c.C.[.[.[/]   ] | Initializing Spring DispatcherServlet 'dispatcherServlet'
+19.06.2023. 00:26:30 | INFO  | [o.s.w.s.DispatcherServlet] | Initializing Servlet 'dispatcherServlet'
+19.06.2023. 00:26:30 | INFO  | [o.s.w.s.DispatcherServlet] | Completed initialization in 5 ms
+19.06.2023. 00:26:38 | INFO  | [c.S.I.s.AuthenticationService] | Login success! Email: kralusdanijela@gmail.com
+19.06.2023. 00:27:09 | INFO  | [c.S.I.c.UserController] | Permissions saved successfully. Admin:kralusdanijela@gmail.com
+19.06.2023. 00:27:25 | INFO  | [o.s.w.s.c.WebSocketMessageBrokerStats] | WebSocketSession[3 current WS(3)-HttpStream(0)-HttpPoll(0), 3 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(3)-CONNECTED(3)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 8, active threads = 0, queued tasks = 0, completed tasks = 30], outboundChannel[pool size = 8, active threads = 0, queued tasks = 0, completed tasks = 12], sockJsScheduler[pool size = 4, active threads = 1, queued tasks = 4, completed tasks = 11]
+19.06.2023. 00:30:42 | ERROR | [c.S.I.s.AuthenticationService] | Email or password are not correct. Email: kralusdanijela@gmail.com
+19.06.2023. 00:31:01 | INFO  | [c.S.I.s.AuthenticationService] | Login success! Email: kralusdanijela@gmail.com
+19.06.2023. 00:31:45 | INFO  | [o.s.m.s.b.SimpleBrokerMessageHandler] | Stopping...
+19.06.2023. 00:31:45 | INFO  | [o.s.m.s.b.SimpleBrokerMessageHandler] | BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@71586f]]
+19.06.2023. 00:31:45 | INFO  | [o.s.m.s.b.SimpleBrokerMessageHandler] | Stopped.
+19.06.2023. 00:31:45 | INFO  | [o.s.o.j.LocalContainerEntityManagerFactoryBean] | Closing JPA EntityManagerFactory for persistence unit 'default'
+19.06.2023. 00:31:45 | INFO  | [c.z.h.HikariDataSource] | HikariPool-1 - Shutdown initiated...
+19.06.2023. 00:31:45 | INFO  | [c.z.h.HikariDataSource] | HikariPool-1 - Shutdown completed.
+19.06.2023. 00:34:58 | INFO  | [c.S.I.ItCompanyApplication] | Starting ItCompanyApplication using Java 17 with PID 12628 (C:\Users\HP\Desktop\8.semestar\bezbednost\projekat\Employees-and-project-management-IT-company\IT-Company\target\classes started by HP in C:\Users\HP\Desktop\8.semestar\bezbednost\projekat\Employees-and-project-management-IT-company\IT-Company)
+19.06.2023. 00:34:58 | DEBUG | [c.S.I.ItCompanyApplication] | Running with Spring Boot v3.0.1, Spring v6.0.3
+19.06.2023. 00:34:58 | INFO  | [c.S.I.ItCompanyApplication] | No active profile set, falling back to 1 default profile: "default"
+19.06.2023. 00:35:01 | INFO  | [o.s.d.r.c.RepositoryConfigurationDelegate] | Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+19.06.2023. 00:35:01 | INFO  | [o.s.d.r.c.RepositoryConfigurationDelegate] | Finished Spring Data repository scanning in 265 ms. Found 12 JPA repository interfaces.
+19.06.2023. 00:35:03 | INFO  | [o.s.b.w.e.t.TomcatWebServer] | Tomcat initialized with port(s): 8081 (https)
+19.06.2023. 00:35:03 | INFO  | [o.a.c.h.Http11NioProtocol] | Initializing ProtocolHandler ["https-jsse-nio-8081"]
+19.06.2023. 00:35:03 | INFO  | [o.a.c.c.StandardService] | Starting service [Tomcat]
+19.06.2023. 00:35:03 | INFO  | [o.a.c.c.StandardEngine] | Starting Servlet engine: [Apache Tomcat/10.1.4]
+19.06.2023. 00:35:04 | INFO  | [o.a.c.c.C.[.[.[/]   ] | Initializing Spring embedded WebApplicationContext
+19.06.2023. 00:35:04 | INFO  | [o.s.b.w.s.c.ServletWebServerApplicationContext] | Root WebApplicationContext: initialization completed in 4946 ms
+19.06.2023. 00:35:04 | INFO  | [o.h.j.i.u.LogHelper ] | HHH000204: Processing PersistenceUnitInfo [name: default]
+19.06.2023. 00:35:04 | INFO  | [o.h.Version         ] | HHH000412: Hibernate ORM core version 6.1.6.Final
+19.06.2023. 00:35:04 | WARN  | [o.h.o.deprecation   ] | HHH90000021: Encountered deprecated setting [javax.persistence.sharedCache.mode], use [jakarta.persistence.sharedCache.mode] instead
+19.06.2023. 00:35:05 | INFO  | [c.z.h.HikariDataSource] | HikariPool-1 - Starting...
+19.06.2023. 00:35:05 | INFO  | [c.z.h.p.HikariPool  ] | HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@1c2d63f0
+19.06.2023. 00:35:05 | INFO  | [c.z.h.HikariDataSource] | HikariPool-1 - Start completed.
+19.06.2023. 00:35:05 | INFO  | [SQL dialect         ] | HHH000400: Using dialect: org.hibernate.dialect.PostgreSQLDialect
+19.06.2023. 00:35:08 | INFO  | [o.h.e.t.j.p.i.JtaPlatformInitiator] | HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+19.06.2023. 00:35:08 | INFO  | [o.s.o.j.LocalContainerEntityManagerFactoryBean] | Initialized JPA EntityManagerFactory for persistence unit 'default'
+19.06.2023. 00:35:10 | DEBUG | [c.S.I.c.JwtAuthenticationFilter] | Filter 'jwtAuthenticationFilter' configured for use
+19.06.2023. 00:35:11 | WARN  | [o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration] | spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+19.06.2023. 00:35:11 | INFO  | [o.s.s.w.DefaultSecurityFilterChain] | Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@480b785a, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@35427786, org.springframework.security.web.context.SecurityContextHolderFilter@1ff55410, org.springframework.security.web.header.HeaderWriterFilter@3c2406dd, org.springframework.web.filter.CorsFilter@6554f841, org.springframework.security.web.authentication.logout.LogoutFilter@1fce17b8, com.SIEBS.ITCompany.config.JwtAuthenticationFilter@26fee641, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter@43e7ca6f, org.springframework.security.web.authentication.ui.DefaultLoginPageGeneratingFilter@5f0c04d2, org.springframework.security.web.authentication.ui.DefaultLogoutPageGeneratingFilter@1bef1304, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@505e8d48, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@3841e77a, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@835718b, org.springframework.security.web.session.SessionManagementFilter@7207cb8b, org.springframework.security.web.access.ExceptionTranslationFilter@43c25e89, org.springframework.security.web.access.intercept.AuthorizationFilter@b24e21f]
+19.06.2023. 00:35:12 | INFO  | [o.a.c.h.Http11NioProtocol] | Starting ProtocolHandler ["https-jsse-nio-8081"]
+19.06.2023. 00:35:12 | INFO  | [o.s.b.w.e.t.TomcatWebServer] | Tomcat started on port(s): 8081 (https) with context path ''
+19.06.2023. 00:35:12 | INFO  | [o.s.m.s.b.SimpleBrokerMessageHandler] | Starting...
+19.06.2023. 00:35:12 | INFO  | [o.s.m.s.b.SimpleBrokerMessageHandler] | BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@7b01f056]]
+19.06.2023. 00:35:12 | INFO  | [o.s.m.s.b.SimpleBrokerMessageHandler] | Started.
+19.06.2023. 00:35:12 | INFO  | [c.S.I.ItCompanyApplication] | Started ItCompanyApplication in 15.069 seconds (process running for 16.425)
+19.06.2023. 00:35:22 | INFO  | [o.a.c.c.C.[.[.[/]   ] | Initializing Spring DispatcherServlet 'dispatcherServlet'
+19.06.2023. 00:35:22 | INFO  | [o.s.w.s.DispatcherServlet] | Initializing Servlet 'dispatcherServlet'
+19.06.2023. 00:35:22 | INFO  | [o.s.w.s.DispatcherServlet] | Completed initialization in 4 ms
+19.06.2023. 00:35:22 | INFO  | [c.S.I.s.AuthenticationService] | Login success! Email: kralusdanijela@gmail.com
+19.06.2023. 00:35:57 | INFO  | [o.s.m.s.b.SimpleBrokerMessageHandler] | Stopping...
+19.06.2023. 00:35:57 | INFO  | [o.s.m.s.b.SimpleBrokerMessageHandler] | BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@7b01f056]]
+19.06.2023. 00:35:57 | INFO  | [o.s.m.s.b.SimpleBrokerMessageHandler] | Stopped.
+19.06.2023. 00:35:57 | INFO  | [o.s.o.j.LocalContainerEntityManagerFactoryBean] | Closing JPA EntityManagerFactory for persistence unit 'default'
+19.06.2023. 00:35:57 | INFO  | [c.z.h.HikariDataSource] | HikariPool-1 - Shutdown initiated...
+19.06.2023. 00:35:57 | INFO  | [c.z.h.HikariDataSource] | HikariPool-1 - Shutdown completed.

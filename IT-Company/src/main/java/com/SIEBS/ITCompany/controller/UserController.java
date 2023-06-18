@@ -48,6 +48,8 @@ public class UserController {
     private final AuthenticationService authService;
     @Autowired
     private final HmacService hmacService;
+    @Autowired
+    private final NotificationController notificationController;
 
     @PostMapping("/send")
     public String sendMail(@RequestParam(value = "file", required = false)MultipartFile[] file, String to, String subject, String body){
@@ -266,9 +268,10 @@ public class UserController {
         if (isSaved) {
             log.info("Permissions saved successfully. Admin:" + authService.removeDangerousCharacters(authService.getLoggedUser().getEmail()));
             MessageResponse response = new MessageResponse("Permissions saved successfully.");
+            notificationController.createNotification("Permissions saved successfully. Admin:" + authService.removeDangerousCharacters(authService.getLoggedUser().getEmail()));
             return ResponseEntity.ok(response);
         } else {
-            log.info("Permissions saved successfully.");
+            log.info("Error saving permissions.Admin:" + authService.removeDangerousCharacters(authService.getLoggedUser().getEmail()));
             MessageResponse response = new MessageResponse("Error saving permissions.Admin:" + authService.removeDangerousCharacters(authService.getLoggedUser().getEmail()));
             return ResponseEntity.badRequest().body(response);
         }
