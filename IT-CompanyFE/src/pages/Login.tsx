@@ -1,6 +1,9 @@
 import { SyntheticEvent, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { LoginResponse } from "../model/login-response";
+import SocketService from "./SocketService";
+
+
 
 export function Login() {
   const [email, setEmail] = useState("");
@@ -63,6 +66,27 @@ export function Login() {
         loginResponse = data
         if(loginResponse.message === "Successfully!"){
           localStorage.setItem('loggedUser', JSON.stringify(loginResponse));
+          if(loginResponse.role.name.toString()==="ADMINISTRATOR") {
+            SocketService.establishConnection();
+            fetch("https://localhost:8081/api/v1/notif/getAll", {
+                method: "GET",
+                headers: {
+                  "Content-type": "application/json",
+                },
+                credentials: "include"
+              }).then(res => res.json())
+                .then(notifications => {
+                  // Sacuvaj notifikacije u Local Storage
+                  localStorage.setItem('notifications', JSON.stringify(notifications));
+                  const unopenedNotifications = notifications.filter((notification: { opened: any; }) => !notification.opened);
+
+                  // Sacuvaj broj notifikacija u Local Storage
+                  localStorage.setItem('unopenedNotifications', unopenedNotifications.length.toString());
+                })
+                .catch(error => {
+                  console.error("Error while fetching notifications:", error);
+                });
+          }       
           navigate("/")
           return
         }else if(loginResponse.message === "Email or password are not correct!"){
@@ -80,6 +104,9 @@ export function Login() {
     })
 
   };
+
+
+  
 
   useEffect(() => {
     setPasswordError("");

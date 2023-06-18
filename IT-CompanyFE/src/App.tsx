@@ -23,10 +23,13 @@ import ManagerProjects from './pages/ManagerProjects';
 import Protected from './authorization/Protected';
 import SearchUsers from './pages/SearchUsers';
 import { QRLog } from './pages/QRLog';
+import LogViewer from './pages/Logs';
+import NotificationsPage from './pages/Notification';
 
 
 function App(){
   useEffect(() => {
+    
     document.title = "IT-Company";
   }, []);
 
@@ -57,6 +60,8 @@ function App(){
           <Route path="/careerPage" element={<Protected role={"SOFTWARE_ENGINEER"}><CareerPage/></Protected>} />
           <Route path="/employeeProjects" element={<Protected role={"SOFTWARE_ENGINEER"}><EmployeeProjects/></Protected>} />
           <Route path="/managerProjects" element={<Protected role={"PROJECT_MANAGER"}><ManagerProjects/></Protected>} />
+          <Route path="/logs" element={<Protected role={"ADMINISTRATOR"}><LogViewer/></Protected>} />
+          <Route path="/notifications" element={<Protected role={"ADMINISTRATOR"}><NotificationsPage/></Protected>} />
           <Route path="/qrlogin" element={<QRLog/>} />
         </Routes>
       </div>

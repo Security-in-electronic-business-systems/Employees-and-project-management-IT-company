@@ -1,5 +1,6 @@
 import { Link, useNavigate  } from 'react-router-dom';
 import { UseLoggedUser } from './hooks/UseLoggedUserInformation';
+import { Badge } from 'react-bootstrap';
   
 
 function Navbar() {
@@ -39,6 +40,12 @@ function Navbar() {
   };
 
   const loggedUser = UseLoggedUser()
+
+  const getUnopenedNotificationsCount = () => {
+    const unopenedNotifications = localStorage.getItem('unopenedNotifications');
+    console.log("ovoliko  "  +  unopenedNotifications);
+    return unopenedNotifications ? parseInt(unopenedNotifications) : 0;
+  };
 
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light" style={navStyle}>
@@ -105,6 +112,30 @@ function Navbar() {
             <li className="nav-item active">
           <Link className="nav-link" to="/search">SearchEngineers</Link>
         </li>)}
+        {loggedUser?.role.name.toString() === "ADMINISTRATOR"  && (
+            <li className="nav-item active">
+          <Link className="nav-link" to="/Logs">View Logs</Link>
+        </li>)}
+        
+        {loggedUser?.role.name.toString() === "ADMINISTRATOR" && (
+  <li className="nav-item active">
+    <Link className="nav-link" to="/notifications">
+      Notifications
+      <span className="position-relative">
+        <i className="bi bi-bell"></i>
+
+          <Badge bg="danger" className="position-absolute top-0 start-100 translate-middle">
+            {getUnopenedNotificationsCount()}
+            <span className="visually-hidden">unread notifications</span>
+          </Badge>
+
+      </span>
+    </Link>
+  </li>
+)}
+       
+
+
       </ul>
       <ul className="navbar-nav mr-auto" style={stylesRight}>
       <li className="nav-item active" >
