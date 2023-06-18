@@ -80,3 +80,204 @@
 19.06.2023. 00:35:57 | INFO  | [o.s.o.j.LocalContainerEntityManagerFactoryBean] | Closing JPA EntityManagerFactory for persistence unit 'default'
 19.06.2023. 00:35:57 | INFO  | [c.z.h.HikariDataSource] | HikariPool-1 - Shutdown initiated...
 19.06.2023. 00:35:57 | INFO  | [c.z.h.HikariDataSource] | HikariPool-1 - Shutdown completed.
+19.06.2023. 01:00:36 | INFO  | [c.S.I.ItCompanyApplication] | Starting ItCompanyApplication using Java 17 with PID 2516 (C:\Users\HP\Desktop\8.semestar\bezbednost\projekat\Employees-and-project-management-IT-company\IT-Company\target\classes started by HP in C:\Users\HP\Desktop\8.semestar\bezbednost\projekat\Employees-and-project-management-IT-company\IT-Company)
+19.06.2023. 01:00:36 | DEBUG | [c.S.I.ItCompanyApplication] | Running with Spring Boot v3.0.1, Spring v6.0.3
+19.06.2023. 01:00:36 | INFO  | [c.S.I.ItCompanyApplication] | No active profile set, falling back to 1 default profile: "default"
+19.06.2023. 01:00:39 | INFO  | [o.s.d.r.c.RepositoryConfigurationDelegate] | Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+19.06.2023. 01:00:39 | INFO  | [o.s.d.r.c.RepositoryConfigurationDelegate] | Finished Spring Data repository scanning in 288 ms. Found 12 JPA repository interfaces.
+19.06.2023. 01:00:41 | INFO  | [o.s.b.w.e.t.TomcatWebServer] | Tomcat initialized with port(s): 8081 (https)
+19.06.2023. 01:00:41 | INFO  | [o.a.c.h.Http11NioProtocol] | Initializing ProtocolHandler ["https-jsse-nio-8081"]
+19.06.2023. 01:00:41 | INFO  | [o.a.c.c.StandardService] | Starting service [Tomcat]
+19.06.2023. 01:00:41 | INFO  | [o.a.c.c.StandardEngine] | Starting Servlet engine: [Apache Tomcat/10.1.4]
+19.06.2023. 01:00:42 | INFO  | [o.a.c.c.C.[.[.[/]   ] | Initializing Spring embedded WebApplicationContext
+19.06.2023. 01:00:42 | INFO  | [o.s.b.w.s.c.ServletWebServerApplicationContext] | Root WebApplicationContext: initialization completed in 5220 ms
+19.06.2023. 01:00:42 | INFO  | [o.h.j.i.u.LogHelper ] | HHH000204: Processing PersistenceUnitInfo [name: default]
+19.06.2023. 01:00:42 | INFO  | [o.h.Version         ] | HHH000412: Hibernate ORM core version 6.1.6.Final
+19.06.2023. 01:00:42 | WARN  | [o.h.o.deprecation   ] | HHH90000021: Encountered deprecated setting [javax.persistence.sharedCache.mode], use [jakarta.persistence.sharedCache.mode] instead
+19.06.2023. 01:00:43 | INFO  | [c.z.h.HikariDataSource] | HikariPool-1 - Starting...
+19.06.2023. 01:00:43 | INFO  | [c.z.h.p.HikariPool  ] | HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@559d19c
+19.06.2023. 01:00:43 | INFO  | [c.z.h.HikariDataSource] | HikariPool-1 - Start completed.
+19.06.2023. 01:00:43 | INFO  | [SQL dialect         ] | HHH000400: Using dialect: org.hibernate.dialect.PostgreSQLDialect
+19.06.2023. 01:00:47 | WARN  | [o.h.t.s.i.ExceptionHandlerLoggedImpl] | GenerationTarget encountered exception accepting command : Error executing DDL "
+19.06.2023. 01:00:47 | INFO  | [o.h.e.t.j.p.i.JtaPlatformInitiator] | HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+19.06.2023. 01:00:47 | INFO  | [o.s.o.j.LocalContainerEntityManagerFactoryBean] | Initialized JPA EntityManagerFactory for persistence unit 'default'
+19.06.2023. 01:00:50 | DEBUG | [c.S.I.c.JwtAuthenticationFilter] | Filter 'jwtAuthenticationFilter' configured for use
+19.06.2023. 01:00:51 | WARN  | [o.s.b.w.s.c.AnnotationConfigServletWebServerApplicationContext] | Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'securityConfiguration' defined in file [C:\Users\HP\Desktop\8.semestar\bezbednost\projekat\Employees-and-project-management-IT-company\IT-Company\target\classes\com\SIEBS\ITCompany\config\SecurityConfiguration.class]: Unsatisfied dependency expressed through constructor parameter 2: Error creating bean with name 'logoutService' defined in file [C:\Users\HP\Desktop\8.semestar\bezbednost\projekat\Employees-and-project-management-IT-company\IT-Company\target\classes\com\SIEBS\ITCompany\service\LogoutService.class]: Unsatisfied dependency expressed through constructor parameter 1: Error creating bean with name 'userService' defined in file [C:\Users\HP\Desktop\8.semestar\bezbednost\projekat\Employees-and-project-management-IT-company\IT-Company\target\classes\com\SIEBS\ITCompany\service\UserService.class]: Unsatisfied dependency expressed through constructor parameter 8: Error creating bean with name 'authenticationService' defined in file [C:\Users\HP\Desktop\8.semestar\bezbednost\projekat\Employees-and-project-management-IT-company\IT-Company\target\classes\com\SIEBS\ITCompany\service\AuthenticationService.class]: Unsatisfied dependency expressed through constructor parameter 6: Error creating bean with name 'authenticationManager' defined in class path resource [com/SIEBS/ITCompany/config/ApplicationConfig.class]: Failed to instantiate [org.springframework.security.authentication.AuthenticationManager]: Factory method 'authenticationManager' threw exception with message: Error creating bean with name 'securityConfiguration': Requested bean is currently in creation: Is there an unresolvable circular reference?
+19.06.2023. 01:00:51 | INFO  | [o.s.o.j.LocalContainerEntityManagerFactoryBean] | Closing JPA EntityManagerFactory for persistence unit 'default'
+19.06.2023. 01:00:51 | INFO  | [c.z.h.HikariDataSource] | HikariPool-1 - Shutdown initiated...
+19.06.2023. 01:00:51 | INFO  | [c.z.h.HikariDataSource] | HikariPool-1 - Shutdown completed.
+19.06.2023. 01:00:51 | INFO  | [o.a.c.c.StandardService] | Stopping service [Tomcat]
+19.06.2023. 01:00:51 | INFO  | [o.s.b.a.l.ConditionEvaluationReportLogger] | 
+19.06.2023. 01:00:51 | ERROR | [o.s.b.d.LoggingFailureAnalysisReporter] | 
+19.06.2023. 01:01:29 | INFO  | [c.S.I.ItCompanyApplication] | Starting ItCompanyApplication using Java 17 with PID 13048 (C:\Users\HP\Desktop\8.semestar\bezbednost\projekat\Employees-and-project-management-IT-company\IT-Company\target\classes started by HP in C:\Users\HP\Desktop\8.semestar\bezbednost\projekat\Employees-and-project-management-IT-company\IT-Company)
+19.06.2023. 01:01:29 | DEBUG | [c.S.I.ItCompanyApplication] | Running with Spring Boot v3.0.1, Spring v6.0.3
+19.06.2023. 01:01:29 | INFO  | [c.S.I.ItCompanyApplication] | No active profile set, falling back to 1 default profile: "default"
+19.06.2023. 01:01:32 | INFO  | [o.s.d.r.c.RepositoryConfigurationDelegate] | Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+19.06.2023. 01:01:32 | INFO  | [o.s.d.r.c.RepositoryConfigurationDelegate] | Finished Spring Data repository scanning in 327 ms. Found 12 JPA repository interfaces.
+19.06.2023. 01:01:35 | INFO  | [o.s.b.w.e.t.TomcatWebServer] | Tomcat initialized with port(s): 8081 (https)
+19.06.2023. 01:01:35 | INFO  | [o.a.c.h.Http11NioProtocol] | Initializing ProtocolHandler ["https-jsse-nio-8081"]
+19.06.2023. 01:01:35 | INFO  | [o.a.c.c.StandardService] | Starting service [Tomcat]
+19.06.2023. 01:01:35 | INFO  | [o.a.c.c.StandardEngine] | Starting Servlet engine: [Apache Tomcat/10.1.4]
+19.06.2023. 01:01:35 | INFO  | [o.a.c.c.C.[.[.[/]   ] | Initializing Spring embedded WebApplicationContext
+19.06.2023. 01:01:35 | INFO  | [o.s.b.w.s.c.ServletWebServerApplicationContext] | Root WebApplicationContext: initialization completed in 5818 ms
+19.06.2023. 01:01:36 | INFO  | [o.h.j.i.u.LogHelper ] | HHH000204: Processing PersistenceUnitInfo [name: default]
+19.06.2023. 01:01:36 | INFO  | [o.h.Version         ] | HHH000412: Hibernate ORM core version 6.1.6.Final
+19.06.2023. 01:01:36 | WARN  | [o.h.o.deprecation   ] | HHH90000021: Encountered deprecated setting [javax.persistence.sharedCache.mode], use [jakarta.persistence.sharedCache.mode] instead
+19.06.2023. 01:01:36 | INFO  | [c.z.h.HikariDataSource] | HikariPool-1 - Starting...
+19.06.2023. 01:01:37 | INFO  | [c.z.h.p.HikariPool  ] | HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@3b770d07
+19.06.2023. 01:01:37 | INFO  | [c.z.h.HikariDataSource] | HikariPool-1 - Start completed.
+19.06.2023. 01:01:37 | INFO  | [SQL dialect         ] | HHH000400: Using dialect: org.hibernate.dialect.PostgreSQLDialect
+19.06.2023. 01:01:40 | WARN  | [o.h.e.j.s.SqlExceptionHelper] | SQL Warning Code: 0, SQLState: 00000
+19.06.2023. 01:01:40 | WARN  | [o.h.e.j.s.SqlExceptionHelper] | constraint "uk_pddrhgwxnms2aceeku9s2ewy5" of relation "token" does not exist, skipping
+19.06.2023. 01:01:40 | INFO  | [o.h.e.t.j.p.i.JtaPlatformInitiator] | HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+19.06.2023. 01:01:40 | INFO  | [o.s.o.j.LocalContainerEntityManagerFactoryBean] | Initialized JPA EntityManagerFactory for persistence unit 'default'
+19.06.2023. 01:01:42 | DEBUG | [c.S.I.c.JwtAuthenticationFilter] | Filter 'jwtAuthenticationFilter' configured for use
+19.06.2023. 01:01:42 | WARN  | [o.s.b.w.s.c.AnnotationConfigServletWebServerApplicationContext] | Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'securityConfiguration' defined in file [C:\Users\HP\Desktop\8.semestar\bezbednost\projekat\Employees-and-project-management-IT-company\IT-Company\target\classes\com\SIEBS\ITCompany\config\SecurityConfiguration.class]: Unsatisfied dependency expressed through constructor parameter 2: Error creating bean with name 'logoutService' defined in file [C:\Users\HP\Desktop\8.semestar\bezbednost\projekat\Employees-and-project-management-IT-company\IT-Company\target\classes\com\SIEBS\ITCompany\service\LogoutService.class]: Unsatisfied dependency expressed through constructor parameter 1: Error creating bean with name 'userService' defined in file [C:\Users\HP\Desktop\8.semestar\bezbednost\projekat\Employees-and-project-management-IT-company\IT-Company\target\classes\com\SIEBS\ITCompany\service\UserService.class]: Unsatisfied dependency expressed through constructor parameter 8: Error creating bean with name 'authenticationService' defined in file [C:\Users\HP\Desktop\8.semestar\bezbednost\projekat\Employees-and-project-management-IT-company\IT-Company\target\classes\com\SIEBS\ITCompany\service\AuthenticationService.class]: Unsatisfied dependency expressed through constructor parameter 6: Error creating bean with name 'authenticationManager' defined in class path resource [com/SIEBS/ITCompany/config/ApplicationConfig.class]: Failed to instantiate [org.springframework.security.authentication.AuthenticationManager]: Factory method 'authenticationManager' threw exception with message: Error creating bean with name 'securityConfiguration': Requested bean is currently in creation: Is there an unresolvable circular reference?
+19.06.2023. 01:01:42 | INFO  | [o.s.o.j.LocalContainerEntityManagerFactoryBean] | Closing JPA EntityManagerFactory for persistence unit 'default'
+19.06.2023. 01:01:42 | INFO  | [c.z.h.HikariDataSource] | HikariPool-1 - Shutdown initiated...
+19.06.2023. 01:01:42 | INFO  | [c.z.h.HikariDataSource] | HikariPool-1 - Shutdown completed.
+19.06.2023. 01:01:42 | INFO  | [o.a.c.c.StandardService] | Stopping service [Tomcat]
+19.06.2023. 01:01:42 | INFO  | [o.s.b.a.l.ConditionEvaluationReportLogger] | 
+19.06.2023. 01:01:42 | ERROR | [o.s.b.d.LoggingFailureAnalysisReporter] | 
+19.06.2023. 01:06:42 | INFO  | [c.S.I.ItCompanyApplication] | Starting ItCompanyApplication using Java 17 with PID 15132 (C:\Users\HP\Desktop\8.semestar\bezbednost\projekat\Employees-and-project-management-IT-company\IT-Company\target\classes started by HP in C:\Users\HP\Desktop\8.semestar\bezbednost\projekat\Employees-and-project-management-IT-company\IT-Company)
+19.06.2023. 01:06:42 | DEBUG | [c.S.I.ItCompanyApplication] | Running with Spring Boot v3.0.1, Spring v6.0.3
+19.06.2023. 01:06:42 | INFO  | [c.S.I.ItCompanyApplication] | No active profile set, falling back to 1 default profile: "default"
+19.06.2023. 01:06:43 | INFO  | [o.s.d.r.c.RepositoryConfigurationDelegate] | Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+19.06.2023. 01:06:44 | INFO  | [o.s.d.r.c.RepositoryConfigurationDelegate] | Finished Spring Data repository scanning in 214 ms. Found 12 JPA repository interfaces.
+19.06.2023. 01:06:45 | INFO  | [o.s.b.w.e.t.TomcatWebServer] | Tomcat initialized with port(s): 8081 (https)
+19.06.2023. 01:06:45 | INFO  | [o.a.c.h.Http11NioProtocol] | Initializing ProtocolHandler ["https-jsse-nio-8081"]
+19.06.2023. 01:06:45 | INFO  | [o.a.c.c.StandardService] | Starting service [Tomcat]
+19.06.2023. 01:06:45 | INFO  | [o.a.c.c.StandardEngine] | Starting Servlet engine: [Apache Tomcat/10.1.4]
+19.06.2023. 01:06:46 | INFO  | [o.a.c.c.C.[.[.[/]   ] | Initializing Spring embedded WebApplicationContext
+19.06.2023. 01:06:46 | INFO  | [o.s.b.w.s.c.ServletWebServerApplicationContext] | Root WebApplicationContext: initialization completed in 3856 ms
+19.06.2023. 01:06:46 | INFO  | [o.h.j.i.u.LogHelper ] | HHH000204: Processing PersistenceUnitInfo [name: default]
+19.06.2023. 01:06:46 | INFO  | [o.h.Version         ] | HHH000412: Hibernate ORM core version 6.1.6.Final
+19.06.2023. 01:06:47 | WARN  | [o.h.o.deprecation   ] | HHH90000021: Encountered deprecated setting [javax.persistence.sharedCache.mode], use [jakarta.persistence.sharedCache.mode] instead
+19.06.2023. 01:06:47 | INFO  | [c.z.h.HikariDataSource] | HikariPool-1 - Starting...
+19.06.2023. 01:06:47 | INFO  | [c.z.h.p.HikariPool  ] | HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@38732372
+19.06.2023. 01:06:47 | INFO  | [c.z.h.HikariDataSource] | HikariPool-1 - Start completed.
+19.06.2023. 01:06:47 | INFO  | [SQL dialect         ] | HHH000400: Using dialect: org.hibernate.dialect.PostgreSQLDialect
+19.06.2023. 01:06:50 | INFO  | [o.h.e.t.j.p.i.JtaPlatformInitiator] | HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+19.06.2023. 01:06:50 | INFO  | [o.s.o.j.LocalContainerEntityManagerFactoryBean] | Initialized JPA EntityManagerFactory for persistence unit 'default'
+19.06.2023. 01:06:52 | DEBUG | [c.S.I.c.JwtAuthenticationFilter] | Filter 'jwtAuthenticationFilter' configured for use
+19.06.2023. 01:06:53 | WARN  | [o.s.b.w.s.c.AnnotationConfigServletWebServerApplicationContext] | Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'authenticationController' defined in file [C:\Users\HP\Desktop\8.semestar\bezbednost\projekat\Employees-and-project-management-IT-company\IT-Company\target\classes\com\SIEBS\ITCompany\controller\AuthenticationController.class]: Unsatisfied dependency expressed through constructor parameter 0: Error creating bean with name 'authenticationService' defined in file [C:\Users\HP\Desktop\8.semestar\bezbednost\projekat\Employees-and-project-management-IT-company\IT-Company\target\classes\com\SIEBS\ITCompany\service\AuthenticationService.class]: Unsatisfied dependency expressed through constructor parameter 11: Error creating bean with name 'userService' defined in file [C:\Users\HP\Desktop\8.semestar\bezbednost\projekat\Employees-and-project-management-IT-company\IT-Company\target\classes\com\SIEBS\ITCompany\service\UserService.class]: Unsatisfied dependency expressed through constructor parameter 8: Error creating bean with name 'authenticationService': Requested bean is currently in creation: Is there an unresolvable circular reference?
+19.06.2023. 01:06:53 | INFO  | [o.s.o.j.LocalContainerEntityManagerFactoryBean] | Closing JPA EntityManagerFactory for persistence unit 'default'
+19.06.2023. 01:06:53 | INFO  | [c.z.h.HikariDataSource] | HikariPool-1 - Shutdown initiated...
+19.06.2023. 01:06:53 | INFO  | [c.z.h.HikariDataSource] | HikariPool-1 - Shutdown completed.
+19.06.2023. 01:06:53 | INFO  | [o.a.c.c.StandardService] | Stopping service [Tomcat]
+19.06.2023. 01:06:53 | INFO  | [o.s.b.a.l.ConditionEvaluationReportLogger] | 
+19.06.2023. 01:06:53 | ERROR | [o.s.b.d.LoggingFailureAnalysisReporter] | 
+19.06.2023. 01:09:17 | INFO  | [c.S.I.ItCompanyApplication] | Starting ItCompanyApplication using Java 17 with PID 1960 (C:\Users\HP\Desktop\8.semestar\bezbednost\projekat\Employees-and-project-management-IT-company\IT-Company\target\classes started by HP in C:\Users\HP\Desktop\8.semestar\bezbednost\projekat\Employees-and-project-management-IT-company\IT-Company)
+19.06.2023. 01:09:17 | DEBUG | [c.S.I.ItCompanyApplication] | Running with Spring Boot v3.0.1, Spring v6.0.3
+19.06.2023. 01:09:17 | INFO  | [c.S.I.ItCompanyApplication] | No active profile set, falling back to 1 default profile: "default"
+19.06.2023. 01:09:19 | INFO  | [o.s.d.r.c.RepositoryConfigurationDelegate] | Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+19.06.2023. 01:09:19 | INFO  | [o.s.d.r.c.RepositoryConfigurationDelegate] | Finished Spring Data repository scanning in 210 ms. Found 12 JPA repository interfaces.
+19.06.2023. 01:09:20 | INFO  | [o.s.b.w.e.t.TomcatWebServer] | Tomcat initialized with port(s): 8081 (https)
+19.06.2023. 01:09:20 | INFO  | [o.a.c.h.Http11NioProtocol] | Initializing ProtocolHandler ["https-jsse-nio-8081"]
+19.06.2023. 01:09:20 | INFO  | [o.a.c.c.StandardService] | Starting service [Tomcat]
+19.06.2023. 01:09:20 | INFO  | [o.a.c.c.StandardEngine] | Starting Servlet engine: [Apache Tomcat/10.1.4]
+19.06.2023. 01:09:21 | INFO  | [o.a.c.c.C.[.[.[/]   ] | Initializing Spring embedded WebApplicationContext
+19.06.2023. 01:09:21 | INFO  | [o.s.b.w.s.c.ServletWebServerApplicationContext] | Root WebApplicationContext: initialization completed in 3682 ms
+19.06.2023. 01:09:21 | INFO  | [o.h.j.i.u.LogHelper ] | HHH000204: Processing PersistenceUnitInfo [name: default]
+19.06.2023. 01:09:21 | INFO  | [o.h.Version         ] | HHH000412: Hibernate ORM core version 6.1.6.Final
+19.06.2023. 01:09:22 | WARN  | [o.h.o.deprecation   ] | HHH90000021: Encountered deprecated setting [javax.persistence.sharedCache.mode], use [jakarta.persistence.sharedCache.mode] instead
+19.06.2023. 01:09:22 | INFO  | [c.z.h.HikariDataSource] | HikariPool-1 - Starting...
+19.06.2023. 01:09:22 | INFO  | [c.z.h.p.HikariPool  ] | HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@6ba6557e
+19.06.2023. 01:09:22 | INFO  | [c.z.h.HikariDataSource] | HikariPool-1 - Start completed.
+19.06.2023. 01:09:22 | INFO  | [SQL dialect         ] | HHH000400: Using dialect: org.hibernate.dialect.PostgreSQLDialect
+19.06.2023. 01:09:25 | INFO  | [o.h.e.t.j.p.i.JtaPlatformInitiator] | HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+19.06.2023. 01:09:25 | INFO  | [o.s.o.j.LocalContainerEntityManagerFactoryBean] | Initialized JPA EntityManagerFactory for persistence unit 'default'
+19.06.2023. 01:09:27 | DEBUG | [c.S.I.c.JwtAuthenticationFilter] | Filter 'jwtAuthenticationFilter' configured for use
+19.06.2023. 01:09:28 | WARN  | [o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration] | spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+19.06.2023. 01:09:29 | INFO  | [o.s.s.w.DefaultSecurityFilterChain] | Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@71c77042, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@665fb1d8, org.springframework.security.web.context.SecurityContextHolderFilter@4a6c33a0, org.springframework.security.web.header.HeaderWriterFilter@12e5f7cb, org.springframework.web.filter.CorsFilter@142ac60e, org.springframework.security.web.authentication.logout.LogoutFilter@480b785a, com.SIEBS.ITCompany.config.JwtAuthenticationFilter@49c74506, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter@5188c0f2, org.springframework.security.web.authentication.ui.DefaultLoginPageGeneratingFilter@62c019bb, org.springframework.security.web.authentication.ui.DefaultLogoutPageGeneratingFilter@43376a03, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@36d1ac55, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@3da76d3a, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@9b84747, org.springframework.security.web.session.SessionManagementFilter@6d821475, org.springframework.security.web.access.ExceptionTranslationFilter@4ff1f872, org.springframework.security.web.access.intercept.AuthorizationFilter@3a7e13c0]
+19.06.2023. 01:09:29 | INFO  | [o.a.c.h.Http11NioProtocol] | Starting ProtocolHandler ["https-jsse-nio-8081"]
+19.06.2023. 01:09:30 | INFO  | [o.s.b.w.e.t.TomcatWebServer] | Tomcat started on port(s): 8081 (https) with context path ''
+19.06.2023. 01:09:30 | INFO  | [o.s.m.s.b.SimpleBrokerMessageHandler] | Starting...
+19.06.2023. 01:09:30 | INFO  | [o.s.m.s.b.SimpleBrokerMessageHandler] | BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@57753d41]]
+19.06.2023. 01:09:30 | INFO  | [o.s.m.s.b.SimpleBrokerMessageHandler] | Started.
+19.06.2023. 01:09:30 | INFO  | [c.S.I.ItCompanyApplication] | Started ItCompanyApplication in 13.543 seconds (process running for 14.761)
+19.06.2023. 01:10:29 | INFO  | [o.s.w.s.c.WebSocketMessageBrokerStats] | WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], sockJsScheduler[pool size = 1, active threads = 1, queued tasks = 0, completed tasks = 0]
+19.06.2023. 01:11:13 | INFO  | [o.a.c.c.C.[.[.[/]   ] | Initializing Spring DispatcherServlet 'dispatcherServlet'
+19.06.2023. 01:11:13 | INFO  | [o.s.w.s.DispatcherServlet] | Initializing Servlet 'dispatcherServlet'
+19.06.2023. 01:11:13 | INFO  | [o.s.w.s.DispatcherServlet] | Completed initialization in 3 ms
+19.06.2023. 01:11:14 | INFO  | [c.S.I.s.KeystoreService] | New key store created
+19.06.2023. 01:11:14 | INFO  | [c.S.I.s.KeystoreService] | Secret key successfully added to keystore. Alias: kralusdanijela@gmail.com
+19.06.2023. 01:11:14 | INFO  | [c.S.I.s.AuthenticationService] | Registration success. Email:kralusdanijela@gmail.com
+19.06.2023. 01:11:23 | WARN  | [c.S.I.s.AuthenticationService] | Login failed. Account are not approved by administrator. Email: kralusdanijela@gmail.com
+19.06.2023. 01:11:23 | ERROR | [o.a.c.c.C.[.[.[.[dispatcherServlet]] | Servlet.service() for servlet [dispatcherServlet] in context with path [] threw exception [Request processing failed: java.lang.NullPointerException: Cannot invoke "com.SIEBS.ITCompany.model.User.getEmail()" because the return value of "com.SIEBS.ITCompany.service.AuthenticationService.getLoggedUser()" is null] with root cause
+19.06.2023. 01:11:27 | WARN  | [c.S.I.s.AuthenticationService] | Login failed. Account are not approved by administrator. Email: kralusdanijela@gmail.com
+19.06.2023. 01:11:27 | ERROR | [o.a.c.c.C.[.[.[.[dispatcherServlet]] | Servlet.service() for servlet [dispatcherServlet] in context with path [] threw exception [Request processing failed: java.lang.NullPointerException: Cannot invoke "com.SIEBS.ITCompany.model.User.getEmail()" because the return value of "com.SIEBS.ITCompany.service.AuthenticationService.getLoggedUser()" is null] with root cause
+19.06.2023. 01:11:55 | INFO  | [c.S.I.s.AuthenticationService] | Login success! Email: kralusdanijela@gmail.com
+19.06.2023. 01:12:00 | ERROR | [c.S.I.s.PermissionService] | Permission denied. User: kralusdanijela@gmail.compermission: GET_USER
+19.06.2023. 01:12:00 | ERROR | [c.S.I.s.PermissionService] | Permission denied. User: kralusdanijela@gmail.compermission: GET_USER
+19.06.2023. 01:12:08 | ERROR | [c.S.I.s.PermissionService] | Permission denied. User: kralusdanijela@gmail.compermission: GET_ALL_SKILL
+19.06.2023. 01:12:08 | ERROR | [c.S.I.s.PermissionService] | Permission denied. User: kralusdanijela@gmail.compermission: GET_ALL_SKILL
+19.06.2023. 01:12:10 | ERROR | [c.S.I.s.PermissionService] | Permission denied. User: kralusdanijela@gmail.compermission: GET_EMPLOYEE_PROJECTS
+19.06.2023. 01:12:10 | ERROR | [c.S.I.s.PermissionService] | Permission denied. User: kralusdanijela@gmail.compermission: GET_EMPLOYEE_PROJECTS
+19.06.2023. 01:12:11 | ERROR | [c.S.I.s.PermissionService] | Permission denied. User: kralusdanijela@gmail.compermission: GET_ALL_SKILL
+19.06.2023. 01:12:11 | ERROR | [c.S.I.s.PermissionService] | Permission denied. User: kralusdanijela@gmail.compermission: GET_ALL_SKILL
+19.06.2023. 01:12:49 | INFO  | [c.S.I.s.AuthenticationService] | Login success! Email: kralusdanijela@gmail.com
+19.06.2023. 01:12:56 | ERROR | [o.s.w.s.m.WebSocketAnnotationMethodMessageHandler] | Unhandled exception from message handler method
+19.06.2023. 01:13:01 | ERROR | [o.s.w.s.m.WebSocketAnnotationMethodMessageHandler] | Unhandled exception from message handler method
+19.06.2023. 01:13:06 | ERROR | [o.s.w.s.m.WebSocketAnnotationMethodMessageHandler] | Unhandled exception from message handler method
+19.06.2023. 01:13:11 | ERROR | [o.s.w.s.m.WebSocketAnnotationMethodMessageHandler] | Unhandled exception from message handler method
+19.06.2023. 01:13:16 | ERROR | [o.s.w.s.m.WebSocketAnnotationMethodMessageHandler] | Unhandled exception from message handler method
+19.06.2023. 01:13:21 | ERROR | [o.s.w.s.m.WebSocketAnnotationMethodMessageHandler] | Unhandled exception from message handler method
+19.06.2023. 01:13:26 | ERROR | [o.s.w.s.m.WebSocketAnnotationMethodMessageHandler] | Unhandled exception from message handler method
+19.06.2023. 01:13:31 | ERROR | [o.s.w.s.m.WebSocketAnnotationMethodMessageHandler] | Unhandled exception from message handler method
+19.06.2023. 01:13:35 | INFO  | [c.S.I.s.AuthenticationService] | Login success! Email: kralusdanijela@gmail.com
+19.06.2023. 01:13:42 | ERROR | [o.s.w.s.m.WebSocketAnnotationMethodMessageHandler] | Unhandled exception from message handler method
+19.06.2023. 01:13:47 | ERROR | [o.s.w.s.m.WebSocketAnnotationMethodMessageHandler] | Unhandled exception from message handler method
+19.06.2023. 01:13:52 | ERROR | [o.s.w.s.m.WebSocketAnnotationMethodMessageHandler] | Unhandled exception from message handler method
+19.06.2023. 01:13:57 | ERROR | [o.s.w.s.m.WebSocketAnnotationMethodMessageHandler] | Unhandled exception from message handler method
+19.06.2023. 01:14:03 | ERROR | [o.s.w.s.m.WebSocketAnnotationMethodMessageHandler] | Unhandled exception from message handler method
+19.06.2023. 01:14:06 | INFO  | [o.s.m.s.b.SimpleBrokerMessageHandler] | Stopping...
+19.06.2023. 01:14:06 | INFO  | [o.s.m.s.b.SimpleBrokerMessageHandler] | BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@57753d41]]
+19.06.2023. 01:14:06 | INFO  | [o.s.m.s.b.SimpleBrokerMessageHandler] | Stopped.
+19.06.2023. 01:14:06 | INFO  | [o.s.o.j.LocalContainerEntityManagerFactoryBean] | Closing JPA EntityManagerFactory for persistence unit 'default'
+19.06.2023. 01:14:06 | INFO  | [c.z.h.HikariDataSource] | HikariPool-1 - Shutdown initiated...
+19.06.2023. 01:14:06 | INFO  | [c.z.h.HikariDataSource] | HikariPool-1 - Shutdown completed.
+19.06.2023. 01:15:47 | INFO  | [c.S.I.ItCompanyApplication] | Starting ItCompanyApplication using Java 17 with PID 3900 (C:\Users\HP\Desktop\8.semestar\bezbednost\projekat\Employees-and-project-management-IT-company\IT-Company\target\classes started by HP in C:\Users\HP\Desktop\8.semestar\bezbednost\projekat\Employees-and-project-management-IT-company\IT-Company)
+19.06.2023. 01:15:47 | DEBUG | [c.S.I.ItCompanyApplication] | Running with Spring Boot v3.0.1, Spring v6.0.3
+19.06.2023. 01:15:47 | INFO  | [c.S.I.ItCompanyApplication] | No active profile set, falling back to 1 default profile: "default"
+19.06.2023. 01:15:50 | INFO  | [o.s.d.r.c.RepositoryConfigurationDelegate] | Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+19.06.2023. 01:15:50 | INFO  | [o.s.d.r.c.RepositoryConfigurationDelegate] | Finished Spring Data repository scanning in 308 ms. Found 12 JPA repository interfaces.
+19.06.2023. 01:15:53 | INFO  | [o.s.b.w.e.t.TomcatWebServer] | Tomcat initialized with port(s): 8081 (https)
+19.06.2023. 01:15:53 | INFO  | [o.a.c.h.Http11NioProtocol] | Initializing ProtocolHandler ["https-jsse-nio-8081"]
+19.06.2023. 01:15:53 | INFO  | [o.a.c.c.StandardService] | Starting service [Tomcat]
+19.06.2023. 01:15:53 | INFO  | [o.a.c.c.StandardEngine] | Starting Servlet engine: [Apache Tomcat/10.1.4]
+19.06.2023. 01:15:54 | INFO  | [o.a.c.c.C.[.[.[/]   ] | Initializing Spring embedded WebApplicationContext
+19.06.2023. 01:15:54 | INFO  | [o.s.b.w.s.c.ServletWebServerApplicationContext] | Root WebApplicationContext: initialization completed in 6836 ms
+19.06.2023. 01:15:54 | INFO  | [o.h.j.i.u.LogHelper ] | HHH000204: Processing PersistenceUnitInfo [name: default]
+19.06.2023. 01:15:55 | INFO  | [o.h.Version         ] | HHH000412: Hibernate ORM core version 6.1.6.Final
+19.06.2023. 01:15:55 | WARN  | [o.h.o.deprecation   ] | HHH90000021: Encountered deprecated setting [javax.persistence.sharedCache.mode], use [jakarta.persistence.sharedCache.mode] instead
+19.06.2023. 01:15:56 | INFO  | [c.z.h.HikariDataSource] | HikariPool-1 - Starting...
+19.06.2023. 01:15:57 | INFO  | [c.z.h.p.HikariPool  ] | HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@9e33a6a
+19.06.2023. 01:15:57 | INFO  | [c.z.h.HikariDataSource] | HikariPool-1 - Start completed.
+19.06.2023. 01:15:57 | INFO  | [SQL dialect         ] | HHH000400: Using dialect: org.hibernate.dialect.PostgreSQLDialect
+19.06.2023. 01:16:01 | INFO  | [o.h.e.t.j.p.i.JtaPlatformInitiator] | HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+19.06.2023. 01:16:01 | INFO  | [o.s.o.j.LocalContainerEntityManagerFactoryBean] | Initialized JPA EntityManagerFactory for persistence unit 'default'
+19.06.2023. 01:16:03 | DEBUG | [c.S.I.c.JwtAuthenticationFilter] | Filter 'jwtAuthenticationFilter' configured for use
+19.06.2023. 01:16:04 | WARN  | [o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration] | spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+19.06.2023. 01:16:05 | INFO  | [o.s.s.w.DefaultSecurityFilterChain] | Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@35427786, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@6554f841, org.springframework.security.web.context.SecurityContextHolderFilter@53628ff6, org.springframework.security.web.header.HeaderWriterFilter@23e0ef68, org.springframework.web.filter.CorsFilter@1bef1304, org.springframework.security.web.authentication.logout.LogoutFilter@190677c6, com.SIEBS.ITCompany.config.JwtAuthenticationFilter@42626e86, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter@2e3fdf30, org.springframework.security.web.authentication.ui.DefaultLoginPageGeneratingFilter@4ff1f872, org.springframework.security.web.authentication.ui.DefaultLogoutPageGeneratingFilter@835718b, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@3841e77a, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@d2161b6, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@2e6dc94c, org.springframework.security.web.session.SessionManagementFilter@27449f65, org.springframework.security.web.access.ExceptionTranslationFilter@5b71ccf2, org.springframework.security.web.access.intercept.AuthorizationFilter@43e7ca6f]
+19.06.2023. 01:16:06 | INFO  | [o.a.c.h.Http11NioProtocol] | Starting ProtocolHandler ["https-jsse-nio-8081"]
+19.06.2023. 01:16:07 | INFO  | [o.s.b.w.e.t.TomcatWebServer] | Tomcat started on port(s): 8081 (https) with context path ''
+19.06.2023. 01:16:07 | INFO  | [o.s.m.s.b.SimpleBrokerMessageHandler] | Starting...
+19.06.2023. 01:16:07 | INFO  | [o.s.m.s.b.SimpleBrokerMessageHandler] | BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@4d619aa0]]
+19.06.2023. 01:16:07 | INFO  | [o.s.m.s.b.SimpleBrokerMessageHandler] | Started.
+19.06.2023. 01:16:07 | INFO  | [c.S.I.ItCompanyApplication] | Started ItCompanyApplication in 21.088 seconds (process running for 22.766)
+19.06.2023. 01:16:13 | INFO  | [o.a.c.c.C.[.[.[/]   ] | Initializing Spring DispatcherServlet 'dispatcherServlet'
+19.06.2023. 01:16:13 | INFO  | [o.s.w.s.DispatcherServlet] | Initializing Servlet 'dispatcherServlet'
+19.06.2023. 01:16:13 | INFO  | [o.s.w.s.DispatcherServlet] | Completed initialization in 3 ms
+19.06.2023. 01:16:16 | INFO  | [c.S.I.s.AuthenticationService] | Login success! Email: kralusdanijela@gmail.com
+19.06.2023. 01:17:05 | INFO  | [o.s.w.s.c.WebSocketMessageBrokerStats] | WebSocketSession[3 current WS(3)-HttpStream(0)-HttpPoll(0), 3 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(3)-CONNECTED(3)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 8, active threads = 0, queued tasks = 0, completed tasks = 42], outboundChannel[pool size = 8, active threads = 0, queued tasks = 0, completed tasks = 19], sockJsScheduler[pool size = 4, active threads = 1, queued tasks = 4, completed tasks = 11]
+19.06.2023. 01:17:09 | ERROR | [c.S.I.s.AuthenticationService] | Email or password are not correct. Email: kralusdanijela@gmail.com1
+19.06.2023. 01:17:15 | INFO  | [c.S.I.s.AuthenticationService] | Login success! Email: kralusdanijela@gmail.com
+19.06.2023. 01:17:20 | ERROR | [c.S.I.s.PermissionService] | Permission denied. User: kralusdanijela@gmail.compermission: GET_USER
+19.06.2023. 01:17:20 | ERROR | [c.S.I.s.PermissionService] | Permission denied. User: kralusdanijela@gmail.compermission: GET_USER
+19.06.2023. 01:18:03 | INFO  | [o.s.m.s.b.SimpleBrokerMessageHandler] | Stopping...
+19.06.2023. 01:18:03 | INFO  | [o.s.m.s.b.SimpleBrokerMessageHandler] | BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@4d619aa0]]
+19.06.2023. 01:18:03 | INFO  | [o.s.m.s.b.SimpleBrokerMessageHandler] | Stopped.
+19.06.2023. 01:18:03 | INFO  | [o.s.o.j.LocalContainerEntityManagerFactoryBean] | Closing JPA EntityManagerFactory for persistence unit 'default'
+19.06.2023. 01:18:03 | INFO  | [c.z.h.HikariDataSource] | HikariPool-1 - Shutdown initiated...
+19.06.2023. 01:18:03 | INFO  | [c.z.h.HikariDataSource] | HikariPool-1 - Shutdown completed.

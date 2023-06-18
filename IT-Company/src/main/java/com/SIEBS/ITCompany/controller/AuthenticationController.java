@@ -42,7 +42,7 @@ public class AuthenticationController {
           @RequestBody AuthenticationRequest request,
           HttpServletResponse response
 
-  ) {
+  ) throws Exception {
     AuthenticationResponse authResponse = service.authenticate(request);
 
     if (authResponse != null) {
@@ -109,7 +109,8 @@ public class AuthenticationController {
 
   @GetMapping("/register/verificate")
   public ResponseEntity<MessageResponse> verificateRegistration(
-          @RequestParam("token") String token,@RequestParam("email") String email,
+          @RequestParam("token") String token,
+          @RequestParam("email") String email,
           HttpServletRequest request,
           HttpServletResponse response
   ) {

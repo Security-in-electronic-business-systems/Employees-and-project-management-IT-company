@@ -31,24 +31,30 @@ public class LogService {
             try (BufferedReader br = new BufferedReader(new FileReader(logFile))) {
                 String line;
                 while ((line = br.readLine()) != null) {
-                    String[] parts = line.split("\\|", 4);
+                    try {
+                        String[] parts = line.split("\\|", 4);
 
-                    String logTimestampStr = parts[0].trim();
-                    LocalDateTime logTimestamp = LocalDateTime.parse(logTimestampStr, formatter);
+                        String logTimestampStr = parts[0].trim();
+                        LocalDateTime logTimestamp = LocalDateTime.parse(logTimestampStr, formatter);
 
-                    if (logTimestamp.isAfter(twentyFourHoursAgo) && logTimestamp.isBefore(now)) {
-                        Date date = convertToDate(logTimestamp);
-                        String type = parts[1].trim();
-                        String component = parts[2].trim();
-                        String message = parts[3].trim();
+                        if (logTimestamp.isAfter(twentyFourHoursAgo) && logTimestamp.isBefore(now)) {
+                            Date date = convertToDate(logTimestamp);
+                            String type = parts[1].trim();
+                            String component = parts[2].trim();
+                            String message = parts[3].trim();
 
-                        Logs log = new Logs(date, type, component, message);
-                        logs.add(log);
+                            Logs log = new Logs(date, type, component, message);
+                            logs.add(log);
+                        }
+                    } catch (Exception e) {
+                        // Preskači red u slučaju izuzetka
+                        continue;
                     }
                 }
             } catch (IOException e) {
                 // Handle exception
             }
+
         }
 
         return logs;

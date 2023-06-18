@@ -1,6 +1,7 @@
 package com.SIEBS.ITCompany.service;
 
 import com.SIEBS.ITCompany.model.Notification;
+import com.SIEBS.ITCompany.model.User;
 import com.SIEBS.ITCompany.repository.NotificationRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,7 +16,7 @@ import java.util.Optional;
 @Slf4j
 public class NotificationService {
     private final NotificationRepository notificationRepository;
-
+    private User loggedUser;
     public List<Notification> getAll(){
         List<Notification> not = notificationRepository.findAll();
         return not;
@@ -40,5 +41,16 @@ public class NotificationService {
             // Implementacija logike za spremanje promjene u bazu podataka
             notificationRepository.save(notification);
         }
+    }
+    public User getLoggedUser() {
+        return loggedUser;
+    }
+
+    public void logoutLoggedUser() {
+        this.loggedUser = null;
+    }
+
+    public void setLoggedUser(User loggedUser) {
+        this.loggedUser = loggedUser;
     }
 }

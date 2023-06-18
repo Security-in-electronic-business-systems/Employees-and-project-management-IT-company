@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service;
 public class LogoutService implements LogoutHandler {
 
   private final TokenRepository tokenRepository;
-  private final UserService userService;
+  private final NotificationService notificationService;
 
   @Override
   public void logout(
@@ -28,7 +28,7 @@ public class LogoutService implements LogoutHandler {
   ) {
 
     deleteAllCookies(response);
-    userService.logoutLoggedUser();
+    notificationService.logoutLoggedUser();
     String jwt = getAccessTokenFromCookie(request);
     if(jwt == ""){
       return;

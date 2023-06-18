@@ -14,8 +14,6 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -23,6 +21,7 @@ import java.util.List;
 @Data
 @Builder
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "_user")
 public class User implements UserDetails {
@@ -36,6 +35,7 @@ public class User implements UserDetails {
   private String password;
   private String phoneNumber;
   private boolean isApproved;
+  private boolean isBlocked;
   @DateTimeFormat(pattern = "dd/MM/yyyy HH:mm")
   private Date registrationDate;
   private String title;

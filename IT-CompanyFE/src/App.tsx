@@ -13,6 +13,7 @@ import Profil from './pages/Profil';
 import SessionExpired from './pages/SessionExpired';
 import TokenExpired from './pages/TokenExpired';import RegisterAdmin from './pages/RegisterAdmin';
 import ViewRegistrationRequests from './pages/ViewRegistrationRequests';
+import ChangePassword from './pages/ChangePassword';
 import HMACVerification from './pages/HMACVerification';
 import RolePermissions from './pages/RolePermissions';
 import EnginerProfil from './pages/EnginerProfil';
@@ -21,11 +22,12 @@ import CareerPage from './pages/CareerPage';
 import EmployeeProjects from './pages/EmployeeProjects';
 import ManagerProjects from './pages/ManagerProjects';
 import Protected from './authorization/Protected';
+import { ForgotPassword } from './pages/ForgotPassword';
+import ChangeForgotPassword from './pages/ChangeForgotPassword';
 import SearchUsers from './pages/SearchUsers';
 import { QRLog } from './pages/QRLog';
 import LogViewer from './pages/Logs';
 import NotificationsPage from './pages/Notification';
-
 
 function App(){
   useEffect(() => {
@@ -54,6 +56,7 @@ function App(){
           <Route path="/wait-room" element={<WaitRoom/>} />
           <Route path="/session-expired" element={<SessionExpired/>} />
           <Route path="/token-expired" element={<TokenExpired/>} />
+          <Route path="/changePassword" element={<ChangePassword/>} />
           <Route path="/permissions" element={<Protected role={"ADMINISTRATOR"}><RolePermissions/></Protected>} />
           <Route path="/enginerProfil" element={<Protected role={"SOFTWARE_ENGINEER"}><EnginerProfil/></Protected>} />
           <Route path="/projectManagerProfil" element={<Protected role={"PROJECT_MANAGER"}><ProjectManagerProfil/></Protected>} />
@@ -62,6 +65,8 @@ function App(){
           <Route path="/managerProjects" element={<Protected role={"PROJECT_MANAGER"}><ManagerProjects/></Protected>} />
           <Route path="/logs" element={<Protected role={"ADMINISTRATOR"}><LogViewer/></Protected>} />
           <Route path="/notifications" element={<Protected role={"ADMINISTRATOR"}><NotificationsPage/></Protected>} />
+          <Route path="/forgotPassword" element={<ForgotPassword/>} />
+          <Route path="/changeForgotPassword/:token" element={<ChangeForgotPassword/>} />
           <Route path="/qrlogin" element={<QRLog/>} />
         </Routes>
       </div>

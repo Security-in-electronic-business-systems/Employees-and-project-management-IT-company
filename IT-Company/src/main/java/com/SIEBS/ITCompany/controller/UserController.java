@@ -11,6 +11,8 @@ import com.SIEBS.ITCompany.service.AuthenticationService;
 import com.SIEBS.ITCompany.service.EmailService;
 import com.SIEBS.ITCompany.service.HmacService;
 import com.SIEBS.ITCompany.service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.LogManager;
@@ -27,6 +29,7 @@ import org.springframework.web.bind.annotation.*;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -51,6 +54,51 @@ public class UserController {
     @Autowired
     private final NotificationController notificationController;
 
+
+    @PostMapping("/blockUser")
+    public ResponseEntity<MessageResponse> blockUser(@RequestBody ForgotPasswordDTO emailDTO){
+        return ResponseEntity.ok(userService.BlockUser(emailDTO.getEmail()));
+    }
+
+    @PostMapping("/unblockUser")
+    public ResponseEntity<MessageResponse> unblockUser(@RequestBody ForgotPasswordDTO emailDTO){
+        return ResponseEntity.ok(userService.UnblockUser(emailDTO.getEmail()));
+    }
+
+    @GetMapping("/checkIsForgotPasswordLinkValid")
+    public ResponseEntity verifyForgotPasswordLink(
+            @RequestParam("token") String token,
+            HttpServletResponse response
+    ){
+        URI changePasswordUri = URI.create("http://localhost:3000/changeForgotPassword/" + token);
+        URI tokenExpiredUri = URI.create("http://localhost:3000/token-expired");
+
+        if(!userService.isTokenFromForgotPasswordLinkValid(token)){
+            return ResponseEntity.status(HttpStatus.FOUND)
+                    .location(tokenExpiredUri)
+                    .body(null);
+        }else{
+            return ResponseEntity.status(HttpStatus.FOUND)
+                    .location(changePasswordUri)
+                    .body(null);
+        }
+    }
+
+    @PostMapping("/forgotPassword")
+    public ResponseEntity<MessageResponse> changePassword(@RequestBody ForgotPasswordDTO forgotPasswordDTO){
+        return ResponseEntity.ok(userService.SendMailForForgotPassword(forgotPasswordDTO.getEmail()));
+    }
+
+    @PostMapping("/changeForgottenPassword")
+    public ResponseEntity<MessageResponse> changeForgottenPassword(@RequestBody ChangeForgottenPasswordDTO changeForgottenPasswordDTO){
+        return ResponseEntity.ok(userService.ChangeForgottenPassword(changeForgottenPasswordDTO));
+    }
+
+    @PostMapping("/changePassword")
+    public ResponseEntity<MessageResponse> changePassword(@RequestBody ChangePasswordDTO changePasswordDTO){
+        return ResponseEntity.ok(userService.ChangePassword(changePasswordDTO));
+    }
+
     @PostMapping("/send")
     public String sendMail(@RequestParam(value = "file", required = false)MultipartFile[] file, String to, String subject, String body){
         return emailService.sendMail(to, subject, body);
@@ -58,7 +106,7 @@ public class UserController {
 
 
     @GetMapping("/registration/requests")
-    public List<RegistrationRequestResponse> getRegistrationRequests(){
+    public List<RegistrationRequestResponse> getRegistrationRequests() throws Exception {
         List<User> users = userService.getRegistrationRequests();
 
         List<RegistrationRequestResponse> usersResponse = users.stream()
@@ -76,7 +124,7 @@ public class UserController {
     }
     @PreAuthorize("@permissionService.hasPermission('GET_ALL_USERS')")
     @GetMapping("/getAll")
-    public ResponseEntity<List<UsersResponse>> getAllUsers() {
+    public ResponseEntity<List<UsersResponse>> getAllUsers() throws Exception {
         List<User> users = userService.getAllUsers();
 
         if (users.isEmpty()) {
@@ -93,6 +141,7 @@ public class UserController {
                         .title(user.getTitle())
                         .address(user.getAddress())
                         .role(new RoleDTO(user.getRole().getId(), user.getRole().getName()))
+                        .isBlocked(user.isBlocked())
                         .build())
                 .collect(Collectors.toList());
 
@@ -490,7 +539,7 @@ public class UserController {
     }
 
     @PostMapping("/search")
-    public ResponseEntity<List<UsersResponse>> search(@RequestBody SearchDTO request) {
+    public ResponseEntity<List<UsersResponse>> search(@RequestBody SearchDTO request) throws Exception {
         List<User> users =userService.search(request);
         if (users.isEmpty()) {
             return ResponseEntity.noContent().build();
@@ -514,7 +563,7 @@ public class UserController {
 
     @GetMapping("/findByEmail")
     public RegistrationRequestResponse findByEmail() throws Exception {
-        Optional<User> user = userService.findByEmail("t@kjnjkngfghhgvvvvvv");
+        Optional<User> user = userService.findByEmail("pavle@gmail.com");
 
         RegistrationRequestResponse usersResponse = RegistrationRequestResponse.builder()
                         .firstname(user.get().getFirstname())

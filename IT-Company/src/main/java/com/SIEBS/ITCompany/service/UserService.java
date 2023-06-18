@@ -5,11 +5,9 @@ import com.SIEBS.ITCompany.model.*;
 import com.SIEBS.ITCompany.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.crypto.SecretKey;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -26,8 +24,13 @@ public class UserService {
     private final ProjectRepository projectRepository;
     private final AddressRepository addressRepository;
     private final RoleRepository roleRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final EmailService emailService;
+    private final JwtService jwtService;
+    private final MagicLinkService magicLinkService;
+    private final AuthenticationService authenticationService;
     private final KeystoreService keystoreService;
-    private User loggedUser;
+
     private final PermissionRepository permissionRepository;
 
     private final EmployeeProjectRepository employeeProjectsRepository;
@@ -35,15 +38,25 @@ public class UserService {
 
     private final FileRepository fileRepository;
 
-    public List<User> getAllUsers() {
+    public List<User> getAllUsers() throws Exception {
         List<User> users = repository.findAll();
+        for (User user: users) {
+            UserDecoded userDecoded = keystoreService.decryptUser(user);
+            user.setTitle(userDecoded.getTitle());
+            user.setAddress(userDecoded.getAdress());
+        }
         return users;
     }
 
-    public List<User> getRegistrationRequests() {
+    public List<User> getRegistrationRequests() throws Exception {
         List<User> users = repository.findByIsApprovedFalse();
         List<User> filteredUsers = new ArrayList<>();
         for (User user: users){
+            //dekodiranje----------------------
+            UserDecoded userDecoded = keystoreService.decryptUser(user);
+            user.setTitle(userDecoded.getTitle());
+            user.setAddress(userDecoded.getAdress());
+            //-----------------------------------
             if (user.getRegistrationDate()==null){
                 filteredUsers.add(user);
             }else{
@@ -124,8 +137,11 @@ public class UserService {
 
     public Optional<User> findByEmail(String email) throws Exception {
         Optional<User> user = repository.findByEmail(email);
-//        SecretKey secretKey = keystoreService.getKey(user.get().getEmail(),user.get().getPhoneNumber());
-//        user.get().setTitle(keystoreService.decrypt(user.get().getTitle(), secretKey));
+
+        UserDecoded decryptedUser = keystoreService.decryptUser(user.get());
+        user.get().setTitle(decryptedUser.getTitle());
+        user.get().setAddress(decryptedUser.getAdress());
+
         return user;
     }
 
@@ -250,7 +266,20 @@ public class UserService {
         return skills;
     }
 
+    public MessageResponse ChangePassword(ChangePasswordDTO changePasswordDTO) {
+        User user = repository.findByEmail(changePasswordDTO.getEmail()).orElse(null);
+        if(user == null){
+            return MessageResponse.builder().message("User not found!").build();
+        }
 
+        if(passwordEncoder.matches(changePasswordDTO.getOldPassword(), user.getPassword())){
+            user.setPassword(passwordEncoder.encode(changePasswordDTO.getNewPassword()));
+            repository.update(user);
+            return MessageResponse.builder().message("Successfully!").build();
+        }else{
+            return MessageResponse.builder().message("Old password is not correct!").build();
+        }
+    }
     public boolean editSkill(AllSkillDTO skillResponse) {
         Optional<Skill> skilOptionall =  skillRepository.findById( Long.valueOf(skillResponse.getId()).intValue());
         Skill skill = skilOptionall.orElse(null);
@@ -353,11 +382,78 @@ public class UserService {
         }
     }
 
-    public List<User> search(SearchDTO searchDTO){
+    public MessageResponse SendMailForForgotPassword(String email) {
+        var user = repository.findByEmail(email).orElse(null);
+        if(user == null){
+            return MessageResponse.builder().message("User not found!").build();
+        }
+        var jwtToken = jwtService.generateTokenForPasswordlessLogin(user);
+        String url = "https://localhost:8081/api/v1/user/checkIsForgotPasswordLinkValid?token=" + jwtToken;
+        magicLinkService.Save(MagicLink.builder().used(false).token(jwtToken).build());
+        System.out.println(url);
+        String message = "Hello " + user.getFirstname() + ", click on this link and change password: " + url;
+        //ovjde ide slanje linka na mejl
+        emailService.sendMail(user.getEmail(), "IT-Company: forgot password", url);
+        return MessageResponse.builder().message("Successfully!").build();
+    }
+
+    public boolean isTokenFromForgotPasswordLinkValid(String token){
+        if(magicLinkService.isTokenUsed(token)){
+            return false;
+        }else if(jwtService.isTokenExpired(token)){
+            return false;
+        }
+        magicLinkService.setUsedByToken(token);
+        return true;
+    }
+
+    public MessageResponse ChangeForgottenPassword(ChangeForgottenPasswordDTO changeForgottenPasswordDTO) {
+        String email = jwtService.extractUsername(changeForgottenPasswordDTO.getToken());
+        if(email == null){
+            return MessageResponse.builder().message("Some error occurred, please try again!").build();
+        }
+        User user = repository.findByEmail(email).orElse(null);
+        if(user == null){
+            return MessageResponse.builder().message("User not found!").build();
+        }
+
+        user.setPassword(passwordEncoder.encode(changeForgottenPasswordDTO.getNewPassword()));
+        repository.update(user);
+        return MessageResponse.builder().message("Successfully!").build();
+    }
+
+    public MessageResponse BlockUser(String email) {
+        User user = repository.findByEmail(email).orElse(null);
+        if(user == null){
+            return MessageResponse.builder().message("User not found").build();
+        }
+
+        user.setBlocked(true);
+        authenticationService.revokeAllUserTokens(user);
+        repository.update(user);
+        return MessageResponse.builder().message("Successfully!").build();
+    }
+
+    public MessageResponse UnblockUser(String email) {
+        User user = repository.findByEmail(email).orElse(null);
+        if(user == null){
+            return MessageResponse.builder().message("User not found").build();
+        }
+
+        user.setBlocked(false);
+        repository.update(user);
+        return MessageResponse.builder().message("Successfully!").build();
+    }
+    public List<User> search(SearchDTO searchDTO) throws Exception {
         List<User> users = repository.search(searchDTO);
         List<User> filterdUsers = new ArrayList<>();
         Date currentDate = new Date();
         for (User user:users) {
+            //dekodiranje----------------------
+            UserDecoded userDecoded = keystoreService.decryptUser(user);
+            user.setTitle(userDecoded.getTitle());
+            user.setAddress(userDecoded.getAdress());
+            //-----------------------------------
             if (user.getRole().getName().equals("SOFTWARE_ENGINEER")){
                 Date registrationDate = user.getRegistrationDate();
                 if (registrationDate == null){
@@ -388,15 +484,4 @@ public class UserService {
                 "UTF-8");
     }
 
-    public User getLoggedUser() {
-        return loggedUser;
-    }
-
-    public void logoutLoggedUser() {
-        this.loggedUser = null;
-    }
-
-    public void setLoggedUser(User loggedUser) {
-        this.loggedUser = loggedUser;
-    }
 }

@@ -12,6 +12,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jboss.aerogear.security.otp.Totp;
+import org.jboss.aerogear.security.otp.api.Base32;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -41,10 +42,10 @@ public class AuthenticationService {
   private final EmailService emailService;
   private final UserRoleRepository userRoleRepository;
   private final KeystoreService keystoreService;
-  private final UserService userService;
+  private final NotificationService notificationService;
   private User loggedUser;
 
-  public AuthenticationResponse authenticate(AuthenticationRequest request) {
+  public AuthenticationResponse authenticate(AuthenticationRequest request) throws Exception {
     try{
       if(!repository.findByEmail(request.getEmail()).orElse(null).isApproved()){
         log.warn("Login failed. Account are not approved by administrator. Email: " + removeDangerousCharacters(request.getEmail()) );
@@ -53,6 +54,14 @@ public class AuthenticationService {
                 .loginResponse(LoginResponse
                         .builder()
                         .message("Your account are not approved by administrator!")
+                        .build())
+                .build();
+      }else if(repository.findByEmail(request.getEmail()).orElse(null).isBlocked()){
+        return AuthenticationResponse
+                .builder()
+                .loginResponse(LoginResponse
+                        .builder()
+                        .message("Your account are blocked by administrator!")
                         .build())
                 .build();
       }
@@ -93,12 +102,14 @@ public class AuthenticationService {
                 .build();
       }
     }
-
     loggedUser = user;
-    userService.setLoggedUser(user);
+    notificationService.setLoggedUser(user);
     var jwtToken = jwtService.generateToken(user);
     var refreshToken = jwtService.generateRefreshToken(user);
     log.info("Login success! Email: " + removeDangerousCharacters(request.getEmail()));
+    revokeAllUserTokens(user);
+    saveUserToken(user, jwtToken);
+    saveUserToken(user, refreshToken);
     return AuthenticationResponse
             .builder()
             .accessToken(jwtToken)
@@ -126,13 +137,7 @@ public class AuthenticationService {
     return true;
   }
 
-  public String encodeTitle(RegisterRequest request) throws Exception {
-    SecretKey key = keystoreService.generateKey();
-    String encriptedValue = keystoreService.encrypt(request.getTitle(), key);
-    keystoreService.addKey(request.getEmail(), request.getPhoneNumber(), key);
 
-    return encriptedValue;
-  }
   public String removeDangerousCharacters(String input) {
     // Lista potencijalno opasnih karaktera
     String[] dangerousCharacters = {"'", "\"", "/", "\\", "<", ">", "|"};
@@ -148,8 +153,7 @@ public class AuthenticationService {
   public MessageResponse register(RegisterRequest request) throws Exception {
     Optional<User> tmp = repository.findByEmail(request.getEmail());
     Role role = roleRepository.findByName(request.getRole());
-    //Provjera jedinstvenosti mejla i provjera da li je korisniku sa navedenim emailom odbijen zahtjev za registraciju u posljednjih 10min
-
+    UserEncoded userEncoded = keystoreService.encryptUser(request);
     if (!tmp.isPresent()){
       var user = User.builder()
               .firstname(request.getFirstname())
@@ -159,12 +163,14 @@ public class AuthenticationService {
               .phoneNumber(request.getPhoneNumber())
               .isApproved(false)
               .registrationDate(null)
-              .title(encodeTitle(request))
-              .address(request.getAddress())
+              .title(userEncoded.getTitle())
+              .address(userEncoded.getAdress())
+              .secret(Base32.random())
+              .isUsing2FA(Boolean.parseBoolean(request.getIsUsing2FA()))
               .role(role)
               .roles(new ArrayList<>())
               .build();
-      var address =addressRepository.save(request.getAddress());
+      var address =addressRepository.save(userEncoded.getAdress());
       var savedUser = repository.save(user);
       var primalRole = UserRole.builder()
               .user(user)
@@ -231,10 +237,13 @@ public class AuthenticationService {
     if (isTokenValid) {
       String email = jwtService.extractUsername(token);
       var user = repository.findByEmail(email).orElse(null);
-      if (user == null) {
+
+      if (user == null || user.isBlocked() || !user.isApproved()) {
         log.error("Failed to generate access and refresh token. Email:" + removeDangerousCharacters(email));
+
         return null;
       }
+
       var jwtToken = jwtService.generateToken(user);
       var refreshToken = jwtService.generateRefreshToken(user);
       revokeAllUserTokens(user);
@@ -253,7 +262,12 @@ public class AuthenticationService {
     if(user == null){
       log.error("Failed to generate access and refresh token - passwordless auth. Email:" + removeDangerousCharacters(request.getEmail()));
       return "User not found!";
+    }else if(user.isBlocked()){
+      return "Your account are blocked by administrator!";
+    }else if(!user.isApproved()){
+      return "Your account are not approved by administrator!";
     }
+
     var jwtToken = jwtService.generateTokenForPasswordlessLogin(user);
     String url = "https://localhost:8081/api/v1/auth/authenticate?token=" + jwtToken;
     magicLinkService.Save(MagicLink.builder().used(false).token(jwtToken).build());

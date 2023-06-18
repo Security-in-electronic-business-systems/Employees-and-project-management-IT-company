@@ -29,8 +29,7 @@ public class NotificationController {
     private final WebSocketHandler webSocketHandler;
     @Autowired
     private final EmailService emailService;
-    @Autowired
-    private final UserService userService;
+
 
     @GetMapping("/getAll")
     public ResponseEntity<List<Notification>> getAllNotification(){
@@ -55,8 +54,8 @@ public class NotificationController {
 
     public Notification createNotification(String notification) {
         Notification not = new Notification(new Date(), notification, false);
-        if (userService.getLoggedUser()!= null) {
-            if (userService.getLoggedUser().getRole().getName().equals("ADMINISTRATOR")) {
+        if (notificationService.getLoggedUser()!= null) {
+            if (notificationService.getLoggedUser().getRole().getName().equals("ADMINISTRATOR")) {
                 webSocketHandler.sendNotification(not);
                 not.setOpened(true);
             }
