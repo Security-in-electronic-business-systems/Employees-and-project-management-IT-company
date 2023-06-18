@@ -484,11 +484,28 @@ public class UserController {
             return ResponseEntity.ok(projectsDTO);
     }
 
+
+
     @PreAuthorize("@permissionService.hasPermission('EDIT_EMPLOYEE_ON_PROJECT')")
     @PutMapping("/editEmployessOnProject")
     @ResponseBody
     public void editEmployessOnProject(@RequestBody EditEmployeeDTO editEmployeeDTO) {
         userService.editEmployees(editEmployeeDTO);
+    }
+
+    @PreAuthorize("@permissionService.hasPermission('DOWNLOAD_CV')")
+    @GetMapping("/downloadCV")
+    public ResponseEntity<byte[]>  viewCv(@PathVariable("email") String email) throws IOException, UnrecoverableKeyException, CertificateException, KeyStoreException, NoSuchAlgorithmException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException, InvalidKeyException {
+
+        Path filePath = Paths.get(uploadDir, email+".pdf");
+
+        byte[] encryptedDocument = Files.readAllBytes(filePath);
+        generateRSAService.decryptCVDocument(String.valueOf(filePath));
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+        headers.setContentDispositionFormData("attachment", email+".pdf"); // Set the desired file name
+        return new ResponseEntity<>(encryptedDocument, headers, HttpStatus.OK);
     }
 
 }

@@ -81,7 +81,7 @@ public class GenerateRSA {
 
             // Učitavanje šifrovanog AES ključa
 //            byte[] encryptedAesKey = loadEncryptedAESKey();
-//
+//            byte[] encryptedAesKey
             // Dekriptovanje AES ključa privatnim RSA ključem
             SecretKey aesKey = decryptAESKeyWithPrivateKey(encryptedAesKey, privateKey);
 
