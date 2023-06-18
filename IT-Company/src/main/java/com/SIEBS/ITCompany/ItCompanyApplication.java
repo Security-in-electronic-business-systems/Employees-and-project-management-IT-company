@@ -12,4 +12,5 @@ public class ItCompanyApplication {
 		SpringApplication.run(ItCompanyApplication.class, args);
 	}
 
+
 }

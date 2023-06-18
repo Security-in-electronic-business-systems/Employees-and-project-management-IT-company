@@ -1,5 +1,6 @@
 package com.SIEBS.ITCompany.service;
 
+import com.SIEBS.ITCompany.controller.AuthenticationController;
 import com.SIEBS.ITCompany.dto.*;
 import com.SIEBS.ITCompany.model.*;
 import com.SIEBS.ITCompany.repository.*;
@@ -9,6 +10,9 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jboss.aerogear.security.otp.Totp;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -28,7 +32,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-
+@Slf4j
 public class AuthenticationService {
   private final UserRepository repository;
   private final TokenRepository tokenRepository;
@@ -47,6 +51,7 @@ public class AuthenticationService {
   public AuthenticationResponse authenticate(AuthenticationRequest request) {
     try{
       if(!repository.findByEmail(request.getEmail()).orElse(null).isApproved()){
+        log.warn("Login failed. Account are not approved by administrator. Email: " + removeDangerousCharacters(request.getEmail()) );
         return AuthenticationResponse
                 .builder()
                 .loginResponse(LoginResponse
@@ -66,6 +71,7 @@ public class AuthenticationService {
               )
       );
     }catch(BadCredentialsException e){
+      log.error("Email or password are not correct. Email: " +  removeDangerousCharacters(request.getEmail()));
       return AuthenticationResponse
               .builder()
               .loginResponse(LoginResponse
@@ -81,6 +87,7 @@ public class AuthenticationService {
     if (user.isUsing2FA()) {
       Totp totp = new Totp(user.getSecret());
       if (!isValidLong(request.getCode()) || !totp.verify(request.getCode())) {
+        log.error("Validation code is not correct for 2FA! Email:" + removeDangerousCharacters(request.getEmail()));
         return AuthenticationResponse
                 .builder()
                 .loginResponse(LoginResponse
@@ -94,6 +101,7 @@ public class AuthenticationService {
     loggedUser = user;
     var jwtToken = jwtService.generateToken(user);
     var refreshToken = jwtService.generateRefreshToken(user);
+    log.info("Login success! Email: " + removeDangerousCharacters(request.getEmail()));
     return AuthenticationResponse
             .builder()
             .accessToken(jwtToken)
@@ -128,7 +136,17 @@ public class AuthenticationService {
 
     return encriptedValue;
   }
+  public String removeDangerousCharacters(String input) {
+    // Lista potencijalno opasnih karaktera
+    String[] dangerousCharacters = {"'", "\"", "/", "\\", "<", ">", "|"};
 
+    // Uklanjanje opasnih karaktera iz stringa
+    for (String character : dangerousCharacters) {
+      input = input.replace(character, "");
+    }
+
+    return input;
+  }
 
   public MessageResponse register(RegisterRequest request) throws Exception {
     Optional<User> tmp = repository.findByEmail(request.getEmail());
@@ -167,15 +185,18 @@ public class AuthenticationService {
         userRoles.add(userRole);
       }
       user.setRoles(userRoles);
+      log.info("Registration success. Email:" + removeDangerousCharacters(request.getEmail()));
       return MessageResponse.builder()
               .message("Success!").build();
     }else{
       User user = tmp.get();
       if (user.isApproved()==true){
+        log.error("User with that email already exist. Email:" + removeDangerousCharacters(request.getEmail()));
         return MessageResponse.builder()
                 .message("User with that email already exist!").build();
       }else{
         if (user.getRegistrationDate()==null){
+          log.warn("request is waiting for the admin's response. Email:" + removeDangerousCharacters(request.getEmail()));
           return MessageResponse.builder()
                   .message("Your request is waiting for the admin's response!").build();
         }else{
@@ -194,10 +215,12 @@ public class AuthenticationService {
 
             addressRepository.save(request.getAddress());
             repository.update(updatedUser);
+            log.info("Request is successfully made again with these email: " + removeDangerousCharacters(user.getEmail()));
             return MessageResponse.builder()
                     .message("Request is successfully made again with these params!: " + user).build();
 
           }else{
+            log.error("Unable to send registration code until: " + checkDate + "Email: " +removeDangerousCharacters(user.getEmail()));
             return MessageResponse.builder()
                     .message("You can not send new registration request until: " +checkDate + "!").build();
           }
@@ -212,6 +235,7 @@ public class AuthenticationService {
       String email = jwtService.extractUsername(token);
       var user = repository.findByEmail(email).orElse(null);
       if (user == null) {
+        log.error("Failed to generate access and refresh token. Email:" + removeDangerousCharacters(email));
         return null;
       }
       var jwtToken = jwtService.generateToken(user);
@@ -223,12 +247,14 @@ public class AuthenticationService {
               .refreshToken(refreshToken)
               .build();
     }
+    log.error("Failed to generate access and refresh token. Email:" + removeDangerousCharacters(token));
     return null;
   }
 
   public String generateAndSendToken(PasswordlessAuthenticationRequest request){
     var user = repository.findByEmail(request.getEmail()).orElse(null);
     if(user == null){
+      log.error("Failed to generate access and refresh token - passwordless auth. Email:" + removeDangerousCharacters(request.getEmail()));
       return "User not found!";
     }
     var jwtToken = jwtService.generateTokenForPasswordlessLogin(user);

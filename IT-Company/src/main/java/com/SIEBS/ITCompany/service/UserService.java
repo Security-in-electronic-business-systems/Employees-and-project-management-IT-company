@@ -4,6 +4,9 @@ import com.SIEBS.ITCompany.dto.*;
 import com.SIEBS.ITCompany.model.*;
 import com.SIEBS.ITCompany.repository.*;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
@@ -17,6 +20,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class UserService {
     private final UserRepository repository;
     private final ProjectRepository projectRepository;
@@ -52,11 +56,24 @@ public class UserService {
         }
         return filteredUsers;
     }
+    public String removeDangerousCharacters(String input) {
+        // Lista potencijalno opasnih karaktera
+        String[] dangerousCharacters = {"'", "\"", "/", "\\", "<", ">", "|"};
+
+        // Uklanjanje opasnih karaktera iz stringa
+        for (String character : dangerousCharacters) {
+            input = input.replace(character, "");
+        }
+
+        return input;
+    }
     public void updateRegistrationDate(String email, Date newDate) {
         try {
             repository.updateRegistrationDate(email, newDate);
+            log.info("User updated successfully. Email: " + removeDangerousCharacters(email));
             System.out.println("Korisnik je uspešno ažuriran.");
         } catch (Exception e) {
+            log.error("User updated unsuccessfully. Email: " + removeDangerousCharacters(email));
             System.out.println("Došlo je do greške pri ažuriranju korisnika: " + e.getMessage());
         }
     }

@@ -12,6 +12,9 @@ import com.SIEBS.ITCompany.service.EmailService;
 import com.SIEBS.ITCompany.service.HmacService;
 import com.SIEBS.ITCompany.service.UserService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
@@ -35,6 +38,7 @@ import org.springframework.web.multipart.MultipartFile;
 @RestController
 @RequestMapping("/api/v1/user")
 @RequiredArgsConstructor
+@Slf4j
 public class UserController {
     @Autowired
     private final EmailService emailService;
@@ -44,7 +48,6 @@ public class UserController {
     private final AuthenticationService authService;
     @Autowired
     private final HmacService hmacService;
-
 
     @PostMapping("/send")
     public String sendMail(@RequestParam(value = "file", required = false)MultipartFile[] file, String to, String subject, String body){
@@ -138,9 +141,11 @@ public class UserController {
         Project savedProject = userService.createProject(projectDTO);
 
         if (savedProject != null) {
+            log.info("Project created successfully. Name: " + projectDTO.getName());
             MessageResponse response = new MessageResponse("Project created successfully.");
             return ResponseEntity.ok(response);
         } else {
+            log.error("Error creating project. Name: " + projectDTO.getName());
             MessageResponse response = new MessageResponse("Error creating project.");
             return ResponseEntity.badRequest().body(response);
         }
@@ -151,9 +156,11 @@ public class UserController {
         userService.updateRegistrationDate(request.getEmail(), new Date());
         String response = emailService.sendMail(request.getEmail(), "Registration request - DECLINED", request.getDescription());
         if (response == "Success!"){
+            log.info("Registration request - DECLINED" + authService.removeDangerousCharacters(request.getDescription()));
             MessageResponse message = new MessageResponse("Registration request successfully declined.");
             return ResponseEntity.ok(message);
         }else{
+            log.error("Error declining registration request." + authService.removeDangerousCharacters(request.getEmail()));
             MessageResponse message = new MessageResponse("Error declining registration request.");
             return ResponseEntity.badRequest().body(message);
         }
@@ -163,9 +170,11 @@ public class UserController {
     public ResponseEntity<MessageResponse> checkIntegrity(@RequestBody HmacRequest request){
         String code = hmacService.generateHmac(request.getPhoneNumber(), request.getLink());
         if (code.equals(request.getCode())){
+            log.info("HMAC success - SAFE. Phone: " + authService.removeDangerousCharacters(request.getPhoneNumber()));
             MessageResponse message = new MessageResponse("SAFE.");
             return ResponseEntity.ok(message);
         }else{
+            log.error("HMAC failed - UNSAFE. Phone: " + authService.removeDangerousCharacters(request.getPhoneNumber()));
             MessageResponse message = new MessageResponse("UNSAFE!");
             return ResponseEntity.badRequest().body(message);
         }
@@ -179,6 +188,7 @@ public class UserController {
         if (user.isPresent()){
             secretKey = user.get().getPhoneNumber();
         }else{
+
             MessageResponse message = new MessageResponse("Error user does not exist!");
             return ResponseEntity.badRequest().body(message);
         }
@@ -200,9 +210,11 @@ public class UserController {
 
         String response = emailService.sendMail(request.getEmail(), "Registration request - ACCEPTED", htmlBody.toString());
         if (response == "Success!"){
+            log.info("Registration request successfully accepted. Email:" + authService.removeDangerousCharacters(request.getEmail()));
             MessageResponse message = new MessageResponse("Registration request successfully accepted.");
             return ResponseEntity.ok(message);
         }else{
+            log.error("Error accepting registration request. Email: " + authService.removeDangerousCharacters(request.getEmail()));
             MessageResponse message = new MessageResponse("Error accepting registration request.");
             return ResponseEntity.badRequest().body(message);
         }
@@ -232,9 +244,11 @@ public class UserController {
         boolean isUpdated = userService.updateUser(usersResponse);
 
         if (isUpdated) {
+            log.info("User updated successfully." + authService.removeDangerousCharacters(usersResponse.getEmail()));
             MessageResponse response = new MessageResponse("User updated successfully.");
             return ResponseEntity.ok(response);
         } else {
+            log.error("User updated unsuccessfully." + authService.removeDangerousCharacters(usersResponse.getEmail()));
             MessageResponse response = new MessageResponse("Error updating user.");
             return ResponseEntity.badRequest().body(response);
         }
@@ -250,10 +264,12 @@ public class UserController {
         boolean isSaved = userService.savePermissions(permissionDTOList);
 
         if (isSaved) {
+            log.info("Permissions saved successfully. Admin:" + authService.removeDangerousCharacters(authService.getLoggedUser().getEmail()));
             MessageResponse response = new MessageResponse("Permissions saved successfully.");
             return ResponseEntity.ok(response);
         } else {
-            MessageResponse response = new MessageResponse("Error saving permissions.");
+            log.info("Permissions saved successfully.");
+            MessageResponse response = new MessageResponse("Error saving permissions.Admin:" + authService.removeDangerousCharacters(authService.getLoggedUser().getEmail()));
             return ResponseEntity.badRequest().body(response);
         }
     }
@@ -264,9 +280,11 @@ public class UserController {
         boolean isSaved = userService.createSkill(skill);
 
         if (isSaved) {
+            log.info("Skill saved successfully:" + authService.removeDangerousCharacters(skill.getName()));
             MessageResponse response = new MessageResponse("Skill saved successfully.");
             return ResponseEntity.ok(response);
         } else {
+            log.warn("Error saving skill: " + authService.removeDangerousCharacters(skill.getName()));
             MessageResponse response = new MessageResponse("Error saving skill.");
             return ResponseEntity.badRequest().body(response);
         }
@@ -286,9 +304,11 @@ public class UserController {
     public ResponseEntity<MessageResponse> editSkill(@RequestBody AllSkillDTO allSkillDTO) {
         boolean isUpdated = userService.editSkill(allSkillDTO);
         if (isUpdated) {
+            log.info("Skill updated successfully." + authService.removeDangerousCharacters(allSkillDTO.getName()));
             MessageResponse response = new MessageResponse("Skill updated successfully.");
             return ResponseEntity.ok(response);
         } else {
+            log.warn("Error updating skill." + authService.removeDangerousCharacters(allSkillDTO.getName()));
             MessageResponse response = new MessageResponse("Error updating skill.");
             return ResponseEntity.badRequest().body(response);
         }
@@ -316,10 +336,11 @@ public class UserController {
             }
 
             userService.saveFile(fileEntity);
-
+            log.info("CV upload successfully. Email: " + authService.removeDangerousCharacters(user.getEmail()));
             MessageResponse response = new MessageResponse("File upload successfully.");
             return ResponseEntity.ok(response);
         } catch (IOException e) {
+            log.info("CV upload unsuccessfully. Email: " + authService.removeDangerousCharacters(authService.getLoggedUser().getEmail()));
             MessageResponse response = new MessageResponse("Error uploading.");
             return ResponseEntity.badRequest().body(response);
         }

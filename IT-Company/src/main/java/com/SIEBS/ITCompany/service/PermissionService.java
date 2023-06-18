@@ -6,6 +6,9 @@ import com.SIEBS.ITCompany.model.UserRole;
 import com.SIEBS.ITCompany.repository.PermissionRepository;
 import com.SIEBS.ITCompany.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,6 +16,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class PermissionService {
     private final PermissionRepository repository;
     private final UserRepository userRepository;
@@ -30,6 +34,7 @@ public class PermissionService {
                }
             }
         }
+        log.error("Permission denied. User: " + authenticationService.removeDangerousCharacters(loggedUser.getEmail()) + "permission: " + authenticationService.removeDangerousCharacters(permission) );
         return false;
     }
 
