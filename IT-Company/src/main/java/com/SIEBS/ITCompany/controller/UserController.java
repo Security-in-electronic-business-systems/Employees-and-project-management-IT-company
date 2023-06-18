@@ -1,5 +1,6 @@
 package com.SIEBS.ITCompany.controller;
 
+import ch.qos.logback.core.net.SyslogOutputStream;
 import com.SIEBS.ITCompany.dto.RegistrationRequestResponse;
 
 import com.SIEBS.ITCompany.dto.*;
@@ -7,12 +8,10 @@ import com.SIEBS.ITCompany.model.*;
 
 import com.SIEBS.ITCompany.repository.PermissionRepository;
 import com.SIEBS.ITCompany.repository.SkillRepository;
-import com.SIEBS.ITCompany.service.AuthenticationService;
-import com.SIEBS.ITCompany.service.EmailService;
-import com.SIEBS.ITCompany.service.HmacService;
-import com.SIEBS.ITCompany.service.UserService;
+import com.SIEBS.ITCompany.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -22,8 +21,14 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.security.*;
+import java.security.cert.CertificateException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -31,6 +36,8 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.web.multipart.MultipartFile;
+
+import javax.crypto.*;
 
 @RestController
 @RequestMapping("/api/v1/user")
@@ -40,10 +47,15 @@ public class UserController {
     private final EmailService emailService;
     @Autowired
     private final UserService userService;
+
+    @Autowired
+    private final GenerateRSA generateRSAService;
     @Autowired
     private final AuthenticationService authService;
     @Autowired
     private final HmacService hmacService;
+    @Value("${file.upload-dir}")
+    private String uploadDir;
 
 
     @PostMapping("/send")
@@ -299,23 +311,26 @@ public class UserController {
     @ResponseBody
     public ResponseEntity<MessageResponse> uploadFile(@RequestParam("file") MultipartFile multipartFile) {
         try {
-            // Čitanje sadržaja fajla
-            byte[] fileData = multipartFile.getBytes();
             User user = authService.getLoggedUser();
+            Path filePath = Paths.get(uploadDir, user.getEmail()+".pdf");
+
+            System.out.println("*******STIGAO je*******, "+  multipartFile.getBytes());
+
+            generateRSAService.encryptCVDocument(String.valueOf(filePath));
+            System.out.println("*******STIGAO*******");
+
+            // Čitanje sadržaja fajla
 
 
-            // Čuvanje fajla u bazi podataka
-            File fileEntity = new File();
-            fileEntity.setUser(user);
-            fileEntity.setFileData(fileData);
-            List<File> allFiles = userService.getFile();
-            for(File f: allFiles){
-                if(f.getUser().getId() == user.getId()){
-                    userService.deleteFile(f.getId());
-                }
-            }
+            byte[] documentBytes = multipartFile.getBytes();
 
-            userService.saveFile(fileEntity);
+
+
+
+//            Files.write(filePath, encryptedDocument);
+
+
+
 
             MessageResponse response = new MessageResponse("File upload successfully.");
             return ResponseEntity.ok(response);
@@ -327,19 +342,30 @@ public class UserController {
 
     @PreAuthorize("@permissionService.hasPermission('DOWNLOAD_CV')")
     @GetMapping("/download")
-    public ResponseEntity<byte[]>  downloadFile() throws IOException {
-        User user = authService.getLoggedUser();
-        byte[] fileBytes = userService.getFileBytesById(user);
+    public ResponseEntity<byte[]>  downloadFile() throws IOException, UnrecoverableKeyException, CertificateException, KeyStoreException, NoSuchAlgorithmException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException, InvalidKeyException {
 
-        if (fileBytes == null) {
-            return ResponseEntity.notFound().build();
-        }
+        User user = authService.getLoggedUser();
+
+        Path filePath = Paths.get(uploadDir, user.getEmail()+".pdf");
+
+        byte[] encryptedDocument = Files.readAllBytes(filePath);
+        generateRSAService.decryptCVDocument(String.valueOf(filePath));
+
+
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-        headers.setContentDispositionFormData("attachment", "file.pdf"); // Set the desired file name
+        headers.setContentDispositionFormData("attachment", user.getEmail()+".pdf"); // Set the desired file name
 
-        return new ResponseEntity<>(fileBytes, headers, HttpStatus.OK);
+//        return new ResponseEntity<>(Files.readAllBytes(filePath), headers, HttpStatus.OK);
+        return new ResponseEntity<>(encryptedDocument, headers, HttpStatus.OK);
+
+
+//        HttpHeaders headers = new HttpHeaders();
+//        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+//        headers.setContentDispositionFormData("attachment", "file.pdf"); // Set the desired file name
+
+//        return new ResponseEntity<>(fileBytes, headers, HttpStatus.OK);
     }
     @PreAuthorize("@permissionService.hasPermission('GET_MANAGER_PROJECTS')")
     @GetMapping("/getManagerProjects")
