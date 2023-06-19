@@ -24,7 +24,7 @@ interface Role {
   name: string;
 }
 
-function ViewCV ()  {
+function ViewAllCV ()  {
   const [users, setUsers] = useState<User[]>([]);
   // const pattern = /^[^d]/i; 
 
@@ -78,7 +78,6 @@ function ViewCV ()  {
         </thead>
         <tbody>
           {users.map((user) => (
-            user.role.id === 1 &&
             <tr key={user.userId}>
               <td>{user.firstname}</td>
               <td>{user.lastname}</td>
@@ -92,4 +91,4 @@ function ViewCV ()  {
   );
 }
 
-export default ViewCV;
+export default ViewAllCV;

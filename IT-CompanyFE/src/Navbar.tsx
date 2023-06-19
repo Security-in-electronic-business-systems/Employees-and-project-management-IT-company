@@ -75,6 +75,10 @@ function Navbar() {
             <li className="nav-item active">
           <Link className="nav-link" to="/profil">Profile</Link>
         </li>)}
+        {loggedUser?.role.name.toString() === "HR_MANAGER"  && (
+            <li className="nav-item active">
+          <Link className="nav-link" to="/viewAllCV">View CV</Link>
+        </li>)}
 
         {loggedUser?.role.name.toString() === "ADMINISTRATOR"  && (
             <li className="nav-item active">

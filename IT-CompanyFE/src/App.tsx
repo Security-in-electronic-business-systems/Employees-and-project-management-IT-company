@@ -22,6 +22,7 @@ import EmployeeProjects from './pages/EmployeeProjects';
 import ManagerProjects from './pages/ManagerProjects';
 import Protected from './authorization/Protected';
 import ViewCV from './pages/ViewCV';
+import ViewAllCV from './pages/ViewAllCV';
 
 
 function App(){
@@ -56,6 +57,7 @@ function App(){
           <Route path="/employeeProjects" element={<Protected role={"SOFTWARE_ENGINEER"}><EmployeeProjects/></Protected>} />
           <Route path="/managerProjects" element={<Protected role={"PROJECT_MANAGER"}><ManagerProjects/></Protected>} />
           <Route path="/viewCV" element={<Protected role={"PROJECT_MANAGER"}><ViewCV/></Protected>} />
+          <Route path="/viewAllCV" element={<Protected role={"HR_MANAGER"}><ViewAllCV/></Protected>} />
         </Routes>
       </div>
     </>
