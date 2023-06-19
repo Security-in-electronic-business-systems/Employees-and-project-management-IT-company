@@ -22,18 +22,15 @@ import CareerPage from './pages/CareerPage';
 import EmployeeProjects from './pages/EmployeeProjects';
 import ManagerProjects from './pages/ManagerProjects';
 import Protected from './authorization/Protected';
-<<<<<<< HEAD
 import { ForgotPassword } from './pages/ForgotPassword';
 import ChangeForgotPassword from './pages/ChangeForgotPassword';
 import SearchUsers from './pages/SearchUsers';
 import { QRLog } from './pages/QRLog';
 import LogViewer from './pages/Logs';
 import NotificationsPage from './pages/Notification';
-=======
 import ViewCV from './pages/ViewCV';
 import ViewAllCV from './pages/ViewAllCV';
 
->>>>>>> 40b0655bf5e3ffc727168c5e365faeed248a88a6
 
 function App(){
   useEffect(() => {
@@ -69,16 +66,13 @@ function App(){
           <Route path="/careerPage" element={<Protected role={"SOFTWARE_ENGINEER"}><CareerPage/></Protected>} />
           <Route path="/employeeProjects" element={<Protected role={"SOFTWARE_ENGINEER"}><EmployeeProjects/></Protected>} />
           <Route path="/managerProjects" element={<Protected role={"PROJECT_MANAGER"}><ManagerProjects/></Protected>} />
-<<<<<<< HEAD
           <Route path="/logs" element={<Protected role={"ADMINISTRATOR"}><LogViewer/></Protected>} />
           <Route path="/notifications" element={<Protected role={"ADMINISTRATOR"}><NotificationsPage/></Protected>} />
           <Route path="/forgotPassword" element={<ForgotPassword/>} />
           <Route path="/changeForgotPassword/:token" element={<ChangeForgotPassword/>} />
           <Route path="/qrlogin" element={<QRLog/>} />
-=======
           <Route path="/viewCV" element={<Protected role={"PROJECT_MANAGER"}><ViewCV/></Protected>} />
           <Route path="/viewAllCV" element={<Protected role={"HR_MANAGER"}><ViewAllCV/></Protected>} />
->>>>>>> 40b0655bf5e3ffc727168c5e365faeed248a88a6
         </Routes>
       </div>
     </>
