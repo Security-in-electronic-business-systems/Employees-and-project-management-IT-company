@@ -72,11 +72,19 @@ function Navbar() {
         </li>)}
         {loggedUser?.role.name.toString() === "PROJECT_MANAGER"  && (
             <li className="nav-item active">
+          <Link className="nav-link" to="/viewCV">ViewCV</Link>
+        </li>)}
+        {loggedUser?.role.name.toString() === "PROJECT_MANAGER"  && (
+            <li className="nav-item active">
           <Link className="nav-link" to="/managerProjects">Projects</Link>
         </li>)}
         {loggedUser?.role.name.toString() === "HR_MANAGER"  && (
             <li className="nav-item active">
           <Link className="nav-link" to="/profil">Profile</Link>
+        </li>)}
+        {loggedUser?.role.name.toString() === "HR_MANAGER"  && (
+            <li className="nav-item active">
+          <Link className="nav-link" to="/viewAllCV">View CV</Link>
         </li>)}
 
         {loggedUser?.role.name.toString() === "ADMINISTRATOR"  && (

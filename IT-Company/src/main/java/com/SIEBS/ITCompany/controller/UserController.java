@@ -1,5 +1,6 @@
 package com.SIEBS.ITCompany.controller;
 
+import ch.qos.logback.core.net.SyslogOutputStream;
 import com.SIEBS.ITCompany.dto.RegistrationRequestResponse;
 
 import com.SIEBS.ITCompany.dto.*;
@@ -13,11 +14,13 @@ import com.SIEBS.ITCompany.service.HmacService;
 import com.SIEBS.ITCompany.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import com.SIEBS.ITCompany.service.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -27,9 +30,15 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.security.*;
+import java.security.cert.CertificateException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -37,6 +46,8 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.web.multipart.MultipartFile;
+
+import javax.crypto.*;
 
 @RestController
 @RequestMapping("/api/v1/user")
@@ -47,10 +58,15 @@ public class UserController {
     private final EmailService emailService;
     @Autowired
     private final UserService userService;
+
+    @Autowired
+    private final GenerateRSA generateRSAService;
     @Autowired
     private final AuthenticationService authService;
     @Autowired
     private final HmacService hmacService;
+    @Value("${file.upload-dir}")
+    private String uploadDir;
     @Autowired
     private final NotificationController notificationController;
 
@@ -371,48 +387,49 @@ public class UserController {
     @ResponseBody
     public ResponseEntity<MessageResponse> uploadFile(@RequestParam("file") MultipartFile multipartFile) {
         try {
-            // Čitanje sadržaja fajla
-            byte[] fileData = multipartFile.getBytes();
             User user = authService.getLoggedUser();
+            Path filePath = Paths.get(uploadDir, user.getEmail()+".pdf");
 
+            System.out.println("*******STIGAO je*******, "+  multipartFile.getBytes());
 
-            // Čuvanje fajla u bazi podataka
-            File fileEntity = new File();
-            fileEntity.setUser(user);
-            fileEntity.setFileData(fileData);
-            List<File> allFiles = userService.getFile();
-            for(File f: allFiles){
-                if(f.getUser().getId() == user.getId()){
-                    userService.deleteFile(f.getId());
-                }
-            }
-
-            userService.saveFile(fileEntity);
-            log.info("CV upload successfully. Email: " + authService.removeDangerousCharacters(user.getEmail()));
+            generateRSAService.encryptCVDocument(String.valueOf(filePath));
+            System.out.println("*******STIGAO*******");
+            // Čitanje sadržaja fajla
+            byte[] documentBytes = multipartFile.getBytes();
+//            Files.write(filePath, encryptedDocument);
             MessageResponse response = new MessageResponse("File upload successfully.");
             return ResponseEntity.ok(response);
         } catch (IOException e) {
-            log.info("CV upload unsuccessfully. Email: " + authService.removeDangerousCharacters(authService.getLoggedUser().getEmail()));
             MessageResponse response = new MessageResponse("Error uploading.");
             return ResponseEntity.badRequest().body(response);
         }
     }
-
     @PreAuthorize("@permissionService.hasPermission('DOWNLOAD_CV')")
     @GetMapping("/download")
-    public ResponseEntity<byte[]>  downloadFile() throws IOException {
-        User user = authService.getLoggedUser();
-        byte[] fileBytes = userService.getFileBytesById(user);
+    public ResponseEntity<byte[]>  downloadFile() throws IOException, UnrecoverableKeyException, CertificateException, KeyStoreException, NoSuchAlgorithmException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException, InvalidKeyException {
 
-        if (fileBytes == null) {
-            return ResponseEntity.notFound().build();
-        }
+        User user = authService.getLoggedUser();
+
+        Path filePath = Paths.get(uploadDir, user.getEmail()+".pdf");
+
+        byte[] encryptedDocument = Files.readAllBytes(filePath);
+        generateRSAService.decryptCVDocument(String.valueOf(filePath));
+
+
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-        headers.setContentDispositionFormData("attachment", "file.pdf"); // Set the desired file name
+        headers.setContentDispositionFormData("attachment", user.getEmail()+".pdf"); // Set the desired file name
 
-        return new ResponseEntity<>(fileBytes, headers, HttpStatus.OK);
+//        return new ResponseEntity<>(Files.readAllBytes(filePath), headers, HttpStatus.OK);
+        return new ResponseEntity<>(encryptedDocument, headers, HttpStatus.OK);
+
+
+//        HttpHeaders headers = new HttpHeaders();
+//        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+//        headers.setContentDispositionFormData("attachment", "file.pdf"); // Set the desired file name
+
+//        return new ResponseEntity<>(fileBytes, headers, HttpStatus.OK);
     }
     @PreAuthorize("@permissionService.hasPermission('GET_MANAGER_PROJECTS')")
     @GetMapping("/getManagerProjects")
@@ -531,12 +548,15 @@ public class UserController {
             return ResponseEntity.ok(projectsDTO);
     }
 
+
+
     @PreAuthorize("@permissionService.hasPermission('EDIT_EMPLOYEE_ON_PROJECT')")
     @PutMapping("/editEmployessOnProject")
     @ResponseBody
     public void editEmployessOnProject(@RequestBody EditEmployeeDTO editEmployeeDTO) {
         userService.editEmployees(editEmployeeDTO);
     }
+
 
     @PostMapping("/search")
     public ResponseEntity<List<UsersResponse>> search(@RequestBody SearchDTO request) throws Exception {
@@ -566,15 +586,30 @@ public class UserController {
         Optional<User> user = userService.findByEmail("pavle@gmail.com");
 
         RegistrationRequestResponse usersResponse = RegistrationRequestResponse.builder()
-                        .firstname(user.get().getFirstname())
-                        .lastname(user.get().getLastname())
-                        .email(user.get().getEmail())
-                        .phoneNumber(user.get().getPhoneNumber())
-                        .isApproved(user.get().isApproved())
-                        .title(user.get().getTitle())
-                        .role(new RoleDTO(user.get().getRole().getId(), user.get().getRole().getName()))
-                        .build();
+                .firstname(user.get().getFirstname())
+                .lastname(user.get().getLastname())
+                .email(user.get().getEmail())
+                .phoneNumber(user.get().getPhoneNumber())
+                .isApproved(user.get().isApproved())
+                .title(user.get().getTitle())
+                .role(new RoleDTO(user.get().getRole().getId(), user.get().getRole().getName()))
+                .build();
         return usersResponse;
     }
 
+    @PreAuthorize("@permissionService.hasPermission('DOWNLOAD_CV')")
+    @GetMapping("/downloadCV")
+    public ResponseEntity<byte[]>  viewCv(@PathVariable("email") String email) throws IOException, UnrecoverableKeyException, CertificateException, KeyStoreException, NoSuchAlgorithmException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException, InvalidKeyException {
+
+        Path filePath = Paths.get(uploadDir, email+".pdf");
+
+        byte[] encryptedDocument = Files.readAllBytes(filePath);
+        generateRSAService.decryptCVDocument(String.valueOf(filePath));
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+        headers.setContentDispositionFormData("attachment", email+".pdf"); // Set the desired file name
+        return new ResponseEntity<>(encryptedDocument, headers, HttpStatus.OK);
+
+    }
 }
