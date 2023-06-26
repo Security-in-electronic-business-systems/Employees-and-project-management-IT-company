@@ -4,9 +4,12 @@ import com.SIEBS.ITCompany.dto.*;
 import com.SIEBS.ITCompany.model.*;
 import com.SIEBS.ITCompany.repository.*;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -15,11 +18,18 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class UserService {
     private final UserRepository repository;
     private final ProjectRepository projectRepository;
     private final AddressRepository addressRepository;
     private final RoleRepository roleRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final EmailService emailService;
+    private final JwtService jwtService;
+    private final MagicLinkService magicLinkService;
+    private final AuthenticationService authenticationService;
+    private final KeystoreService keystoreService;
 
     private final PermissionRepository permissionRepository;
 
@@ -28,15 +38,25 @@ public class UserService {
 
     private final FileRepository fileRepository;
 
-    public List<User> getAllUsers() {
+    public List<User> getAllUsers() throws Exception {
         List<User> users = repository.findAll();
+        for (User user: users) {
+            UserDecoded userDecoded = keystoreService.decryptUser(user);
+            user.setTitle(userDecoded.getTitle());
+            user.setAddress(userDecoded.getAdress());
+        }
         return users;
     }
 
-    public List<User> getRegistrationRequests() {
+    public List<User> getRegistrationRequests() throws Exception {
         List<User> users = repository.findByIsApprovedFalse();
         List<User> filteredUsers = new ArrayList<>();
         for (User user: users){
+            //dekodiranje----------------------
+            UserDecoded userDecoded = keystoreService.decryptUser(user);
+            user.setTitle(userDecoded.getTitle());
+            user.setAddress(userDecoded.getAdress());
+            //-----------------------------------
             if (user.getRegistrationDate()==null){
                 filteredUsers.add(user);
             }else{
@@ -49,11 +69,24 @@ public class UserService {
         }
         return filteredUsers;
     }
+    public String removeDangerousCharacters(String input) {
+        // Lista potencijalno opasnih karaktera
+        String[] dangerousCharacters = {"'", "\"", "/", "\\", "<", ">", "|"};
+
+        // Uklanjanje opasnih karaktera iz stringa
+        for (String character : dangerousCharacters) {
+            input = input.replace(character, "");
+        }
+
+        return input;
+    }
     public void updateRegistrationDate(String email, Date newDate) {
         try {
             repository.updateRegistrationDate(email, newDate);
+            log.info("User updated successfully. Email: " + removeDangerousCharacters(email));
             System.out.println("Korisnik je uspešno ažuriran.");
         } catch (Exception e) {
+            log.error("User updated unsuccessfully. Email: " + removeDangerousCharacters(email));
             System.out.println("Došlo je do greške pri ažuriranju korisnika: " + e.getMessage());
         }
     }
@@ -102,8 +135,14 @@ public class UserService {
         return savedProject;
     }
 
-    public Optional<User> findByEmail(String email){
-        return repository.findByEmail(email);
+    public Optional<User> findByEmail(String email) throws Exception {
+        Optional<User> user = repository.findByEmail(email);
+
+        UserDecoded decryptedUser = keystoreService.decryptUser(user.get());
+        user.get().setTitle(decryptedUser.getTitle());
+        user.get().setAddress(decryptedUser.getAdress());
+
+        return user;
     }
 
     public boolean updateUser(UsersResponse usersResponse) {
@@ -205,7 +244,7 @@ public class UserService {
 
     }
 
-    public List<AllSkillDTO> getSkills(String email) {
+    public List<AllSkillDTO> getSkills(String email) throws Exception {
         System.out.println("****************************"+email);
         List<Skill> allSkills = skillRepository.findAll();
         List<AllSkillDTO> skills = new ArrayList<>();
@@ -227,7 +266,20 @@ public class UserService {
         return skills;
     }
 
+    public MessageResponse ChangePassword(ChangePasswordDTO changePasswordDTO) {
+        User user = repository.findByEmail(changePasswordDTO.getEmail()).orElse(null);
+        if(user == null){
+            return MessageResponse.builder().message("User not found!").build();
+        }
 
+        if(passwordEncoder.matches(changePasswordDTO.getOldPassword(), user.getPassword())){
+            user.setPassword(passwordEncoder.encode(changePasswordDTO.getNewPassword()));
+            repository.update(user);
+            return MessageResponse.builder().message("Successfully!").build();
+        }else{
+            return MessageResponse.builder().message("Old password is not correct!").build();
+        }
+    }
     public boolean editSkill(AllSkillDTO skillResponse) {
         Optional<Skill> skilOptionall =  skillRepository.findById( Long.valueOf(skillResponse.getId()).intValue());
         Skill skill = skilOptionall.orElse(null);
@@ -328,6 +380,108 @@ public class UserService {
         } catch (Exception e) {
             System.out.println("Došlo je do greške pri ažuriranju opisa posla: " + e.getMessage());
         }
+    }
+
+    public MessageResponse SendMailForForgotPassword(String email) {
+        var user = repository.findByEmail(email).orElse(null);
+        if(user == null){
+            return MessageResponse.builder().message("User not found!").build();
+        }
+        var jwtToken = jwtService.generateTokenForPasswordlessLogin(user);
+        String url = "https://localhost:8081/api/v1/user/checkIsForgotPasswordLinkValid?token=" + jwtToken;
+        magicLinkService.Save(MagicLink.builder().used(false).token(jwtToken).build());
+        System.out.println(url);
+        String message = "Hello " + user.getFirstname() + ", click on this link and change password: " + url;
+        //ovjde ide slanje linka na mejl
+        emailService.sendMail(user.getEmail(), "IT-Company: forgot password", url);
+        return MessageResponse.builder().message("Successfully!").build();
+    }
+
+    public boolean isTokenFromForgotPasswordLinkValid(String token){
+        if(magicLinkService.isTokenUsed(token)){
+            return false;
+        }else if(jwtService.isTokenExpired(token)){
+            return false;
+        }
+        magicLinkService.setUsedByToken(token);
+        return true;
+    }
+
+    public MessageResponse ChangeForgottenPassword(ChangeForgottenPasswordDTO changeForgottenPasswordDTO) {
+        String email = jwtService.extractUsername(changeForgottenPasswordDTO.getToken());
+        if(email == null){
+            return MessageResponse.builder().message("Some error occurred, please try again!").build();
+        }
+        User user = repository.findByEmail(email).orElse(null);
+        if(user == null){
+            return MessageResponse.builder().message("User not found!").build();
+        }
+
+        user.setPassword(passwordEncoder.encode(changeForgottenPasswordDTO.getNewPassword()));
+        repository.update(user);
+        return MessageResponse.builder().message("Successfully!").build();
+    }
+
+    public MessageResponse BlockUser(String email) {
+        User user = repository.findByEmail(email).orElse(null);
+        if(user == null){
+            return MessageResponse.builder().message("User not found").build();
+        }
+
+        user.setBlocked(true);
+        authenticationService.revokeAllUserTokens(user);
+        repository.update(user);
+        return MessageResponse.builder().message("Successfully!").build();
+    }
+
+    public MessageResponse UnblockUser(String email) {
+        User user = repository.findByEmail(email).orElse(null);
+        if(user == null){
+            return MessageResponse.builder().message("User not found").build();
+        }
+
+        user.setBlocked(false);
+        repository.update(user);
+        return MessageResponse.builder().message("Successfully!").build();
+    }
+    public List<User> search(SearchDTO searchDTO) throws Exception {
+        List<User> users = repository.search(searchDTO);
+        List<User> filterdUsers = new ArrayList<>();
+        Date currentDate = new Date();
+        for (User user:users) {
+            //dekodiranje----------------------
+            UserDecoded userDecoded = keystoreService.decryptUser(user);
+            user.setTitle(userDecoded.getTitle());
+            user.setAddress(userDecoded.getAdress());
+            //-----------------------------------
+            if (user.getRole().getName().equals("SOFTWARE_ENGINEER")){
+                Date registrationDate = user.getRegistrationDate();
+                if (registrationDate == null){
+                    filterdUsers.add(user);
+                    continue;
+                }
+                int diffMonth = (int) ((currentDate.getTime() - registrationDate.getTime()) / (1000L * 60L * 60L * 24L * 30L));
+                if (searchDTO.getMonthNum() == ""){
+                    filterdUsers.add(user);
+                }else{
+                    if (diffMonth >= Integer.parseInt(searchDTO.getMonthNum())){
+                        filterdUsers.add(user);
+                    }
+                }
+            }
+        }
+        return filterdUsers;
+    }
+
+    public static String QR_PREFIX =
+            "https://chart.googleapis.com/chart?chs=200x200&chld=M%%7C0&cht=qr&chl=";
+    public static String APP_NAME = "IT-Company";
+
+    public String generateQRUrl(User user) throws UnsupportedEncodingException {
+        return QR_PREFIX + URLEncoder.encode(String.format(
+                        "otpauth://totp/%s:%s?secret=%s&issuer=%s",
+                        APP_NAME, user.getEmail(), user.getSecret(), APP_NAME),
+                "UTF-8");
     }
 
 }

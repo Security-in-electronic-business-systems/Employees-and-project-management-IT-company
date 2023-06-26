@@ -23,5 +23,6 @@ public class RegisterRequest {
     private String title;
     private Address address;
     private String role;
+    private String isUsing2FA;
     private List<String> roles;
 }

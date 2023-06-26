@@ -10,21 +10,21 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpHeaders;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.net.URI;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
+@Slf4j
 public class AuthenticationController {
 
   private final AuthenticationService service;
@@ -32,6 +32,8 @@ public class AuthenticationController {
   private final JwtService jwtService;
   private final MagicLinkService magicLinkService;
   private final PermissionService permissionService;
+  private final EmailService emailService;
+  private final NotificationController notificationController;
 
 
   @PostMapping("/authenticate")
@@ -40,10 +42,16 @@ public class AuthenticationController {
           @RequestBody AuthenticationRequest request,
           HttpServletResponse response
 
-  ) {
+  ) throws Exception {
     AuthenticationResponse authResponse = service.authenticate(request);
 
     if (authResponse != null) {
+      if (authResponse.getLoginResponse().getMessage().equals("Your account are not approved by administrator!")) {
+        notificationController.createNotification("Login failed. Account are not approved by administrator. Email: " + service.removeDangerousCharacters(request.getEmail()));
+      }
+      if (authResponse.getLoginResponse().getMessage().equals("Email or password are not correct!")) {
+        notificationController.createNotification("Email or password are not correct. Email: " +  service.removeDangerousCharacters(request.getEmail()));
+      }
       Cookie accessTokenCookie = new Cookie("access_token", authResponse.getAccessToken());
       accessTokenCookie.setHttpOnly(true);
       accessTokenCookie.setDomain("localhost");
@@ -57,6 +65,7 @@ public class AuthenticationController {
       response.addCookie(refreshTokenCookie);
       return ResponseEntity.ok(authResponse.getLoginResponse());
     }
+
     return ResponseEntity.ok(authResponse.getLoginResponse());
 
   }
@@ -89,7 +98,8 @@ public class AuthenticationController {
               .location(waitRoomUri)
               .body(authResponse);
     }
-
+    notificationController.createNotification("Link was expired for user" + service.removeDangerousCharacters(authResponse.getLoginResponse().getEmail()));
+    log.error("Link was expired for user" + service.removeDangerousCharacters(authResponse.getLoginResponse().getEmail()));
     //authResponse.getLoginResponse().setMessage("Link was expired!");
     return ResponseEntity.status(HttpStatus.FOUND)
             .location(tokenExpiredUri)
@@ -99,7 +109,8 @@ public class AuthenticationController {
 
   @GetMapping("/register/verificate")
   public ResponseEntity<MessageResponse> verificateRegistration(
-          @RequestParam("token") String token,@RequestParam("email") String email,
+          @RequestParam("token") String token,
+          @RequestParam("email") String email,
           HttpServletRequest request,
           HttpServletResponse response
   ) {
@@ -110,12 +121,14 @@ public class AuthenticationController {
       userService.updateRegistrationDate(email, new Date());
       userService.approveUser(email);
       MessageResponse message = new MessageResponse("Link is valid, you are registered!");
-
+      log.info("Link is valid, Successful registration verification!Email: " + service.removeDangerousCharacters(email));
       return ResponseEntity.status(HttpStatus.FOUND)
               .location(login)
               .body(message);
     }
     MessageResponse message = new MessageResponse("Link is not valid!");
+    notificationController.createNotification("Link is not valid. Unsuccessful registration verification! Email: " + service.removeDangerousCharacters(email));
+    log.warn("Link is not valid. Unsuccessful registration verification! Email: " + service.removeDangerousCharacters(email));
     return ResponseEntity.status(HttpStatus.FOUND)
             .location(tokenExpiredUri)
             .body(message);
@@ -132,7 +145,7 @@ public class AuthenticationController {
   @PostMapping("/register")
   public ResponseEntity<MessageResponse> register(
           @RequestBody RegisterRequest request
-  ) {
+  ) throws Exception {
     return new ResponseEntity<>(service.register(request), HttpStatus.OK);
   }
 
@@ -164,6 +177,33 @@ public class AuthenticationController {
             .message("Successfully!")
             .build());
   }
+  @PostMapping("/qr")
+  public ResponseEntity<MessageResponse> generateQR(@RequestBody Email email) throws Exception {
+    Optional<User> user = userService.findByEmail(email.getEmail());
+    if (user.get().isUsing2FA()){
+      String QRurl = userService.generateQRUrl(user.get());
+      StringBuilder htmlBody = new StringBuilder();
+      htmlBody.append("<h3>Scan this Barcode using Google Authenticator app on your phone to use it later in login!</h3>");
+      htmlBody.append("<img src=").append(QRurl).append(" alt='QR Code' />");
+
+      String response = emailService.sendMail(user.get().getEmail(), "Scan QR code", htmlBody.toString());
+      if (response == "Success!"){
+        log.info("2FA success. QR code sent to email: " + service.removeDangerousCharacters(email.getEmail()));
+        MessageResponse message = new MessageResponse("Check your email and scan QR code!");
+        return ResponseEntity.ok(message);
+      }else{
+        MessageResponse message = new MessageResponse("Error sending QR code.");
+        log.error("2FA failed. Error sending QR code to email: " + service.removeDangerousCharacters(email.getEmail()));
+        return ResponseEntity.badRequest().body(message);
+      }
+    }else{
+      MessageResponse message = new MessageResponse("User does not have an option for two-way authentication!");
+      log.error("User does not have an option for two-way authentication! Email: " + service.removeDangerousCharacters(email.getEmail()));
+      return ResponseEntity.badRequest().body(message);
+    }
+
+  }
+
 
 
 }

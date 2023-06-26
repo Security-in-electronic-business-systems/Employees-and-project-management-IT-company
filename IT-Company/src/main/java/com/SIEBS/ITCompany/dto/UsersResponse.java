@@ -20,4 +20,5 @@ public class UsersResponse {
     private String title;
     private Address address;
     private RoleDTO role;
+    private boolean isBlocked;
 }

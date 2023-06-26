@@ -6,6 +6,7 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 public class LogoutService implements LogoutHandler {
 
   private final TokenRepository tokenRepository;
+  private final NotificationService notificationService;
 
   @Override
   public void logout(
@@ -26,7 +28,7 @@ public class LogoutService implements LogoutHandler {
   ) {
 
     deleteAllCookies(response);
-
+    notificationService.logoutLoggedUser();
     String jwt = getAccessTokenFromCookie(request);
     if(jwt == ""){
       return;

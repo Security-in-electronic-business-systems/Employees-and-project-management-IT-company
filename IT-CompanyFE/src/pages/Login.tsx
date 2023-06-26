@@ -1,12 +1,16 @@
 import { SyntheticEvent, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { LoginResponse } from "../model/login-response";
+import SocketService from "./SocketService";
+
+
 
 export function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
+  const [code, setCode] = useState("");
 
   const navigate = useNavigate();
   let loginResponse: LoginResponse
@@ -52,7 +56,8 @@ export function Login() {
       },
       body: JSON.stringify({
         "email": email,
-        "password": password
+        "password": password,
+        "code": code,
       }),
       credentials: "include"
     }).then(res => res.json())
@@ -61,6 +66,27 @@ export function Login() {
         loginResponse = data
         if(loginResponse.message === "Successfully!"){
           localStorage.setItem('loggedUser', JSON.stringify(loginResponse));
+          if(loginResponse.role.name.toString()==="ADMINISTRATOR") {
+            SocketService.establishConnection();
+            fetch("https://localhost:8081/api/v1/notif/getAll", {
+                method: "GET",
+                headers: {
+                  "Content-type": "application/json",
+                },
+                credentials: "include"
+              }).then(res => res.json())
+                .then(notifications => {
+                  // Sacuvaj notifikacije u Local Storage
+                  localStorage.setItem('notifications', JSON.stringify(notifications));
+                  const unopenedNotifications = notifications.filter((notification: { opened: any; }) => !notification.opened);
+
+                  // Sacuvaj broj notifikacija u Local Storage
+                  localStorage.setItem('unopenedNotifications', unopenedNotifications.length.toString());
+                })
+                .catch(error => {
+                  console.error("Error while fetching notifications:", error);
+                });
+          }       
           navigate("/")
           return
         }else if(loginResponse.message === "Email or password are not correct!"){
@@ -69,12 +95,21 @@ export function Login() {
         }else if(loginResponse.message === "Your account are not approved by administrator!"){
           setPasswordError("Your account are not approved by administrator!")
           return
+        }else if(loginResponse.message === "Your account are blocked by administrator!"){
+          setPasswordError("Your account are blocked by administrator!")
+          return
+        }else if(loginResponse.message === "Validation code is not correct!"){
+          setPasswordError("Validation code is not correct!")
+          return
         }
 
         setPasswordError("Some error occured, please try again!")
     })
 
   };
+
+
+  
 
   useEffect(() => {
     setPasswordError("");
@@ -86,6 +121,10 @@ export function Login() {
 
   const handlePasswordlessLogin = () => {
     navigate("/passwordless-login"); 
+  };  
+  
+  const handleForgotPassword = () => {
+    navigate("/forgotPassword"); 
   };  
 
 
@@ -116,10 +155,19 @@ export function Login() {
       />
       {passwordError && <div className="text-danger">{passwordError}</div>}
     </div>
+    <div>
+      <label>Google Authenticator Verification Code <i>(optional)</i></label>
+      <input type='text' id='code' className="form-control"
+        value={code}
+        onChange={(event) => setCode(event.target.value)}/>
+    </div>
     <div className="d-grid mt-4">
       <button type="submit" className="btn btn-primary btn-sm">Confirm</button>
       <div className="text-center mt-2">
         <a href="" onClick={handlePasswordlessLogin}>Login without password</a>
+      </div>
+      <div className="text-center mt-2">
+        <a href="" onClick={handleForgotPassword}>Forgot password?</a>
       </div>
     </div>
   </form>

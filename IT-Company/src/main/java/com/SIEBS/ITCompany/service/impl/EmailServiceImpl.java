@@ -30,7 +30,6 @@ public class EmailServiceImpl implements EmailService {
             StringBuilder htmlBody = new StringBuilder();
             htmlBody.append("<html><body>");
             htmlBody.append("<h1>").append(subject).append("</h1>");
-            htmlBody.append("<p>Postovani,</p>");
             htmlBody.append("<p>").append(body).append("</p>");
             htmlBody.append("<hr>");
             htmlBody.append("<p></p>");

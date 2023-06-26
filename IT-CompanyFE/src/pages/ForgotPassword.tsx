@@ -1,0 +1,86 @@
+import { SyntheticEvent, useEffect, useState } from "react";
+import { LoginResponse } from "../model/login-response";
+
+export function ForgotPassword() {
+  const [email, setEmail] = useState("");
+  const [emailError, setEmailError] = useState("");
+  let loginResponse: LoginResponse
+
+  const handleSubmit = async (event: SyntheticEvent) => {
+    event.preventDefault();
+
+    // Reset error messages
+    setEmailError("");
+
+    // Email and password required validation
+    if (!email || email === "") {
+      setEmailError("Email is required");
+      return
+    }
+
+    // Email format validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (email && !emailRegex.test(email)) {
+      setEmailError("Invalid email format");
+    }
+
+
+
+    // If there are errors, don't submit the form
+    if (emailError === "Email is required") {
+      setEmailError(emailError)
+      return;
+    }
+
+    // Send form data to server
+    await fetch("https://localhost:8081/api/v1/user/forgotPassword", {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify({
+        "email": email,
+      }),
+      credentials: "include"
+    }).then(res => res.json())
+      .then(data => {
+
+        loginResponse = data
+        if(loginResponse.message === "Successfully!"){
+          alert("Check email")
+        }else{
+          alert("Error")
+        }
+    })
+
+  };
+
+  useEffect(() => {
+    setEmailError("");
+  }, [email]);
+
+
+  return (
+    <div className="d-flex align-items-center justify-content-center" style={{ height: "80vh" }}>
+  <form className="col-md-3" onSubmit={handleSubmit}>
+    <blockquote className="blockquote text-center">
+      <p className="mb-0">Forgot password</p>
+    </blockquote>
+    <div className="mb-3">
+      <label className="form-label">Email</label>
+      <input
+        className="form-control"
+        id="departure"
+        value={email}
+        onChange={(event) => setEmail(event.target.value)}
+      />
+      {emailError && <div className="text-danger">{emailError}</div>}
+    </div>
+    <div className="d-grid mt-4">
+      <button type="submit" className="btn btn-primary btn-sm">Confirm</button>
+    </div>
+  </form>
+</div>
+
+  );
+}
